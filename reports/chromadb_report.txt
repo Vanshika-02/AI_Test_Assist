@@ -1,0 +1,25 @@
+Collection 'selectors_base_collection' contains 1340 documents.
+
+Top 5 similar selectors for query:
+Score: 0.2931 | Selector: data-savebtn=SaveBtn [] 
+Score: 0.3964 | Selector: data-SaveBtn=AddBtn [button] ta-action="actions">
+    <button (click)="save()"
+            [disabled]="isDisableAdd"
+            data-SaveBtn="AddBtn"
+            bciPrimaryButton>
+            {{ isExchangeNode ? ('ui.replace' | translate) : ('ui.add
+Score: 0.4495 | Selector: data-SaveBtn=SaveBtn [button] </form>
+    </div>
+
+    <div actions data-actions="actions">
+        <button (click)="save()" data-SaveBtn="SaveBtn" mat-button [disabled]="!form.valid">{{ 'ui.save'| translate}}</button>
+        <button (click)="clo
+Score: 0.4875 | Selector: data-save=SaveBtn [button] core-picklist>
+  <div actions data-actions="actions">
+    <button bciPrimaryButton (click)="save()" data-save="SaveBtn">{{ 'ui.save'| translate }}</button>
+    <button bciSecondaryButton (click)="close()" data-close="Ca
+Score: 0.4978 | Selector: data-saveBtn=SaveBtn [button] ick)="save()" [disabled]="(formArray.pristine && !filesSelected())" color="primary"
+                data-saveBtn="SaveBtn"
+                bciPrimaryButton>
+                {{'ui.save' | translate}}
+              </button>

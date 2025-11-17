@@ -1,0 +1,36 @@
+2025-11-18 02:26:27,843 INFO Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-18 02:26:29,735 INFO HTTP Request: GET http://localhost:8000/api/v2/auth/identity "HTTP/1.1 200 OK"
+2025-11-18 02:26:29,737 INFO Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-18 02:26:31,414 INFO HTTP Request: GET http://localhost:8000/api/v2/tenants/default_tenant "HTTP/1.1 200 OK"
+2025-11-18 02:26:31,450 INFO HTTP Request: GET http://localhost:8000/api/v2/tenants/default_tenant/databases/default_database "HTTP/1.1 200 OK"
+2025-11-18 02:26:31,617 INFO HTTP Request: GET http://localhost:8000/api/v2/tenants/default_tenant/databases/default_database/collections/selectors_base_collection "HTTP/1.1 200 OK"
+2025-11-18 02:26:31,711 INFO HTTP Request: GET http://localhost:8000/api/v2/tenants/default_tenant/databases/default_database/collections/59a0717c-dd9d-46ac-aca0-f15dc36b4655/count "HTTP/1.1 200 OK"
+2025-11-18 02:26:31,714 INFO Collection exists with 1340 documents.
+2025-11-18 02:26:35,165 ERROR Error querying collection: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1028) in query.
+2025-11-18 02:28:32,257 INFO Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-18 02:28:34,366 INFO HTTP Request: GET http://localhost:8000/api/v2/auth/identity "HTTP/1.1 200 OK"
+2025-11-18 02:28:34,367 INFO Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-18 02:28:36,049 INFO HTTP Request: GET http://localhost:8000/api/v2/tenants/default_tenant "HTTP/1.1 200 OK"
+2025-11-18 02:28:36,103 INFO HTTP Request: GET http://localhost:8000/api/v2/tenants/default_tenant/databases/default_database "HTTP/1.1 200 OK"
+2025-11-18 02:28:36,292 INFO HTTP Request: GET http://localhost:8000/api/v2/tenants/default_tenant/databases/default_database/collections/selectors_base_collection "HTTP/1.1 200 OK"
+2025-11-18 02:28:36,365 INFO HTTP Request: GET http://localhost:8000/api/v2/tenants/default_tenant/databases/default_database/collections/59a0717c-dd9d-46ac-aca0-f15dc36b4655/count "HTTP/1.1 200 OK"
+2025-11-18 02:28:36,366 INFO Collection exists with 1340 documents.
+2025-11-18 02:28:39,586 ERROR Error querying collection: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1028) in query.
+2025-11-18 02:47:43,747 INFO Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-18 02:47:45,573 INFO HTTP Request: GET http://localhost:8000/api/v2/auth/identity "HTTP/1.1 200 OK"
+2025-11-18 02:47:45,581 INFO Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-18 02:47:47,218 INFO HTTP Request: GET http://localhost:8000/api/v2/tenants/default_tenant "HTTP/1.1 200 OK"
+2025-11-18 02:47:47,253 INFO HTTP Request: GET http://localhost:8000/api/v2/tenants/default_tenant/databases/default_database "HTTP/1.1 200 OK"
+2025-11-18 02:47:47,378 INFO HTTP Request: GET http://localhost:8000/api/v2/tenants/default_tenant/databases/default_database/collections/selectors_base_collection "HTTP/1.1 200 OK"
+2025-11-18 02:47:47,433 INFO HTTP Request: GET http://localhost:8000/api/v2/tenants/default_tenant/databases/default_database/collections/59a0717c-dd9d-46ac-aca0-f15dc36b4655/count "HTTP/1.1 200 OK"
+2025-11-18 02:47:47,435 INFO Collection exists with 1340 documents.
+2025-11-18 02:47:50,810 ERROR Error querying collection: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1028) in query.
+2025-11-18 02:54:00,279 INFO Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-18 02:54:02,644 INFO HTTP Request: GET http://localhost:8000/api/v2/auth/identity "HTTP/1.1 200 OK"
+2025-11-18 02:54:02,644 INFO Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-11-18 02:54:04,362 INFO HTTP Request: GET http://localhost:8000/api/v2/tenants/default_tenant "HTTP/1.1 200 OK"
+2025-11-18 02:54:04,383 INFO HTTP Request: GET http://localhost:8000/api/v2/tenants/default_tenant/databases/default_database "HTTP/1.1 200 OK"
+2025-11-18 02:54:04,551 INFO HTTP Request: GET http://localhost:8000/api/v2/tenants/default_tenant/databases/default_database/collections/selectors_base_collection "HTTP/1.1 200 OK"
+2025-11-18 02:54:04,589 INFO HTTP Request: GET http://localhost:8000/api/v2/tenants/default_tenant/databases/default_database/collections/59a0717c-dd9d-46ac-aca0-f15dc36b4655/count "HTTP/1.1 200 OK"
+2025-11-18 02:54:04,591 INFO Collection exists with 1340 documents.
+2025-11-18 02:54:07,941 ERROR Error querying collection: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1028) in query.
