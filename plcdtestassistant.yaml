@@ -21,7 +21,7 @@ wait_times:
   after_login: 3000
   after_navigation: 2000
   after_click: 1000
-  after_type: 500
+  after_type: 1500
   after_dropdown: 1500
   page_load: 5000
 
