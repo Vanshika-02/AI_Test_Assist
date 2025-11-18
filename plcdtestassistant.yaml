@@ -22,7 +22,7 @@ wait_times:
   after_navigation: 2000
   after_click: 1000
   after_type: 500
-  after_dropdown: 1000
+  after_dropdown: 1500
   page_load: 5000
 
 # Folder Paths (relative to base_folder)
