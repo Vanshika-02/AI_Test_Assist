@@ -1,0 +1,396 @@
+# ============================================================================
+# TESTING ASSISTANT - COMPLETE CONFIGURATION
+# ============================================================================
+
+# Base Configuration
+base_folder: "C:/Projects/AI_Chat/PLCD/TA_AI_Project"
+project_id: "plcdtest"
+project_name: "PLCD Test Automation"
+
+# Web Application
+web_url: "http://fe0vm03313.de.bosch.com/rbplcd_t/client/login"
+browser: "edge"
+
+# Login Credentials
+login:
+  username: "mechanic"
+  password: "avalon"
+
+# Wait Times (milliseconds)
+wait_times:
+  after_login: 3000
+  after_navigation: 2000
+  after_click: 1000
+  after_type: 500
+  after_dropdown: 1000
+  page_load: 5000
+
+# Folder Paths (relative to base_folder)
+folders:
+  jira: "Jira_Tickets"
+  reports: "Reports"
+  videos: "Videos"
+  scripts: "Generated_Scripts"
+  generated_scripts: "Generated_Scripts"
+  logs: "Logs"
+  selectors: "Selectors_Folder"
+  screenshots: "Screenshots"
+
+# ============================================================================
+# AZURE OPENAI CONFIGURATION
+# ============================================================================
+azure_openai:
+  api_key: "98dkVOUDLG4wm9OCmF8pxnR48BoUCPYKzfI9p4zYGP5uVh7TiLLwJQQJ99BDAC5RqLJXJ3w3AAABACOGWUeW"
+  endpoint: "https://ai2ets.openai.azure.com/"
+  api_version: "2024-02-15-preview"
+  
+  # Model Deployments
+  models:
+    chat: "gpt-4o"                          # For LLM agents
+    embedding: "text-embedding-3-small"     # For semantic search
+    vision: "gpt-4o"                        # For L3 vision agent
+  
+  # Embedding Configuration
+  embedding_config:
+    dimensions: 1536
+    batch_size: 50                          # Batch embed up to 50 items
+    timeout: 30                             # API timeout in seconds
+
+# ============================================================================
+# VECTOR DATABASE CONFIGURATION (ChromaDB)
+# ============================================================================
+vector_database:
+  type: "chromadb"
+  persist_directory: "./data/chromadb"
+  
+  # Collections
+  collections:
+    selectors_base: "selectors_base_collection"
+    runtime_learned: "runtime_learned_collection"
+  
+  # Distance Metric
+  distance_metric: "cosine"                 # cosine, l2, ip
+
+# ============================================================================
+# SELECTOR CONFIGURATION
+# ============================================================================
+selectors:
+  source_file: "Selectors_Folder/selectors_merged_runtime_fixed.json"
+  total_count: 1340
+  
+  # Embedding Strategy
+  embedding_strategy:
+    composite_format: "{attr}_{value} {module} {elementType} {label} {context}"
+    include_fields: ["attr", "value", "module", "elementType", "label", "context"]
+    
+ 
+# ============================================================================
+# AGENT 1: SELECTOR DISCOVERY AGENT (L1)
+# ============================================================================
+agent1_selector_discovery:
+  enabled: true
+  
+  # Retrieval Configuration
+  retrieval:
+    n_results: 5                            # Top K candidates
+    confidence_threshold: 0.75              # Execute if >= this
+    retry_threshold: 0.70                   # Try next candidate if >= this
+    max_retries: 3                          # Max candidates to try
+  
+  # Filters
+  filters:
+    use_module_filter: true
+    use_element_type_filter: true
+    use_priority_filter: true
+  
+  # Scoring Weights
+  scoring:
+    semantic_similarity_weight: 0.60
+    module_match_weight: 0.20
+    priority_weight: 0.15
+    context_overlap_weight: 0.05
+  
+  # System Prompt
+  system_prompt: |
+    You are a selector matching expert. Your task is to find the most semantically 
+    similar selector from the knowledge base that matches the test step intent.
+    Prioritize selectors from the current module and with higher priority values.
+    Return confidence score and metadata for downstream decision-making.
+
+# ============================================================================
+# AGENT 2: DOM DISCOVERY AGENT (L1-Extended)
+# ============================================================================
+agent2_dom_discovery:
+  enabled: true
+  
+  # Activation Thresholds
+  activation:
+    min_confidence_from_l1: 0.60            # Activate if L1 returns 0.60-0.75
+    max_confidence_from_l1: 0.75
+  
+  # DOM Extraction
+  dom_extraction:
+    target_elements: ["button", "input", "select", "a", "span", "div[role='button']"]
+    max_elements: 100                       # Limit elements to embed
+    extract_attributes: ["data-*", "id", "name", "aria-*", "class", "role"]
+  
+  # Selector Priority (Higher = More Stable)
+  selector_priority:
+    data_attributes: 100                    # data-*, data-testid
+    aria_attributes: 80                     # aria-label, role
+    id_attributes: 60                       # id with meaningful names
+    name_attributes: 50                     # name attribute
+    class_stable: 40                        # Specific classes
+    text_based: 20                          # :has-text()
+    positional: 10                          # nth-child()
+  
+  # Confidence Boosting
+  confidence_boost:
+    has_data_attr: 0.15
+    has_aria: 0.10
+    text_match_exact: 0.05
+  
+  # Learning Configuration
+  learning:
+    add_to_collection: true                 # Save discovered selectors
+    min_confidence_to_learn: 0.70
+    require_validation: true                # Validate before saving
+  
+  # System Prompt
+  system_prompt: |
+    You are a DOM analysis expert. Extract visible elements from the live page
+    and match them semantically with the test step. Prioritize data-* attributes
+    and stable selectors. Return the best matching element with confidence score.
+  
+  # Extraction Prompt Template
+  extraction_prompt: |
+    Given the test step: "{step_text}"
+    Current module: "{current_module}"
+    
+    Analyze the DOM and identify the most relevant element.
+    Prefer selectors in this order: data-* > aria-* > id > class > text-based
+    
+    Return the selector with confidence score and reasoning.
+
+# ============================================================================
+# AGENT 3: VISION AGENT (L3)
+# ============================================================================
+agent3_vision:
+  enabled: true
+  
+  # Activation Thresholds
+  activation:
+    max_confidence_from_l1: 0.60            # Activate if L1 < 0.60
+    l2_failed: true                         # Also activate if L2 fails
+  
+  # Vision API Configuration
+  vision_api:
+    model: "gpt-4o"
+    max_tokens: 500
+    temperature: 0.1                        # Low temp for deterministic output
+  
+  # Selector Generation
+  selector_generation:
+    max_attempts: 3                         # Try up to 3 generated selectors
+    validation_required: true               # Must validate on page
+    fallback_to_coordinates: false          # Don't use coordinate clicking
+  
+  # System Prompt
+  system_prompt: |
+    You are a UI element locator using computer vision. Analyze the screenshot
+    and identify the element described in the test step. Generate stable CSS
+    or XPath selectors that can reliably locate the element.
+  
+  # Vision Prompt Template
+  vision_prompt: |
+    Screenshot shows a web application page.
+    
+    Test step instruction: "{step_text}"
+    Current module: "{current_module}"
+    
+    Task: Identify the target UI element and suggest the best selector.
+    
+    Prioritize selector stability in this order:
+    1. data-* attributes (most stable)
+    2. aria-* attributes (accessible)
+    3. id attributes (if meaningful)
+    4. class attributes (if specific)
+    5. text-based selectors (least stable)
+    
+    Return a JSON response:
+    {{
+      "element_identified": true/false,
+      "selector_candidates": ["selector1", "selector2", "selector3"],
+      "confidence": 0.0-1.0,
+      "reasoning": "brief explanation"
+    }}
+
+# ============================================================================
+# EXECUTION SETTINGS
+# ============================================================================
+execution:
+  max_retries: 3
+  screenshot_on_every_step: true
+  record_video: true
+  generate_script: true
+  headless: false
+  
+  # Failure Handling
+  failure_handling:
+    fail_fast: true                         # Stop on first failure
+    capture_failure_screenshot: true
+    capture_failure_dom: true
+    log_detailed_error: true
+
+# ============================================================================
+# MODULE CONFIGURATION
+# ============================================================================
+modules:
+  # All valid modules from selector JSON (for validation during setup)
+  known_modules:
+    - "AddExisting"
+    - "AllQuery"
+    - "AttributeGroup"
+    - "AttributeGroups"
+    - "Auth"
+    - "BreadCrumbs"
+    - "BulkOperation"
+    - "CommandBarWithTable"
+    - "Common"
+    - "CreateNew"
+    - "DetailView"
+    - "EntityAttribute"
+    - "EntityList"
+    - "Equipment"
+    - "EquipmentCalendar"
+    - "NestedTree"
+    - "Parts"
+    - "Projects"
+    - "ResultEntry"
+    - "Rfidbookings"
+    - "SearchBar"
+    - "Sequences"
+    - "Shared"
+    - "StatusEdit"
+    - "StatusIcon"
+    - "Tests"
+    - "Teststep"
+    - "Teststeps"
+    - "VisualInvestigation"
+    - "Dashboard"
+  
+  # UI-to-Code Module Mapping (only for modules with different names)
+  module_aliases:
+    Runs: "Teststep"          # UI: "Runs" → Code: "Teststep"
+    Tasks: "Tests"            # UI: "Tasks" → Code: "Tests"
+  
+  # Technical/Component Modules (always include in searches)
+  common_modules:
+    - "Common"
+    - "CommandBarWithTable"
+    - "SearchBar"
+    - "BreadCrumbs"
+    - "Shared"
+
+# ============================================================================
+# LOGGING CONFIGURATION
+# ============================================================================
+logging:
+  level: "INFO"                             # DEBUG, INFO, WARNING, ERROR
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # Log files
+  files:
+    main_log: "Logs/testing_assistant.log"
+    agent_log: "Logs/agent_execution.log"
+    error_log: "Logs/errors.log"
+  
+  # What to log
+  log_embeddings: false                     # Log embedding vectors (verbose)
+  log_similarity_scores: true
+  log_agent_decisions: true
+  log_selector_attempts: true
+
+# ============================================================================
+# PERFORMANCE TUNING
+# ============================================================================
+performance:
+  # Caching
+  cache_embeddings: true
+  cache_dom_snapshots: false
+  
+  # Timeouts
+  page_load_timeout: 30000                  # 30 seconds
+  element_wait_timeout: 10000               # 10 seconds
+  api_call_timeout: 30                      # 30 seconds
+  
+  # Rate Limiting
+  max_api_calls_per_minute: 60
+  batch_api_calls: true
+
+# ============================================================================
+# REPORTING
+# ============================================================================
+reporting:
+  format: "html"                            # html, json, both
+  include_screenshots: true
+  include_video_link: true
+  include_script_link: true
+  include_confidence_scores: true
+  include_agent_chain: true                 # Show L1->L2->L3 path
+
+# ============================================================================
+# FEATURE FLAGS
+# ============================================================================
+features:
+  enable_learning: true                     # Learn from successful executions
+  enable_context_tracking: true            # Track sequential context
+  enable_module_detection: true            # Auto-detect current module
+  enable_multi_agent: true                 # Use all 3 agents
+  enable_vision_fallback: true             # Use L3 vision agent
+
+# ============================================================================
+# GENERATED TEST SCRIPTS CONFIGURATION
+# ============================================================================
+generated_scripts:
+  enabled: true
+  
+  # Script Format
+  format: "python"                          # Options: python, typescript
+  extension: ".py"                          # Auto-set based on format
+  
+  # File Naming
+  naming_pattern: "{ticket_id}_{module}_{timestamp}"
+  include_timestamp: true
+  
+  # Framework Configuration
+  framework:
+    python:
+      library: "playwright"                 # playwright, selenium
+      test_runner: "pytest"                 # pytest, unittest
+      template: "templates/playwright_test_template.py"
+    typescript:
+      library: "playwright"
+      test_runner: "playwright-test"
+      template: "templates/playwright_test_template.spec.ts"
+  
+  # Script Content
+  include_in_script:
+    selectors_used: true                    # Actual selectors executed
+    wait_times: true                        # Wait commands used
+    assertions: true                        # Verification steps
+    comments: true                          # Step descriptions from Jira
+    confidence_scores: false                # L1/L2/L3 metadata (debug only)
+  
+  # Storage & Organization
+  storage:
+    base_folder: "Generated_Scripts"
+    organize_by_module: true                # Create subfolders per module
+    organize_by_date: false
+    max_versions_per_ticket: 5              # Keep last 5 versions
+  
+  # Execution Settings
+  execution:
+    auto_validate: true                     # Run generated script once to verify
+    add_to_regression_suite: true           # Add to regression test collection
+    mark_as_stable_after_runs: 3            # Mark stable after 3 successful runs

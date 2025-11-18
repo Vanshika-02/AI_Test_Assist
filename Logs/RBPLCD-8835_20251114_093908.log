@@ -1,0 +1,76 @@
+[2025-11-14 09:39:08] [INFO] [TA_AI_Project] Logger initialized for ticket RBPLCD-8835
+[2025-11-14 09:39:08] [DEBUG] [TA_AI_Project] Log file: Logs\RBPLCD-8835_20251114_093908.log
+[2025-11-14 09:39:08] [INFO] [TA_AI_Project] Starting workflow execution...
+[2025-11-14 09:39:08] [INFO] [TA_AI_Project] Loading configuration...
+[2025-11-14 09:39:08] [ERROR] [TA_AI_Project] Failed to load configuration: Invalid YAML syntax in plcdtest_config.yaml: while scanning a simple key
+  in "plcdtest_config.yaml", line 36, column 3
+could not find expected ':'
+  in "plcdtest_config.yaml", line 37, column 3
+[2025-11-14 09:39:08] [ERROR] [TA_AI_Project] Test execution failed: Invalid YAML syntax in plcdtest_config.yaml: while scanning a simple key
+  in "plcdtest_config.yaml", line 36, column 3
+could not find expected ':'
+  in "plcdtest_config.yaml", line 37, column 3
+Traceback (most recent call last):
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\utils\config_loader.py", line 40, in load_config
+    config = yaml.safe_load(f)
+             ^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\yaml\__init__.py", line 125, in safe_load
+    return load(stream, SafeLoader)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\yaml\__init__.py", line 81, in load
+    return loader.get_single_data()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\yaml\constructor.py", line 49, in get_single_data
+    node = self.get_single_node()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\yaml\composer.py", line 36, in get_single_node
+    document = self.compose_document()
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\yaml\composer.py", line 55, in compose_document
+    node = self.compose_node(None, None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\yaml\composer.py", line 84, in compose_node
+    node = self.compose_mapping_node(anchor)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\yaml\composer.py", line 133, in compose_mapping_node
+    item_value = self.compose_node(node, item_key)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\yaml\composer.py", line 84, in compose_node
+    node = self.compose_mapping_node(anchor)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\yaml\composer.py", line 127, in compose_mapping_node
+    while not self.check_event(MappingEndEvent):
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\yaml\parser.py", line 98, in check_event
+    self.current_event = self.state()
+                         ^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\yaml\parser.py", line 428, in parse_block_mapping_key
+    if self.check_token(KeyToken):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\yaml\scanner.py", line 115, in check_token
+    while self.need_more_tokens():
+          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\yaml\scanner.py", line 152, in need_more_tokens
+    self.stale_possible_simple_keys()
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\yaml\scanner.py", line 291, in stale_possible_simple_keys
+    raise ScannerError("while scanning a simple key", key.mark,
+yaml.scanner.ScannerError: while scanning a simple key
+  in "plcdtest_config.yaml", line 36, column 3
+could not find expected ':'
+  in "plcdtest_config.yaml", line 37, column 3
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\run_test.py", line 80, in run_ticket_test
+    state = load_config_node(state)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\workflows\test_workflow.py", line 36, in load_config_node
+    config = load_config("plcdtest_config.yaml")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\utils\config_loader.py", line 42, in load_config
+    raise yaml.YAMLError(f"Invalid YAML syntax in {config_path}: {e}")
+yaml.error.YAMLError: Invalid YAML syntax in plcdtest_config.yaml: while scanning a simple key
+  in "plcdtest_config.yaml", line 36, column 3
+could not find expected ':'
+  in "plcdtest_config.yaml", line 37, column 3

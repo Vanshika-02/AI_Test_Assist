@@ -1,0 +1,239 @@
+[INFO] ================================================================================
+[INFO]    Runtime Selector Extraction for RBPLCD-8835
+[INFO] ================================================================================
+[INFO] 
+[1/5] Parsing Jira ticket...
+[INFO]   Ticket: RBPLCD-8835
+[INFO]   Module: Teststep
+[INFO]   Steps: 8
+[INFO] 
+[2/5] Initializing browser...
+[INFO] Launched edge browser
+[INFO] Navigating to: http://fe0vm03313.de.bosch.com/rbplcd_t/client/login
+[INFO] Azure Vision Client initialized
+[INFO] Jira module 'Teststep' maps to web name 'Runs'
+[INFO] 
+[3/5] Performing auto-login...
+[INFO] Captured login page screenshot
+[INFO] Attempting login with standard selectors...
+[INFO] Standard selectors not found, will use CV-guided approach
+[INFO] Using CV to identify specific selectors...
+[INFO] Vision API call successful
+[INFO] CV identified selectors with confidence: 0.95
+[INFO] CV reasoning: The primary selectors are based on unique and specific attributes like 'placeholder' and button text, which are highly reliable and unlikely to change frequently. The fallback selectors use 'name' attributes and button type, which are also specific but slightly less reliable than the primary ones. These selectors ensure precision and minimize the risk of selecting incorrect elements.
+[INFO] Primary selectors - Username: input[placeholder='Username'], Password: input[placeholder='Password'], Button: button:has-text('Login')
+[INFO] Username filled using CV selector: input[placeholder='Username']
+[INFO] Password filled using CV selector: input[placeholder='Password']
+[INFO] Login button clicked using CV selector: button:has-text('Login')
+[INFO] Current URL after login: http://fe0vm03313.de.bosch.com/rbplcd_t/client/dashboard
+[INFO] Login successful - URL changed from login page
+[INFO]   Login successful
+[INFO] 
+[4/5] Executing 8 steps and extracting selectors...
+[INFO] 
+Step 1: Login [SKIPPED - login already done]
+[INFO] 
+Step 2: navigate to teststep
+[INFO]   Target text: 'teststep'
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 2
+[INFO]   Extracted 497 selectors, kept 377 after filtering
+[INFO]   Top candidates for 'teststep':
+[INFO]     [data-tabindex="-1"] (clickable=True, visible=True, tag=button, text='')
+[INFO]     [data-index="0"] (clickable=True, visible=False, tag=button, text='M')
+[INFO]     [data-index="1"] (clickable=True, visible=False, tag=button, text='T')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 2: navigate to teststep
+[INFO] LEVEL 1: Trying custom selectors from JSON...
+[INFO] L1: Trying static selector: [data-masterViewTestSteps="masterViewTestSteps"]
+[INFO] L1: Static selector count: 0
+[INFO] L1: Static selector not found on page
+[INFO] LEVEL 2: Trying generic HTML patterns...
+[INFO] Navigation detected - looking for 'Runs' in web app
+[INFO] Trying pattern: button:has-text('Runs') -> Count: 0
+[INFO] Trying pattern: a:has-text('Runs') -> Count: 0
+[INFO] Trying pattern: [role='link']:has-text('Runs') -> Count: 1
+[INFO] DEBUG: step_text = 'navigate to teststep'
+[INFO] DEBUG: step_lower contains 'select': False, contains dropdown: False
+[INFO] Clicked (default): [role='link']:has-text('Runs')
+[INFO]   Learning from L2 success...
+[INFO]   Extracted from working selector: [data-test="sidebar-nav-item-nav_item_teststeps"]
+[INFO] 
+Step 3: click on teststep named as default_Measurement01
+[INFO]   Target text: 'teststep'
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 3
+[INFO]   Extracted 395 selectors, kept 173 after filtering
+[INFO]   Top candidates for 'teststep':
+[INFO]     [data-opencreatedialog="aeName.TestStep.name"] (clickable=True, visible=True, tag=button, text='Run')
+[INFO]     [data-showmoreverticalbtn="ShowMoreVerticalBtn"] (clickable=True, visible=True, tag=button, text='')
+[INFO]     [data-test="commandbar-search-input"] (clickable=True, visible=True, tag=input, text='')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 3: click on teststep named as default_Measurement01
+[INFO] LEVEL 1: Trying custom selectors from JSON...
+[INFO] Level 1: Extracted row identifier: default_Measurement01
+[INFO] Row scoping required - skipping Level 1, will use Level 2
+[INFO] LEVEL 2: Trying generic HTML patterns...
+[INFO] Extracted row identifier: default_Measurement01
+[INFO] Trying row selector: tr:has-text('default_Measurement01') -> Count: 1
+[INFO] DEBUG: step_text = 'click on teststep named as default_Measurement01'
+[INFO] DEBUG: step_lower contains 'select': False, contains dropdown: False
+[INFO] Clicked: tr:has-text('default_Measurement01')
+[INFO]   Learning from L2 success...
+[INFO]   Extracted from working selector: [data-routerlinkid="905"]
+[INFO] 
+Step 4: open parts accordion
+[INFO]   Target text: 'parts'
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 4
+[INFO]   Extracted 596 selectors, kept 232 after filtering
+[INFO]   Top candidates for 'parts':
+[INFO]     [data-expensionpanelheader="aeName.UnitUnderTest.names"] (clickable=True, visible=True, tag=span, text='Parts')
+[INFO]     [data-aename="TestStep"] (clickable=False, visible=True, tag=div, text='Parts1Equipments0Sequences1')
+[INFO]     [data-parttypepanel="partTypePanel"] (clickable=False, visible=True, tag=app-parts-panel, text='Parts1')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 4: open parts accordion
+[INFO] LEVEL 1: Trying custom selectors from JSON...
+[INFO] No matching selector found in JSON
+[INFO] LEVEL 2: Trying generic HTML patterns...
+[INFO] Trying pattern: [role='button'][aria-expanded='false'] -> Count: 8
+[WARNING] Pattern [role='button'][aria-expanded='false'] has 8 matches - ambiguous
+[INFO] Trying pattern: .mat-expansion-panel-header:has-text('Parts') -> Count: 1
+[INFO] DEBUG: step_text = 'open parts accordion'
+[INFO] DEBUG: step_lower contains 'select': False, contains dropdown: False
+[INFO] Clicked: .mat-expansion-panel-header:has-text('Parts')
+[INFO]   Learning from L2 success...
+[WARNING] Element has no data-* attributes: .mat-expansion-panel-header:has-text('Parts')
+[INFO] 
+Step 5: click on edit button of part default_testobject_01
+[INFO]   Target text: 'edit'
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 5
+[INFO]   Extracted 673 selectors, kept 270 after filtering
+[INFO]   Top candidates for 'edit':
+[INFO]     [data-opencreatedialog="aeName.TestStep.name"] (clickable=True, visible=True, tag=button, text='Run')
+[INFO]     [data-showmoreverticalbtn="ShowMoreVerticalBtn"] (clickable=True, visible=True, tag=button, text='')
+[INFO]     [data-test="commandbar-search-input"] (clickable=True, visible=True, tag=input, text='')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 5: click on edit button of part default_testobject_01
+[INFO] LEVEL 1: Trying custom selectors from JSON...
+[INFO] Level 1: Extracted row identifier from 'of part/testobject': default_testobject_01
+[INFO] Row scoping required - skipping Level 1, will use Level 2
+[INFO] LEVEL 2: Trying generic HTML patterns...
+[INFO] Extracted row identifier from 'of part/testobject': default_testobject_01
+[INFO] Trying scoped pattern: :text-is('default_testobject_01') >> xpath=.. >> [data-editicon] -> Count: 3
+[INFO] DEBUG: step_text = 'click on edit button of part default_testobject_01'
+[INFO] DEBUG: step_lower contains 'select': False, contains dropdown: False
+[INFO] Clicked (force): :text-is('default_testobject_01') >> xpath=.. >> [data-editicon]
+[INFO]   Learning from L2 success...
+[INFO]   Extracted from working selector: [data-editicon="EditIcon"]
+[INFO] 
+Step 6: Click on Type from mandatory field and select “Type 5” from drop down
+[INFO]   Target text: 'type'
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 6
+[INFO]   Extracted 792 selectors, kept 326 after filtering
+[INFO]   Top candidates for 'type':
+[INFO]     [data-model="model"] (clickable=False, visible=True, tag=bci-modal-component, text='Edit TestObjectMandatory DataN')
+[INFO]     [data-attributegroups="attributeGroups"] (clickable=False, visible=True, tag=app-attribute-groups, text='Mandatory DataName Type Id Opt')
+[INFO]     [data-attributegroup="attributeGroup"] (clickable=False, visible=True, tag=app-attribute-group, text='Mandatory DataName Type Id')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 6: Click on Type from mandatory field and select “Type 5” from drop down
+[INFO] LEVEL 1: Trying custom selectors from JSON...
+[INFO] No matching selector found in JSON
+[INFO] LEVEL 2: Trying generic HTML patterns...
+[INFO] Extracted dropdown/input field name: Type
+[INFO] Trying pattern: [data-attribute='Type'] -> Count: 2
+[WARNING] Pattern [data-attribute='Type'] has 2 matches - ambiguous
+[INFO] Trying pattern: [data-basicattribute='attribute'][aria-label*='Type'] -> Count: 0
+[INFO] Trying pattern: input.mat-mdc-autocomplete-trigger[data-attribute='Type'] -> Count: 1
+[INFO] DEBUG: step_text = 'Click on Type from mandatory field and select “Type 5” from drop down'
+[INFO] DEBUG: step_lower contains 'select': True, contains dropdown: True
+[INFO] DEBUG: Looking for quoted value in step_text
+[INFO] DEBUG: Characters in 'select...down': [101, 108, 101, 99, 116, 32, 8220, 84, 121, 112, 101, 32, 53, 8221, 32, 102, 114, 111, 109, 32, 100, 114, 111, 112, 32, 100, 111, 119, 110]
+[INFO] Extracted dropdown value (quoted): Type 5
+[INFO] Autocomplete/Dropdown selection. Target value: 'Type 5'
+[INFO] Clicked field: input.mat-mdc-autocomplete-trigger[data-attribute='Type']
+[INFO] Dropdown panel opened: [role="listbox"]
+[INFO] Typed 'Type 5' into field to filter options
+[INFO] Clicked option: 'Type 5'
+[INFO] Field value after selection: 'Type 5'
+[INFO]   Learning from L2 success...
+[ERROR] Error extracting specific element: Locator.evaluate: Unexpected token "-" while parsing css selector "input.mat-mdc-autocomplete-trigger[data-attribute='Type'] -> selected 'Type 5'". Did you mean to CSS.escape it?
+Call log:
+  - waiting for input.mat-mdc-autocomplete-trigger[data-attribute='Type'] -> selected 'Type 5' >> nth=0
+
+[INFO] 
+Step 7: click on save
+[INFO]   Target text: 'save'
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 7
+[INFO]   Extracted 792 selectors, kept 326 after filtering
+[INFO]   Top candidates for 'save':
+[INFO]     [data-savebtn="SaveBtn"] (clickable=True, visible=True, tag=button, text='Save')
+[INFO]     [data-detailsheader="detailsHeader"] (clickable=True, visible=True, tag=mat-expansion-panel-header, text='Details  Please save changes')
+[INFO]     [data-editmessage="editMessage"] (clickable=True, visible=False, tag=span, text='Please save changes')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 7: click on save
+[INFO] LEVEL 1: Trying custom selectors from JSON...
+[INFO] No matching selector found in JSON
+[INFO] LEVEL 2: Trying generic HTML patterns...
+[INFO] Trying pattern: button:has-text('Save') -> Count: 1
+[INFO] DEBUG: step_text = 'click on save'
+[INFO] DEBUG: step_lower contains 'select': False, contains dropdown: False
+[INFO] Clicked: button:has-text('Save')
+[INFO]   Learning from L2 success...
+[ERROR] Error extracting specific element: Locator.evaluate: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Save')").first
+
+[INFO] 
+Step 8: "Successfully edited: 'TestObject' default_testobject_01" message should be displayed
+[INFO]   Target text: 'Successfully edited: '
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 8
+[INFO]   Extracted 673 selectors, kept 270 after filtering
+[INFO]   Top candidates for 'Successfully edited: ':
+[INFO]     [data-opencreatedialog="aeName.TestStep.name"] (clickable=True, visible=True, tag=button, text='Run')
+[INFO]     [data-showmoreverticalbtn="ShowMoreVerticalBtn"] (clickable=True, visible=True, tag=button, text='')
+[INFO]     [data-test="commandbar-search-input"] (clickable=True, visible=True, tag=input, text='')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 8: "Successfully edited: 'TestObject' default_testobject_01" message should be displayed
+[INFO] LEVEL 1: Trying custom selectors from JSON...
+[INFO] No matching selector found in JSON
+[INFO] LEVEL 2: Trying generic HTML patterns...
+[INFO] Extracted message to verify: Successfully edited: 'TestObject' default_testobject_01
+[INFO] Trying pattern: :has-text('Successfully edited') -> Count: 0
+[INFO] Trying pattern: div:has-text('Successfully edited') -> Count: 0
+[INFO] Trying pattern: .mat-snack-bar-container -> Count: 0
+[INFO] Trying pattern: [role='alert'] -> Count: 0
+[INFO] Trying pattern: .notification -> Count: 0
+[INFO] Trying pattern: :text('Successfully') -> Count: 0
+[INFO] Trying pattern: * -> Count: 1743
+[INFO] Message verification: found 1743 matches (OK for verification)
+[INFO] DEBUG: step_text = '"Successfully edited: \'TestObject\' default_testobject_01" message should be displayed'
+[INFO] DEBUG: step_lower contains 'select': False, contains dropdown: False
+[INFO]   Learning from L2 success...
+[INFO]   Extracted from working selector: [data-beasties-container=""]
+[INFO] 
+[5/5] Saving extracted selectors...
+[INFO] Runtime selectors saved to: Selectors_Folder\runtime_selectors_RBPLCD-8835.json
+[INFO]   Total unique selectors: 705
+[INFO] 
+================================================================================
+[INFO]    Extraction Complete!
+[INFO] ================================================================================
+[INFO] Total selectors extracted: 1978
+[INFO] Output file: Selectors_Folder/runtime_selectors_RBPLCD-8835.json
+[INFO] 
+Next steps:
+[INFO]   1. Review: Selectors_Folder/runtime_selectors_RBPLCD-8835.json
+[INFO]   2. Merge with existing selectors: python merge_selectors.py
+[INFO]   3. Re-test with merged selectors: python run_test.py RBPLCD-8835

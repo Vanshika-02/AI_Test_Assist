@@ -1,0 +1,17 @@
+[2025-10-07 15:49:13] [INFO] [TA_AI_Project] Logger initialized for ticket LOGIN-TEST
+[2025-10-07 15:49:13] [DEBUG] [TA_AI_Project] Log file: C:\Projects\AI_Chat\PLCD\TA_AI_Project\Logs\LOGIN-TEST_20251007_154913.log
+[2025-10-07 15:49:13] [INFO] [TA_AI_Project] Azure Vision Client initialized
+[2025-10-07 15:49:13] [DEBUG] [TA_AI_Project] Using deployment: gpt-4o
+[2025-10-07 15:49:25] [DEBUG] [TA_AI_Project] Calling vision API (attempt 1/3)
+[2025-10-07 15:49:25] [DEBUG] [TA_AI_Project] Prompt: 
+You are looking at a login page screenshot (1920x1080 pixels).
+
+Find these INTERACTIVE elements (NOT the labels):
+1. The USERNAME INPUT BOX (the white/gray box where you TYPE username, NOT the "Usern...
+[2025-10-07 15:49:33] [DEBUG] [TA_AI_Project] API Response: {
+    "username_field": {"x": 960, "y": 400},
+    "password_field": {"x": 960, "y": 500},
+    "login_button": {"x": 960, "y": 600},
+    "confidence": 0.98
+}...
+[2025-10-07 15:49:33] [INFO] [TA_AI_Project] Vision API call successful

@@ -1,0 +1,245 @@
+2025-11-17 22:24:33,823 - INFO - Loading selectors from: Selectors_Folder\selectors_merged_runtime_fixed.json
+2025-11-17 22:24:33,831 - INFO - Loaded 1340 selectors from JSON
+2025-11-17 22:24:37,821 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:24:39,616 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:24:41,221 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:24:42,799 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:24:44,383 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:24:45,945 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:24:47,511 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:24:49,085 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:24:50,852 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:24:52,420 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:24:54,034 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:24:55,818 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:24:57,638 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:24:59,409 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:25:01,168 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:25:02,941 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:25:04,713 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:25:06,292 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:25:08,107 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:25:09,722 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:25:11,467 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:25:13,293 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:25:15,060 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:25:16,842 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:25:18,626 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:25:20,410 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:25:22,185 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:25:23,930 - ERROR - Setup failed: Expected ID to be a str, got None in add.
+Traceback (most recent call last):
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\setup_vectordb.py", line 314, in <module>
+    collection = setup_chromadb(config)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\setup_vectordb.py", line 260, in setup_chromadb
+    collection.add(
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\chromadb\api\models\Collection.py", line 86, in add
+    add_request = self._validate_and_prepare_add_request(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\chromadb\api\models\CollectionCommon.py", line 103, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\chromadb\api\models\CollectionCommon.py", line 235, in _validate_and_prepare_add_request
+    validate_insert_record_set(record_set=add_records)
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\chromadb\api\types.py", line 437, in validate_insert_record_set
+    validate_ids(record_set["ids"])
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\chromadb\api\types.py", line 958, in validate_ids
+    raise ValueError(f"Expected ID to be a str, got {id_}")
+ValueError: Expected ID to be a str, got None in add.
+2025-11-17 22:25:53,764 - INFO - Loading selectors from: Selectors_Folder\selectors_merged_runtime_fixed.json
+2025-11-17 22:25:53,779 - INFO - Loaded 1340 selectors from JSON
+2025-11-17 22:25:54,018 - ERROR - Setup failed: EOF when reading a line
+Traceback (most recent call last):
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\setup_vectordb.py", line 319, in <module>
+    collection = setup_chromadb(config)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\setup_vectordb.py", line 181, in setup_chromadb
+    user_input = input("Continue? (yes/no): ").strip().lower()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+EOFError: EOF when reading a line
+2025-11-17 22:26:20,627 - INFO - Loading selectors from: Selectors_Folder\selectors_merged_runtime_fixed.json
+2025-11-17 22:26:20,648 - INFO - Loaded 1340 selectors from JSON
+2025-11-17 22:26:23,577 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:26:25,537 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:26:27,146 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:26:28,749 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:26:30,338 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:26:31,955 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:26:33,527 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:26:36,755 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:26:38,925 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:26:40,687 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:26:42,280 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:26:43,863 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:26:45,647 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:26:47,414 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:26:49,189 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:26:50,970 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:26:52,767 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:26:54,549 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:26:56,416 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:26:58,212 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:26:59,988 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:27:01,789 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:27:03,572 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:27:05,345 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:27:07,112 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:27:08,756 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:27:10,516 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:27:12,387 - ERROR - Setup failed: Expected IDs to be unique, found duplicates of: mat-input-1 in add.
+Traceback (most recent call last):
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\setup_vectordb.py", line 321, in <module>
+    collection = setup_chromadb(config)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\setup_vectordb.py", line 267, in setup_chromadb
+    collection.add(
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\chromadb\api\models\Collection.py", line 86, in add
+    add_request = self._validate_and_prepare_add_request(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\chromadb\api\models\CollectionCommon.py", line 103, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\chromadb\api\models\CollectionCommon.py", line 235, in _validate_and_prepare_add_request
+    validate_insert_record_set(record_set=add_records)
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\chromadb\api\types.py", line 437, in validate_insert_record_set
+    validate_ids(record_set["ids"])
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\chromadb\api\types.py", line 980, in validate_ids
+    raise errors.DuplicateIDError(message)
+chromadb.errors.DuplicateIDError: Expected IDs to be unique, found duplicates of: mat-input-1 in add.
+2025-11-17 22:29:29,581 - INFO - Loading selectors from: Selectors_Folder\selectors_merged_runtime_fixed.json
+2025-11-17 22:29:29,581 - INFO - Loaded 1340 selectors from JSON
+2025-11-17 22:29:31,394 - INFO - Retrying request to /embeddings in 0.418664 seconds
+2025-11-17 22:29:33,863 - INFO - Retrying request to /embeddings in 0.760537 seconds
+2025-11-17 22:29:36,681 - WARNING - Embedding attempt 1 failed: Connection error.. Retrying in 1s...
+2025-11-17 22:29:39,728 - INFO - Retrying request to /embeddings in 0.437114 seconds
+2025-11-17 22:29:42,222 - INFO - Retrying request to /embeddings in 0.964678 seconds
+2025-11-17 22:29:45,235 - WARNING - Embedding attempt 2 failed: Connection error.. Retrying in 2s...
+2025-11-17 22:29:49,278 - INFO - Retrying request to /embeddings in 0.423107 seconds
+2025-11-17 22:29:51,740 - INFO - Retrying request to /embeddings in 0.978112 seconds
+2025-11-17 22:29:54,772 - ERROR - All 3 embedding attempts failed
+2025-11-17 22:29:54,772 - ERROR - Failed to embed batch 1: Connection error.
+2025-11-17 22:29:54,772 - ERROR - Setup failed: Connection error.
+Traceback (most recent call last):
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\httpx\_transports\default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\httpcore\_sync\connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\httpcore\_sync\connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\httpcore\_sync\http_proxy.py", line 288, in handle_request
+    connect_response = self._connection.handle_request(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\httpcore\_sync\connection.py", line 101, in handle_request
+    raise exc
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\httpcore\_sync\connection.py", line 78, in handle_request
+    stream = self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\httpcore\_sync\connection.py", line 124, in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\httpcore\_backends\sync.py", line 207, in connect_tcp
+    with map_exceptions(exc_map):
+  File "C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 155, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\httpcore\_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\openai\_base_client.py", line 982, in request
+    response = self._client.send(
+               ^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\httpx\_client.py", line 914, in send
+    response = self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\httpx\_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\httpx\_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\httpx\_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\httpx\_transports\default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+  File "C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\Lib\contextlib.py", line 155, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\httpx\_transports\default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\setup_vectordb.py", line 329, in <module>
+    collection = setup_chromadb(config)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\setup_vectordb.py", line 257, in setup_chromadb
+    batch_embeddings = embed_batch(batch_docs, azure_client, embedding_model)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\setup_vectordb.py", line 115, in embed_batch
+    response = client.embeddings.create(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\openai\resources\embeddings.py", line 132, in create
+    return self._post(
+           ^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\openai\_base_client.py", line 1259, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\openai\_base_client.py", line 1014, in request
+    raise APIConnectionError(request=request) from err
+openai.APIConnectionError: Connection error.
+2025-11-17 22:33:11,851 - INFO - Loading selectors from: Selectors_Folder\selectors_merged_runtime_fixed.json
+2025-11-17 22:33:11,851 - INFO - Loaded 1340 selectors from JSON
+2025-11-17 22:33:12,035 - ERROR - Setup failed: Collection [selectors_base_collection] already exists
+Traceback (most recent call last):
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\setup_vectordb.py", line 329, in <module>
+    collection = setup_chromadb(config)
+                 ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\setup_vectordb.py", line 183, in setup_chromadb
+    collection = chroma_client.create_collection(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\chromadb\api\client.py", line 183, in create_collection
+    model = self._server.create_collection(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\AI_Chat\PLCD\TA_AI_Project\venv\Lib\site-packages\chromadb\api\rust.py", line 242, in create_collection
+    collection = self.bindings.create_collection(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+chromadb.errors.InternalError: Collection [selectors_base_collection] already exists
+2025-11-17 22:33:52,327 - INFO - Loading selectors from: Selectors_Folder\selectors_merged_runtime_fixed.json
+2025-11-17 22:33:52,336 - INFO - Loaded 1340 selectors from JSON
+2025-11-17 22:33:54,535 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:33:56,350 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:33:57,911 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:33:59,496 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:01,074 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:02,652 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:04,268 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:05,865 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:07,681 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:09,245 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:10,857 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:12,635 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:14,409 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:16,204 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:17,998 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:19,797 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:21,577 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:23,164 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:24,957 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:26,738 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:28,500 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:30,395 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:32,164 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:33,920 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:35,717 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:37,508 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-17 22:34:39,328 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"

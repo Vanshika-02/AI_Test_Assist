@@ -1,0 +1,67 @@
+2025-11-18 11:18:12,310 - INFO - Feedback Tool initialized
+2025-11-18 11:18:12,375 - INFO - Parsing HTML report: Reports/RBPLCD-8835_20251118_111718_report.html
+2025-11-18 11:18:12,378 - INFO - Parsed 6 steps from report
+2025-11-18 11:32:48,800 - INFO - ================================================================================
+2025-11-18 11:32:48,801 - INFO - Saving corrections to runtime collection
+2025-11-18 11:32:48,801 - INFO - Total corrections: 2
+2025-11-18 11:32:48,899 - INFO - Deleted 5 old entries for Step 4
+2025-11-18 11:32:48,901 - INFO - Generating embeddings for 2 corrections...
+2025-11-18 11:32:51,940 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-18 11:32:51,942 - INFO - Adding 2 corrected selectors to runtime collection...
+2025-11-18 11:32:52,025 - INFO - [OK] Saved 2 corrections to runtime collection
+2025-11-18 11:32:52,026 - INFO - ================================================================================
+2025-11-18 11:32:52,038 - INFO - Exported feedback report to: Feedback\RBPLCD-8835_20251118_113252_feedback.json
+2025-11-18 11:42:59,261 - INFO - Feedback Tool initialized
+2025-11-18 11:42:59,313 - INFO - Parsing HTML report: Reports/RBPLCD-8835_20251118_114213_report.html
+2025-11-18 11:42:59,316 - INFO - Parsed 4 steps from report
+2025-11-18 11:43:50,149 - INFO - ================================================================================
+2025-11-18 11:43:50,149 - INFO - Saving corrections to runtime collection
+2025-11-18 11:43:50,149 - INFO - Total corrections: 1
+2025-11-18 11:43:50,223 - INFO - Deleted 1 old entries for Step 4
+2025-11-18 11:43:50,223 - INFO - Generating embeddings for 1 corrections...
+2025-11-18 11:43:52,321 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-18 11:43:52,323 - INFO - Adding 1 corrected selectors to runtime collection...
+2025-11-18 11:43:52,398 - INFO - [OK] Saved 1 corrections to runtime collection
+2025-11-18 11:43:52,398 - INFO - ================================================================================
+2025-11-18 11:43:52,411 - INFO - Exported feedback report to: Feedback\RBPLCD-8835_20251118_114352_feedback.json
+2025-11-18 11:46:41,140 - INFO - Feedback Tool initialized
+2025-11-18 11:46:41,187 - INFO - Parsing HTML report: Reports/RBPLCD-8835_20251118_114511_report.html
+2025-11-18 11:46:41,190 - INFO - Parsed 6 steps from report
+2025-11-18 11:50:43,751 - INFO - ================================================================================
+2025-11-18 11:50:43,752 - INFO - Saving corrections to runtime collection
+2025-11-18 11:50:43,752 - INFO - Total corrections: 2
+2025-11-18 11:50:43,820 - INFO - Deleted 3 old entries for Step 5
+2025-11-18 11:50:43,872 - INFO - Deleted 1 old entries for Step 6
+2025-11-18 11:50:43,872 - INFO - Generating embeddings for 2 corrections...
+2025-11-18 11:50:46,995 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-18 11:50:46,998 - INFO - Adding 2 corrected selectors to runtime collection...
+2025-11-18 11:50:47,062 - INFO - [OK] Saved 2 corrections to runtime collection
+2025-11-18 11:50:47,063 - INFO - ================================================================================
+2025-11-18 11:50:47,071 - INFO - Exported feedback report to: Feedback\RBPLCD-8835_20251118_115047_feedback.json
+2025-11-18 11:57:18,133 - INFO - Feedback Tool initialized
+2025-11-18 11:57:18,188 - INFO - Parsing HTML report: Reports/RBPLCD-8835_20251118_115209_report.html
+2025-11-18 11:57:18,191 - INFO - Parsed 5 steps from report
+2025-11-18 11:58:18,628 - INFO - ================================================================================
+2025-11-18 11:58:18,628 - INFO - Saving corrections to runtime collection
+2025-11-18 11:58:18,628 - INFO - Total corrections: 1
+2025-11-18 11:58:18,705 - INFO - Deleted 1 old entries for Step 5
+2025-11-18 11:58:18,705 - INFO - Generating embeddings for 1 corrections...
+2025-11-18 11:58:20,639 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-18 11:58:20,640 - INFO - Adding 1 corrected selectors to runtime collection...
+2025-11-18 11:58:20,704 - INFO - [OK] Saved 1 corrections to runtime collection
+2025-11-18 11:58:20,706 - INFO - ================================================================================
+2025-11-18 11:58:20,710 - INFO - Exported feedback report to: Feedback\RBPLCD-8835_20251118_115820_feedback.json
+2025-11-18 12:22:10,067 - INFO - Feedback Tool initialized
+2025-11-18 12:22:10,110 - INFO - Parsing HTML report: Reports/RBPLCD-8835_20251118_122032_report.html
+2025-11-18 12:22:10,114 - INFO - Parsed 6 steps from report
+2025-11-18 12:27:03,162 - INFO - ================================================================================
+2025-11-18 12:27:03,162 - INFO - Saving corrections to runtime collection
+2025-11-18 12:27:03,163 - INFO - Total corrections: 3
+2025-11-18 12:27:03,256 - INFO - Deleted 1 old entries for Step 4
+2025-11-18 12:27:03,309 - INFO - Deleted 1 old entries for Step 5
+2025-11-18 12:27:03,310 - INFO - Generating embeddings for 3 corrections...
+2025-11-18 12:27:05,412 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-18 12:27:05,616 - INFO - Adding 3 corrected selectors to runtime collection...
+2025-11-18 12:27:05,681 - INFO - [OK] Saved 3 corrections to runtime collection
+2025-11-18 12:27:05,681 - INFO - ================================================================================
+2025-11-18 12:27:05,688 - INFO - Exported feedback report to: Feedback\RBPLCD-8835_20251118_122705_feedback.json

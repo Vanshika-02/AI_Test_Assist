@@ -1,0 +1,89 @@
+# ============================================
+# Sample Configuration for Test Automation Project
+# Use this as a template for creating new projects
+# ============================================
+
+# ============================================
+# BASE FOLDER (Where project files are stored)
+# ============================================
+base_folder: "Projects"
+
+# ============================================
+# PROJECT NAME (Must be unique)
+# ============================================
+project:
+  name: "sample_test_project"
+  description: "Sample testing project for demonstration"
+
+# ============================================
+# TESTER ACCOUNTS (Add your testers here)
+# ============================================
+testers:
+  - username: "alice_tester"
+    password: "alice123"
+  - username: "bob_tester"
+    password: "bob456"
+
+# ============================================
+# WEB APPLICATION UNDER TEST
+# ============================================
+web_application:
+  url: "https://www.google.com"
+  browser: "edge"                    # chromium, firefox, edge, webkit
+  environment: "test"                # test, staging, production
+  test_credentials:
+    username: "test_user@example.com"
+    password: "test_password"
+
+# ============================================
+# WAIT TIMES (milliseconds)
+# ============================================
+wait_times:
+  after_login: 3000
+  after_navigation: 2000
+  after_click: 1000
+  after_type: 500
+  after_dropdown: 1000
+  page_load: 5000
+
+# ============================================
+# FOLDER STRUCTURE (Relative to base_folder/project_name)
+# ============================================
+folders:
+  jira: "Jira_Tickets"
+  reports: "Reports"
+  videos: "Videos"
+  scripts: "Generated_Scripts"
+  logs: "Logs"
+  selectors: "Selectors_Folder"
+
+# ============================================
+# AZURE OPENAI CONFIGURATION
+# ============================================
+azure_openai:
+  api_key: "your_azure_openai_api_key_here"
+  endpoint: "https://your-endpoint.openai.azure.com/"
+  api_version: "2024-02-15-preview"
+  deployment_gpt4o: "gpt-4o"
+
+# ============================================
+# MODULE MAPPING (Jira to Web App)
+# Maps Jira field names to web application names
+# ============================================
+module_mapping:
+  - jira_name: "teststep"
+    web_app_name: "Runs"
+  - jira_name: "test"
+    web_app_name: "Tasks"
+  - jira_name: "structurelevel"
+    web_app_name: "Projects"
+
+# ============================================
+# EXECUTION SETTINGS
+# ============================================
+execution:
+  max_retries: 3
+  screenshot_on_every_step: true
+  record_video: true
+  generate_script: true
+  headless: false

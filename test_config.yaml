@@ -1,0 +1,41 @@
+base_folder: "Projects"
+project:
+  name: "demo_project"
+testers:
+  - username: "demo_user"
+    password: "Demo@123"
+web_application:
+  url: "http://fe0vm03313.de.bosch.com/rbplcd_t/client/login"
+  browser: "edge"
+  environment: "staging"
+  test_credentials:
+    username: "mechanic"
+    password: "avalon"
+wait_times:
+  after_login: 3000
+  after_navigation: 2000
+  after_click: 1000
+  after_type: 500
+  after_dropdown: 1000
+  page_load: 5000
+folders:
+  jira: "Jira_Tickets"
+  reports: "Reports"
+  videos: "Videos"
+  scripts: "Generated_Scripts"
+  logs: "Logs"
+  selectors: "Selectors_Folder"
+azure_openai:
+  api_key: "test_key"
+  endpoint: "https://ai2ets.openai.azure.com/"
+  api_version: "2024-02-15-preview"
+  deployment_gpt4o: "gpt-4o"
+module_mapping:
+  - jira_name: "teststep"
+    web_app_name: "Runs"
+execution:
+  max_retries: 3
+  screenshot_on_every_step: true
+  record_video: true
+  generate_script: true
+  headless: false

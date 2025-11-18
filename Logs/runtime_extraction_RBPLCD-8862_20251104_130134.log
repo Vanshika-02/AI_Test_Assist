@@ -1,0 +1,308 @@
+[INFO] ================================================================================
+[INFO]    Runtime Selector Extraction for RBPLCD-8862
+[INFO] ================================================================================
+[INFO] 
+[1/5] Parsing Jira ticket...
+[INFO]   Ticket: RBPLCD-8862
+[INFO]   Module: Teststep
+[INFO]   Steps: 9
+[INFO] 
+[2/5] Initializing browser...
+[INFO] Launched edge browser
+[INFO] Navigating to: http://fe0vm03313.de.bosch.com/rbplcd_t/client/login
+[INFO] Azure Vision Client initialized
+[INFO] Jira module 'Teststep' maps to web name 'Runs'
+[INFO] 
+[3/5] Performing auto-login...
+[INFO] Captured login page screenshot
+[INFO] Attempting login with standard selectors...
+[INFO] Standard selectors not found, will use CV-guided approach
+[INFO] Using CV to identify specific selectors...
+[INFO] Vision API call successful
+[INFO] CV identified selectors with confidence: 0.95
+[INFO] CV reasoning: The primary selectors are based on unique and specific attributes like 'placeholder' and button text, which are highly reliable and unlikely to change. Fallbacks use 'name' attributes and button type, which are also specific but slightly less reliable than placeholders and visible text. These selectors are specific to the login form and avoid generic patterns.
+[INFO] Primary selectors - Username: input[placeholder='Username'], Password: input[placeholder='Password'], Button: button:has-text('Login')
+[INFO] Username filled using CV selector: input[placeholder='Username']
+[INFO] Password filled using CV selector: input[placeholder='Password']
+[INFO] Login button clicked using CV selector: button:has-text('Login')
+[INFO] Current URL after login: http://fe0vm03313.de.bosch.com/rbplcd_t/client/dashboard
+[INFO] Login successful - URL changed from login page
+[INFO]   Login successful
+[INFO] 
+[4/5] Executing 9 steps and extracting selectors...
+[INFO] 
+Step 1: Login [SKIPPED - login already done]
+[INFO] 
+Step 2: Navigate to teststep
+[INFO]   Target text: 'teststep'
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 2
+[INFO]   Extracted 497 selectors, kept 377 after filtering
+[INFO]   Top candidates for 'teststep':
+[INFO]     [data-tabindex="-1"] (clickable=True, visible=True, tag=button, text='')
+[INFO]     [data-index="0"] (clickable=True, visible=False, tag=button, text='M')
+[INFO]     [data-index="1"] (clickable=True, visible=False, tag=button, text='T')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 2: Navigate to teststep
+[INFO] LEVEL 1: Trying custom selectors from JSON...
+[INFO] L1: Trying static selector: [data-masterViewTestSteps="masterViewTestSteps"]
+[INFO] L1: Static selector count: 0
+[INFO] L1: Static selector not found on page
+[INFO] LEVEL 2: Trying generic HTML patterns...
+[INFO] Navigation detected - looking for 'Runs' in web app
+[INFO] Trying pattern: button:has-text('Runs') -> Count: 0
+[INFO] Trying pattern: a:has-text('Runs') -> Count: 0
+[INFO] Trying pattern: [role='link']:has-text('Runs') -> Count: 1
+[INFO] DEBUG: step_text = 'Navigate to teststep'
+[INFO] DEBUG: step_lower contains 'select': False, contains dropdown: False
+[INFO] Clicked (default): [role='link']:has-text('Runs')
+[INFO]   Learning from L2 success...
+[INFO]   Extracted from working selector: [data-test="sidebar-nav-item-nav_item_teststeps"]
+[INFO] 
+Step 3: Force Click on "... +" button on .
+[INFO]   Target text: '... +'
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 3
+[INFO]   Extracted 395 selectors, kept 173 after filtering
+[INFO]   Top candidates for '... +':
+[INFO]     [data-opencreatedialog="aeName.TestStep.name"] (clickable=True, visible=True, tag=button, text='Run')
+[INFO]     [data-showmoreverticalbtn="ShowMoreVerticalBtn"] (clickable=True, visible=True, tag=button, text='')
+[INFO]     [data-test="commandbar-search-input"] (clickable=True, visible=True, tag=input, text='')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 3: Force Click on "... +" button on .
+[INFO] LEVEL 1: Trying custom selectors from JSON...
+[INFO] No matching selector found in JSON
+[INFO] LEVEL 2: Trying generic HTML patterns...
+[INFO] Trying pattern: button:has-text('{text}') -> Count: 0
+[INFO] Trying pattern: a:has-text('{text}') -> Count: 0
+[INFO] Trying pattern: [role='link']:has-text('{text}') -> Count: 0
+[INFO] Trying pattern: [role='button']:has-text('{text}') -> Count: 0
+[INFO] Trying pattern: button[type='submit'] -> Count: 0
+[INFO] Trying pattern: input[type='submit'] -> Count: 0
+[INFO] Trying pattern: button -> Count: 37
+[WARNING] Pattern button has 37 matches - ambiguous
+[INFO] LEVEL 3: Using CV-guided selector discovery...
+[INFO] Vision API call successful
+[INFO] CV selector strategy: button:has-text('... +')
+[INFO] CV reasoning: The '... +' button appears to be a unique element on the page based on the screenshot. A text-based selector is used as it is specific and readable. ARIA attributes or icon-based selectors are provided as fallback options.
+[INFO] CV primary selector count: 0
+[INFO] Trying fallback: button[aria-label='Add'] -> Count: 0
+[INFO] Trying fallback: button:has(.icon-plus) -> Count: 0
+[INFO] 
+Step 4: Select "Project" from the drop down and click on it.
+[INFO]   Target text: 'Project'
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 4
+[INFO]   Extracted 395 selectors, kept 173 after filtering
+[INFO]   Top candidates for 'Project':
+[INFO]     [data-test="sidebar-nav-item-undefined"] (clickable=True, visible=True, tag=mat-list-item, text='Projects')
+[INFO]     [data-labelvalue="ui.commandbar.StructureLevel"] (clickable=True, visible=True, tag=mat-label, text='Project')
+[INFO]     [data-masterview="masterView"] (clickable=False, visible=True, tag=bci-master-view, text='Run 6 itemsSearchStatus Respon')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 4: Select "Project" from the drop down and click on it.
+[INFO] LEVEL 1: Trying custom selectors from JSON...
+[INFO] No matching selector found in JSON
+[INFO] LEVEL 2: Trying generic HTML patterns...
+[INFO] Trying pattern: [data-attribute='{text}'] -> Count: 0
+[INFO] Trying pattern: [data-basicattribute='attribute'][aria-label*='{text}'] -> Count: 0
+[INFO] Trying pattern: input.mat-mdc-autocomplete-trigger[data-attribute='{text}'] -> Count: 0
+[INFO] Trying pattern: label:has-text('{text}') .mat-select -> Count: 0
+[INFO] Trying pattern: label:has-text('{text}') ~ .mat-select -> Count: 0
+[INFO] Trying pattern: label:has-text('{text}') input.mat-mdc-autocomplete-trigger -> Count: 0
+[INFO] Trying pattern: div:has-text('{text}') >> .mat-select -> Count: 0
+[INFO] Trying pattern: div:has-text('{text}') >> input[role='combobox'] -> Count: 0
+[INFO] Trying pattern: :text('{text}') >> xpath=.. >> .mat-select -> Count: 0
+[INFO] Trying pattern: label:has-text('{text}') ~ select -> Count: 0
+[INFO] Trying pattern: [role='combobox'] -> Count: 6
+[WARNING] Pattern [role='combobox'] has 6 matches - ambiguous
+[INFO] Trying pattern: .mat-select -> Count: 0
+[INFO] Trying pattern: select -> Count: 0
+[INFO] LEVEL 3: Using CV-guided selector discovery...
+[INFO] Vision API call successful
+[INFO] CV selector strategy: select[aria-label='Project']
+[INFO] CV reasoning: The dropdown for 'Project' is uniquely identifiable using the ARIA attribute 'aria-label'. This ensures accessibility and specificity without requiring scoping.
+[INFO] CV primary selector count: 0
+[INFO] Trying fallback: select:has-text('Project') -> Count: 0
+[INFO] Trying fallback: select.project-dropdown -> Count: 0
+[INFO] 
+Step 5: Click on Select Product and select "MyProject" from drop down.
+[INFO]   Target text: 'MyProject'
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 5
+[INFO]   Extracted 395 selectors, kept 173 after filtering
+[INFO]   Top candidates for 'MyProject':
+[INFO]     [data-opencreatedialog="aeName.TestStep.name"] (clickable=True, visible=True, tag=button, text='Run')
+[INFO]     [data-showmoreverticalbtn="ShowMoreVerticalBtn"] (clickable=True, visible=True, tag=button, text='')
+[INFO]     [data-test="commandbar-search-input"] (clickable=True, visible=True, tag=input, text='')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 5: Click on Select Product and select "MyProject" from drop down.
+[INFO] LEVEL 1: Trying custom selectors from JSON...
+[INFO] No matching selector found in JSON
+[INFO] LEVEL 2: Trying generic HTML patterns...
+[INFO] Extracted dropdown/input field name: Select Product
+[INFO] Trying pattern: [data-attribute='Select Product'] -> Count: 0
+[INFO] Trying pattern: [data-basicattribute='attribute'][aria-label*='Select Product'] -> Count: 0
+[INFO] Trying pattern: input.mat-mdc-autocomplete-trigger[data-attribute='Select Product'] -> Count: 0
+[INFO] Trying pattern: label:has-text('Select Product') .mat-select -> Count: 0
+[INFO] Trying pattern: label:has-text('Select Product') ~ .mat-select -> Count: 0
+[INFO] Trying pattern: label:has-text('Select Product') input.mat-mdc-autocomplete-trigger -> Count: 0
+[INFO] Trying pattern: div:has-text('Select Product') >> .mat-select -> Count: 0
+[INFO] Trying pattern: div:has-text('Select Product') >> input[role='combobox'] -> Count: 0
+[INFO] Trying pattern: :text('Select Product') >> xpath=.. >> .mat-select -> Count: 0
+[INFO] Trying pattern: label:has-text('Select Product') ~ select -> Count: 0
+[INFO] Trying pattern: [role='combobox'] -> Count: 6
+[WARNING] Pattern [role='combobox'] has 6 matches - ambiguous
+[INFO] Trying pattern: .mat-select -> Count: 0
+[INFO] Trying pattern: select -> Count: 0
+[INFO] LEVEL 3: Using CV-guided selector discovery...
+[INFO] Vision API call successful
+[INFO] CV selector strategy: select[aria-label='Product']
+[INFO] CV reasoning: The dropdown for 'Product' is uniquely identifiable using the ARIA attribute 'aria-label'. No scoping is required as it is not within a specific row or context.
+[INFO] CV primary selector count: 0
+[INFO] Trying fallback: select:has-text('Product') -> Count: 0
+[INFO] Trying fallback: select[aria-labelledby='Product'] -> Count: 0
+[INFO] 
+Step 6: Click on Name and type "default project"
+[INFO]   Target text: 'default project'
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 6
+[INFO]   Extracted 395 selectors, kept 173 after filtering
+[INFO]   Top candidates for 'default project':
+[INFO]     [data-opencreatedialog="aeName.TestStep.name"] (clickable=True, visible=True, tag=button, text='Run')
+[INFO]     [data-showmoreverticalbtn="ShowMoreVerticalBtn"] (clickable=True, visible=True, tag=button, text='')
+[INFO]     [data-test="commandbar-search-input"] (clickable=True, visible=True, tag=input, text='')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 6: Click on Name and type "default project"
+[INFO] LEVEL 1: Trying custom selectors from JSON...
+[INFO] No matching selector found in JSON
+[INFO] LEVEL 2: Trying generic HTML patterns...
+[INFO] Trying pattern: button:has-text('{text}') -> Count: 0
+[INFO] Trying pattern: a:has-text('{text}') -> Count: 0
+[INFO] Trying pattern: [role='link']:has-text('{text}') -> Count: 0
+[INFO] Trying pattern: [role='button']:has-text('{text}') -> Count: 0
+[INFO] Trying pattern: button[type='submit'] -> Count: 0
+[INFO] Trying pattern: input[type='submit'] -> Count: 0
+[INFO] Trying pattern: button -> Count: 37
+[WARNING] Pattern button has 37 matches - ambiguous
+[INFO] LEVEL 3: Using CV-guided selector discovery...
+[INFO] Vision API call successful
+[INFO] CV selector strategy: tr:has-text('default_result_01') input[type='text']
+[INFO] CV reasoning: The action targets a specific row in the table identified by 'default_result_01'. The input field for 'Name' is scoped within this row. The selector uses text-based scoping and standard HTML attributes for specificity.
+[INFO] CV primary selector count: 0
+[INFO] Trying fallback: tr:has-text('default_result_01') input -> Count: 5
+[INFO] DEBUG: step_text = 'Click on Name and type "default project"'
+[INFO] DEBUG: step_lower contains 'select': False, contains dropdown: False
+[INFO] Clicked: tr:has-text('default_result_01') input
+[INFO] 
+Step 7: Click on save.
+[INFO]   Target text: 'save'
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 7
+[INFO]   Extracted 407 selectors, kept 176 after filtering
+[INFO]   Top candidates for 'save':
+[INFO]     [data-opencreatedialog="aeName.TestStep.name"] (clickable=True, visible=True, tag=button, text='Run')
+[INFO]     [data-showmoreverticalbtn="ShowMoreVerticalBtn"] (clickable=True, visible=True, tag=button, text='')
+[INFO]     [data-test="commandbar-search-input"] (clickable=True, visible=True, tag=input, text='')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 7: Click on save.
+[INFO] LEVEL 1: Trying custom selectors from JSON...
+[INFO] No matching selector found in JSON
+[INFO] LEVEL 2: Trying generic HTML patterns...
+[INFO] Trying pattern: button:has-text('Save') -> Count: 0
+[INFO] Trying pattern: a:has-text('Save') -> Count: 0
+[INFO] Trying pattern: [role='link']:has-text('Save') -> Count: 0
+[INFO] Trying pattern: [role='button']:has-text('Save') -> Count: 0
+[INFO] Trying pattern: button[type='submit'] -> Count: 0
+[INFO] Trying pattern: input[type='submit'] -> Count: 0
+[INFO] Trying pattern: button -> Count: 38
+[WARNING] Pattern button has 38 matches - ambiguous
+[INFO] LEVEL 3: Using CV-guided selector discovery...
+[INFO] Vision API call successful
+[INFO] CV selector strategy: tr:has-text('default_result_01') button:has-text('Save')
+[INFO] CV reasoning: The 'Save' button is located within a specific row in a table. Scoping is required to ensure the correct row ('default_result_01') is targeted. Text-based selector is preferred for clarity and specificity.
+[INFO] CV primary selector count: 0
+[INFO] Trying fallback: tr:has-text('default_result_01') [aria-label='Save'] -> Count: 0
+[INFO] Trying fallback: tr:has-text('default_result_01') .save-button -> Count: 0
+[INFO] 
+Step 8: Click on Delete
+[INFO]   Target text: 'delete'
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 8
+[INFO]   Extracted 407 selectors, kept 176 after filtering
+[INFO]   Top candidates for 'delete':
+[INFO]     [data-opencreatedialog="aeName.TestStep.name"] (clickable=True, visible=True, tag=button, text='Run')
+[INFO]     [data-showmoreverticalbtn="ShowMoreVerticalBtn"] (clickable=True, visible=True, tag=button, text='')
+[INFO]     [data-test="commandbar-search-input"] (clickable=True, visible=True, tag=input, text='')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 8: Click on Delete
+[INFO] LEVEL 1: Trying custom selectors from JSON...
+[INFO] No matching selector found in JSON
+[INFO] LEVEL 2: Trying generic HTML patterns...
+[INFO] Trying pattern: button:has-text('{text}') -> Count: 0
+[INFO] Trying pattern: a:has-text('{text}') -> Count: 0
+[INFO] Trying pattern: [role='link']:has-text('{text}') -> Count: 0
+[INFO] Trying pattern: [role='button']:has-text('{text}') -> Count: 0
+[INFO] Trying pattern: button[type='submit'] -> Count: 0
+[INFO] Trying pattern: input[type='submit'] -> Count: 0
+[INFO] Trying pattern: button -> Count: 38
+[WARNING] Pattern button has 38 matches - ambiguous
+[INFO] LEVEL 3: Using CV-guided selector discovery...
+[INFO] Vision API call successful
+[INFO] CV selector strategy: tr:has-text('default_result_01') button:has-text('Delete')
+[INFO] CV reasoning: The 'Delete' button is associated with a specific row in the table. Scoping to the row containing 'default_result_01' ensures the correct button is targeted. Text-based selector is used as it is clear and specific.
+[INFO] CV primary selector count: 0
+[INFO] Trying fallback: tr:has-text('default_result_01') [aria-label='Delete'] -> Count: 0
+[INFO] Trying fallback: tr:has-text('default_result_01') .delete-button -> Count: 0
+[INFO] 
+Step 9: Click on Remove
+[INFO]   Target text: 'remove'
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 9
+[INFO]   Extracted 407 selectors, kept 175 after filtering
+[INFO]   Top candidates for 'remove':
+[INFO]     [data-opencreatedialog="aeName.TestStep.name"] (clickable=True, visible=True, tag=button, text='Run')
+[INFO]     [data-showmoreverticalbtn="ShowMoreVerticalBtn"] (clickable=True, visible=True, tag=button, text='')
+[INFO]     [data-test="commandbar-search-input"] (clickable=True, visible=True, tag=input, text='')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 9: Click on Remove
+[INFO] LEVEL 1: Trying custom selectors from JSON...
+[INFO] No matching selector found in JSON
+[INFO] LEVEL 2: Trying generic HTML patterns...
+[INFO] Trying pattern: button:has-text('{text}') -> Count: 0
+[INFO] Trying pattern: a:has-text('{text}') -> Count: 0
+[INFO] Trying pattern: [role='link']:has-text('{text}') -> Count: 0
+[INFO] Trying pattern: [role='button']:has-text('{text}') -> Count: 0
+[INFO] Trying pattern: button[type='submit'] -> Count: 0
+[INFO] Trying pattern: input[type='submit'] -> Count: 0
+[INFO] Trying pattern: button -> Count: 38
+[WARNING] Pattern button has 38 matches - ambiguous
+[INFO] LEVEL 3: Using CV-guided selector discovery...
+[INFO] Vision API call successful
+[INFO] CV selector strategy: tr:has-text('default_result_01') button:has-text('Remove')
+[INFO] CV reasoning: The 'Remove' button is associated with a specific row in the table. Scoping is required to ensure the correct row is targeted. Text-based selector is used for specificity, with ARIA and CSS class as fallbacks.
+[INFO] CV primary selector count: 0
+[INFO] Trying fallback: tr:has-text('default_result_01') [aria-label='Remove'] -> Count: 0
+[INFO] Trying fallback: tr:has-text('default_result_01') .remove-button -> Count: 0
+[INFO] 
+[5/5] Saving extracted selectors...
+[INFO] Runtime selectors saved to: Selectors_Folder\runtime_selectors_RBPLCD-8862.json
+[INFO]   Total unique selectors: 525
+[INFO] 
+================================================================================
+[INFO]    Extraction Complete!
+[INFO] ================================================================================
+[INFO] Total selectors extracted: 1597
+[INFO] Output file: Selectors_Folder/runtime_selectors_RBPLCD-8862.json
+[INFO] 
+Next steps:
+[INFO]   1. Review: Selectors_Folder/runtime_selectors_RBPLCD-8862.json
+[INFO]   2. Merge with existing selectors: python merge_selectors.py
+[INFO]   3. Re-test with merged selectors: python run_test.py RBPLCD-8862

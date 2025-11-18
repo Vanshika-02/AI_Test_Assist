@@ -1,0 +1,101 @@
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] Logger initialized for ticket RBPLCD-8835
+[2025-11-04 16:15:38] [DEBUG] [TA_AI_Project] Log file: Logs\RBPLCD-8835_20251104_161538.log
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] Starting workflow execution...
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] Loading configuration...
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] Configuration loaded successfully
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] ======================================================================
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] JIRA PARSER AGENT - Starting
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] ======================================================================
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] Parsing ticket: RBPLCD-8835
+[2025-11-04 16:15:38] [DEBUG] [TA_AI_Project] Looking for file: C:\Projects\AI_Chat\PLCD\TA_AI_Project\Jira_Tickets\RBPLCD-8835.txt
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] Successfully read ticket file (1218 characters)
+[2025-11-04 16:15:38] [DEBUG] [TA_AI_Project] Extracted ticket ID: RBPLCD-8835
+[2025-11-04 16:15:38] [DEBUG] [TA_AI_Project] Extracted title: edit part details Created: 2025-09-16  Updated: 2025-09-24
+[2025-11-04 16:15:38] [DEBUG] [TA_AI_Project] Extracted module: Teststep
+[2025-11-04 16:15:38] [DEBUG] [TA_AI_Project] Found 'Steps to Reproduce' section
+[2025-11-04 16:15:38] [DEBUG] [TA_AI_Project] Extracted step 1: Login...
+[2025-11-04 16:15:38] [DEBUG] [TA_AI_Project] Extracted step 2: navigate to teststep...
+[2025-11-04 16:15:38] [DEBUG] [TA_AI_Project] Extracted step 3: click on teststep named as default_Measurement01...
+[2025-11-04 16:15:38] [DEBUG] [TA_AI_Project] Extracted step 4: open parts accordion...
+[2025-11-04 16:15:38] [DEBUG] [TA_AI_Project] Extracted step 5: click on edit button of part default_testobject_01...
+[2025-11-04 16:15:38] [DEBUG] [TA_AI_Project] Extracted step 6: Click on Type from mandatory field and select “Typ...
+[2025-11-04 16:15:38] [DEBUG] [TA_AI_Project] Extracted step 7: click on save...
+[2025-11-04 16:15:38] [DEBUG] [TA_AI_Project] Extracted step 8: "Successfully edited: 'TestObject' default_testobj...
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] Extracted 8 test steps
+[2025-11-04 16:15:38] [DEBUG] [TA_AI_Project] Extracted acceptance criteria: "Successfully edited: 'TestObject' default_testobject_01" message should be displayed...
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] Successfully parsed ticket content
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] Jira Data Summary:
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project]   - Ticket ID: RBPLCD-8835
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project]   - Module: Teststep
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project]   - Title: edit part details Created: 2025-09-16  Updated: 2025-09-24
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project]   - Steps: 8
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project]   - Acceptance Criteria: "Successfully edited: 'TestObject' default_testobj...
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] JIRA PARSER AGENT - Complete
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] ======================================================================
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] ======================================================================
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] VISION EXECUTOR AGENT - Starting
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] ======================================================================
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] Executing 8 test steps
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] Azure Vision Client initialized
+[2025-11-04 16:15:38] [DEBUG] [TA_AI_Project] Using deployment: gpt-4o
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] Sequential context tracking ENABLED
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] Loaded enriched selectors (Phase: runtime_merged)
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] Total selectors loaded: 1333
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] State: Reset for new test
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] Sequential context state reset
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] Module context: Teststep
+[2025-11-04 16:15:38] [INFO] [TA_AI_Project] Initializing browser...
+[2025-11-04 16:15:39] [INFO] [TA_AI_Project] Launched edge browser
+[2025-11-04 16:15:40] [INFO] [TA_AI_Project] Navigating to: http://fe0vm03313.de.bosch.com/rbplcd_t/client/login
+[2025-11-04 16:15:55] [INFO] [TA_AI_Project] Browser initialized successfully
+[2025-11-04 16:15:55] [INFO] [TA_AI_Project] Performing auto-login...
+[2025-11-04 16:15:55] [INFO] [TA_AI_Project] Captured login page screenshot
+[2025-11-04 16:15:55] [INFO] [TA_AI_Project] Attempting login with standard selectors...
+[2025-11-04 16:15:55] [INFO] [TA_AI_Project] Standard selectors not found, will use CV-guided approach
+[2025-11-04 16:15:55] [INFO] [TA_AI_Project] Using CV to identify specific selectors...
+[2025-11-04 16:15:55] [DEBUG] [TA_AI_Project] Calling vision API (attempt 1/3)
+[2025-11-04 16:15:55] [DEBUG] [TA_AI_Project] Prompt: 
+You are analyzing a login page screenshot to identify the BEST CSS selectors for Playwright automation.
+
+Your task: Find the MOST SPECIFIC and RELIABLE selectors for:
+1. Username/Email input field
+2....
+[2025-11-04 16:16:10] [DEBUG] [TA_AI_Project] API Response: {
+    "username_selector": "input[placeholder='Username']",
+    "password_selector": "input[placeholder='Password']",
+    "button_selector": "button:has-text('Login')",
+    "username_fallback": "input...
+[2025-11-04 16:16:10] [INFO] [TA_AI_Project] Vision API call successful
+[2025-11-04 16:16:10] [INFO] [TA_AI_Project] CV identified selectors with confidence: 0.95
+[2025-11-04 16:16:10] [INFO] [TA_AI_Project] CV reasoning: The primary selectors use specific attributes like 'placeholder' and button text, which are unique and descriptive for the elements. The fallback selectors rely on 'name' attributes and button type, which are also reliable but slightly less specific. These choices ensure high accuracy and robustness for automation.
+[2025-11-04 16:16:10] [INFO] [TA_AI_Project] Primary selectors - Username: input[placeholder='Username'], password=***MASKED***'Password'], Button: button:has-text('Login')
+[2025-11-04 16:16:10] [INFO] [TA_AI_Project] Username filled using CV selector: input[placeholder='Username']
+[2025-11-04 16:16:10] [INFO] [TA_AI_Project] Password filled using CV selector: input[placeholder='Password']
+[2025-11-04 16:16:10] [INFO] [TA_AI_Project] Login button clicked using CV selector: button:has-text('Login')
+[2025-11-04 16:16:13] [INFO] [TA_AI_Project] Current URL after login: http://fe0vm03313.de.bosch.com/rbplcd_t/client/login
+[2025-11-04 16:16:13] [WARNING] [TA_AI_Project] Still on login page - login may have failed
+[2025-11-04 16:16:13] [INFO] [TA_AI_Project] Debug screenshot saved: login_failed_debug.png
+[2025-11-04 16:16:13] [ERROR] [TA_AI_Project] Fatal error during execution: Auto-login failed
+[2025-11-04 16:16:13] [INFO] [TA_AI_Project] 
+Total execution time: 34.99 seconds
+[2025-11-04 16:16:13] [INFO] [TA_AI_Project] Video recorded at: C:\Projects\AI_Chat\PLCD\TA_AI_Project\Videos\d6c2a290b9ad38a7e06f80750b481b5a.webm
+[2025-11-04 16:16:13] [INFO] [TA_AI_Project] Video saved: C:\Projects\AI_Chat\PLCD\TA_AI_Project\Videos\d6c2a290b9ad38a7e06f80750b481b5a.webm
+[2025-11-04 16:16:15] [INFO] [TA_AI_Project] Browser closed
+[2025-11-04 16:16:15] [INFO] [TA_AI_Project] ======================================================================
+[2025-11-04 16:16:15] [INFO] [TA_AI_Project] VISION EXECUTOR AGENT - Complete
+[2025-11-04 16:16:15] [INFO] [TA_AI_Project] Overall Status: PASSED
+[2025-11-04 16:16:15] [INFO] [TA_AI_Project] Steps Passed: 0/0
+[2025-11-04 16:16:15] [INFO] [TA_AI_Project] ======================================================================
+[2025-11-04 16:16:15] [INFO] [TA_AI_Project] ======================================================================
+[2025-11-04 16:16:15] [INFO] [TA_AI_Project] REPORT GENERATOR AGENT - Starting
+[2025-11-04 16:16:15] [INFO] [TA_AI_Project] ======================================================================
+[2025-11-04 16:16:15] [INFO] [TA_AI_Project] Generating HTML report...
+[2025-11-04 16:16:15] [WARNING] [TA_AI_Project] Template not found: templates\report_template.html, using built-in template
+[2025-11-04 16:16:15] [INFO] [TA_AI_Project] Report saved: C:\Projects\AI_Chat\PLCD\TA_AI_Project\Reports\RBPLCD-8835_report_20251104_161615.html
+[2025-11-04 16:16:15] [INFO] [TA_AI_Project] HTML report generated: C:\Projects\AI_Chat\PLCD\TA_AI_Project\Reports\RBPLCD-8835_report_20251104_161615.html
+[2025-11-04 16:16:15] [INFO] [TA_AI_Project] Generating Playwright script...
+[2025-11-04 16:16:15] [INFO] [TA_AI_Project] Script saved: C:\Projects\AI_Chat\PLCD\TA_AI_Project\Generated_Scripts\RBPLCD-8835_script_20251104_161615.py
+[2025-11-04 16:16:15] [INFO] [TA_AI_Project] Playwright script generated: C:\Projects\AI_Chat\PLCD\TA_AI_Project\Generated_Scripts\RBPLCD-8835_script_20251104_161615.py
+[2025-11-04 16:16:15] [INFO] [TA_AI_Project] REPORT GENERATOR AGENT - Complete
+[2025-11-04 16:16:15] [INFO] [TA_AI_Project] ======================================================================
+[2025-11-04 16:16:15] [INFO] [TA_AI_Project] Workflow execution completed

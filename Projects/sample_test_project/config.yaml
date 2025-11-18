@@ -1,0 +1,44 @@
+base_folder: Projects
+project:
+  name: sample_test_project
+  description: Sample testing project for demonstration
+testers:
+- username: alice_tester
+  password: alice123
+- username: bob_tester
+  password: bob456
+web_application:
+  url: https://www.google.com
+  test_credentials:
+    username: test_user@example.com
+    password: test_password
+wait_times:
+  default: 5
+  long: 10
+  short: 2
+  page_load: 15
+folders:
+  jira_tickets: Jira_Tickets
+  selectors: Selectors_Folder
+  reports: Reports
+  videos: Videos
+  scripts: Generated_Scripts
+  logs: Logs
+azure_openai:
+  api_key: your_azure_openai_api_key_here
+  endpoint: https://your-endpoint.openai.azure.com
+  deployment_name: gpt-4
+  api_version: '2024-02-01'
+module_mapping:
+  login: login_module
+  navigation: navigation_module
+  forms: forms_module
+  search: search_module
+  reports: reports_module
+execution:
+  headless: true
+  timeout: 30000
+  slow_mo: 0
+  screenshot_on_failure: true
+  video_recording: true
+  browser: chromium

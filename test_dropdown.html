@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Dropdown - Type Selection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@angular/material@15/prebuilt-themes/indigo-pink.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            padding: 40px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+        .form-field {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            font-family: 'Roboto', sans-serif;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3f51b5;
+        }
+        .mat-autocomplete-panel {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            max-height: 256px;
+            overflow-y: auto;
+            position: absolute;
+            z-index: 1000;
+            width: 100%;
+            display: none;
+        }
+        .mat-autocomplete-panel.open {
+            display: block;
+        }
+        mat-option {
+            display: block;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        mat-option:hover {
+            background-color: #f5f5f5;
+        }
+        mat-option.selected {
+            background-color: #3f51b5;
+            color: white;
+        }
+        button {
+            padding: 12px 24px;
+            background-color: #3f51b5;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #303f9f;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+            display: none;
+        }
+        .result.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Edit TestObject</h1>
+
+        <div class="form-field">
+            <label for="name">Name *</label>
+            <input type="text" id="name" value="default_testobject_01" readonly>
+        </div>
+
+        <div class="form-field">
+            <label for="type">Type *</label>
+            <input
+                type="text"
+                id="type"
+                class="mat-mdc-autocomplete-trigger"
+                data-attribute="Type"
+                placeholder="Type*"
+                autocomplete="off"
+                value="Injector">
+            <div class="mat-autocomplete-panel" id="typePanel">
+                <mat-option data-value="Injector">Injector</mat-option>
+                <mat-option data-value="Type 1">Type 1</mat-option>
+                <mat-option data-value="Type 2">Type 2</mat-option>
+                <mat-option data-value="Type 3">Type 3</mat-option>
+                <mat-option data-value="Type 4">Type 4</mat-option>
+                <mat-option data-value="Type 5">Type 5</mat-option>
+            </div>
+        </div>
+
+        <div class="form-field">
+            <label for="status">Sample Status</label>
+            <input type="text" id="status" value="Serial Part" readonly>
+        </div>
+
+        <button id="saveBtn">Save</button>
+
+        <div class="result" id="result">
+            <strong>Successfully edited: 'TestObject' default_testobject_01</strong>
+        </div>
+    </div>
+
+    <script>
+        const typeInput = document.getElementById('type');
+        const typePanel = document.getElementById('typePanel');
+        const saveBtn = document.getElementById('saveBtn');
+        const result = document.getElementById('result');
+        const allOptions = Array.from(typePanel.querySelectorAll('mat-option'));
+
+        // Store all original options
+        const originalOptions = allOptions.map(opt => ({
+            element: opt,
+            value: opt.getAttribute('data-value'),
+            text: opt.textContent
+        }));
+
+        // Open panel on click
+        typeInput.addEventListener('click', function() {
+            typePanel.classList.add('open');
+            // Reset to show all options
+            showAllOptions();
+        });
+
+        // Filter options as user types
+        typeInput.addEventListener('input', function() {
+            const filterText = this.value.toLowerCase().trim();
+
+            if (!filterText) {
+                showAllOptions();
+                return;
+            }
+
+            // Filter options
+            allOptions.forEach(option => {
+                const optionText = option.textContent.toLowerCase();
+                if (optionText.includes(filterText)) {
+                    option.style.display = 'block';
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+
+            typePanel.classList.add('open');
+        });
+
+        // Show all options
+        function showAllOptions() {
+            allOptions.forEach(option => {
+                option.style.display = 'block';
+            });
+        }
+
+        // Handle option selection
+        allOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const value = this.getAttribute('data-value');
+                typeInput.value = value;
+                typePanel.classList.remove('open');
+
+                // Remove selected class from all options
+                allOptions.forEach(opt => opt.classList.remove('selected'));
+                // Add selected class to clicked option
+                this.classList.add('selected');
+            });
+        });
+
+        // Close panel when clicking outside
+        document.addEventListener('click', function(e) {
+            if (e.target !== typeInput && !typePanel.contains(e.target)) {
+                typePanel.classList.remove('open');
+            }
+        });
+
+        // Save button
+        saveBtn.addEventListener('click', function() {
+            result.classList.add('show');
+            setTimeout(() => {
+                result.classList.remove('show');
+            }, 3000);
+        });
+
+        // Prevent panel close on input click
+        typeInput.addEventListener('focus', function() {
+            typePanel.classList.add('open');
+        });
+    </script>
+</body>
+</html>

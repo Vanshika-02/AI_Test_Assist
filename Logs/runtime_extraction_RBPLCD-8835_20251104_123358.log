@@ -1,0 +1,147 @@
+[INFO] ================================================================================
+[INFO]    Runtime Selector Extraction for RBPLCD-8835
+[INFO] ================================================================================
+[INFO] 
+[1/5] Parsing Jira ticket...
+[INFO]   Ticket: RBPLCD-8835
+[INFO]   Module: Teststep
+[INFO]   Steps: 8
+[INFO] 
+[2/5] Initializing browser...
+[INFO] Launched edge browser
+[INFO] Navigating to: http://fe0vm03313.de.bosch.com/rbplcd_t/client/login
+[INFO] Azure Vision Client initialized
+[INFO] Jira module 'Teststep' maps to web name 'Runs'
+[INFO] 
+[3/5] Performing auto-login...
+[INFO] Captured login page screenshot
+[INFO] Attempting login with standard selectors...
+[INFO] Standard selectors not found, will use CV-guided approach
+[INFO] Using CV to identify specific selectors...
+[INFO] Vision API call successful
+[INFO] CV identified selectors with confidence: 0.95
+[INFO] CV reasoning: The chosen selectors are highly specific and reliable. The 'placeholder' attribute uniquely identifies the username and password fields, while the button text 'Login' ensures the correct button is selected. Fallbacks use 'name' attributes and button type for additional reliability. These selectors avoid generic patterns and are visually aligned with the login form.
+[INFO] Primary selectors - Username: input[placeholder='Username'], Password: input[placeholder='Password'], Button: button:has-text('Login')
+[INFO] Username filled using CV selector: input[placeholder='Username']
+[INFO] Password filled using CV selector: input[placeholder='Password']
+[INFO] Login button clicked using CV selector: button:has-text('Login')
+[INFO] Current URL after login: http://fe0vm03313.de.bosch.com/rbplcd_t/client/dashboard
+[INFO] Login successful - URL changed from login page
+[INFO]   Login successful
+[INFO] 
+[4/5] Executing 8 steps and extracting selectors...
+[INFO] 
+Step 1: Login [SKIPPED - login already done]
+[INFO] 
+Step 2: navigate to teststep
+[INFO]   Target text: 'teststep'
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 2
+[INFO]   Extracted 497 selectors, kept 377 after filtering
+[INFO]   Top candidates for 'teststep':
+[INFO]     [data-tabindex="-1"] (clickable=True, visible=True, tag=button, text='')
+[INFO]     [data-index="0"] (clickable=True, visible=False, tag=button, text='M')
+[INFO]     [data-index="1"] (clickable=True, visible=False, tag=button, text='T')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 2: navigate to teststep
+[ERROR] Error executing step: 'SelectorLoader' object has no attribute 'update_state_for_step'
+[INFO] 
+Step 3: click on teststep named as default_Measurement01
+[INFO]   Target text: 'teststep'
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 3
+[INFO]   Extracted 497 selectors, kept 377 after filtering
+[INFO]   Top candidates for 'teststep':
+[INFO]     [data-tabindex="-1"] (clickable=True, visible=True, tag=button, text='')
+[INFO]     [data-index="0"] (clickable=True, visible=False, tag=button, text='M')
+[INFO]     [data-index="1"] (clickable=True, visible=False, tag=button, text='T')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 3: click on teststep named as default_Measurement01
+[ERROR] Error executing step: 'SelectorLoader' object has no attribute 'update_state_for_step'
+[INFO] 
+Step 4: open parts accordion
+[INFO]   Target text: 'parts'
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 4
+[INFO]   Extracted 497 selectors, kept 377 after filtering
+[INFO]   Top candidates for 'parts':
+[INFO]     [data-tabindex="-1"] (clickable=True, visible=True, tag=button, text='')
+[INFO]     [data-index="0"] (clickable=True, visible=False, tag=button, text='M')
+[INFO]     [data-index="1"] (clickable=True, visible=False, tag=button, text='T')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 4: open parts accordion
+[ERROR] Error executing step: 'SelectorLoader' object has no attribute 'update_state_for_step'
+[INFO] 
+Step 5: click on edit button of part default_testobject_01
+[INFO]   Target text: 'edit'
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 5
+[INFO]   Extracted 497 selectors, kept 377 after filtering
+[INFO]   Top candidates for 'edit':
+[INFO]     [data-tabindex="-1"] (clickable=True, visible=True, tag=button, text='')
+[INFO]     [data-index="0"] (clickable=True, visible=False, tag=button, text='M')
+[INFO]     [data-index="1"] (clickable=True, visible=False, tag=button, text='T')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 5: click on edit button of part default_testobject_01
+[ERROR] Error executing step: 'SelectorLoader' object has no attribute 'update_state_for_step'
+[INFO] 
+Step 6: Click on Type from mandatory field and select “Type 5” from drop down
+[INFO]   Target text: 'type'
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 6
+[INFO]   Extracted 497 selectors, kept 377 after filtering
+[INFO]   Top candidates for 'type':
+[INFO]     [data-tabindex="-1"] (clickable=True, visible=True, tag=button, text='')
+[INFO]     [data-index="0"] (clickable=True, visible=False, tag=button, text='M')
+[INFO]     [data-index="1"] (clickable=True, visible=False, tag=button, text='T')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 6: Click on Type from mandatory field and select “Type 5” from drop down
+[ERROR] Error executing step: 'SelectorLoader' object has no attribute 'update_state_for_step'
+[INFO] 
+Step 7: click on save
+[INFO]   Target text: 'save'
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 7
+[INFO]   Extracted 497 selectors, kept 377 after filtering
+[INFO]   Top candidates for 'save':
+[INFO]     [data-tabindex="-1"] (clickable=True, visible=True, tag=button, text='')
+[INFO]     [data-index="0"] (clickable=True, visible=False, tag=button, text='M')
+[INFO]     [data-index="1"] (clickable=True, visible=False, tag=button, text='T')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 7: click on save
+[ERROR] Error executing step: 'SelectorLoader' object has no attribute 'update_state_for_step'
+[INFO] 
+Step 8: "Successfully edited: 'TestObject' default_testobject_01" message should be displayed
+[INFO]   Target text: 'Successfully edited: '
+[INFO]   Extracting selectors from page...
+[INFO] Extracting selectors from page for step 8
+[INFO]   Extracted 497 selectors, kept 377 after filtering
+[INFO]   Top candidates for 'Successfully edited: ':
+[INFO]     [data-tabindex="-1"] (clickable=True, visible=True, tag=button, text='')
+[INFO]     [data-index="0"] (clickable=True, visible=False, tag=button, text='M')
+[INFO]     [data-index="1"] (clickable=True, visible=False, tag=button, text='T')
+[INFO]   Executing step...
+[INFO] 
+Executing Step 8: "Successfully edited: 'TestObject' default_testobject_01" message should be displayed
+[ERROR] Error executing step: 'SelectorLoader' object has no attribute 'update_state_for_step'
+[INFO] 
+[5/5] Saving extracted selectors...
+[INFO] Runtime selectors saved to: Selectors_Folder\runtime_selectors_RBPLCD-8835.json
+[INFO]   Total unique selectors: 377
+[INFO] 
+================================================================================
+[INFO]    Extraction Complete!
+[INFO] ================================================================================
+[INFO] Total selectors extracted: 2639
+[INFO] Output file: Selectors_Folder/runtime_selectors_RBPLCD-8835.json
+[INFO] 
+Next steps:
+[INFO]   1. Review: Selectors_Folder/runtime_selectors_RBPLCD-8835.json
+[INFO]   2. Merge with existing selectors: python merge_selectors.py
+[INFO]   3. Re-test with merged selectors: python run_test.py RBPLCD-8835

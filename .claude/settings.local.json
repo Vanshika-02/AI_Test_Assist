@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python test:*)",
+      "Bash(python test_jira_parser.py:*)",
+      "Bash(python:*)",
+      "Bash(.venvScriptsactivate)",
+      "Bash(pip install:*)",
+      "Bash(./venv/Scripts/pip.exe install:*)",
+      "Bash(./venv/Scripts/playwright.exe install msedge)",
+      "Bash(./venv/Scripts/playwright.exe install --with-deps)",
+      "Bash(./venv/Scripts/playwright.exe install ffmpeg)",
+      "Bash(findstr:*)",
+      "Bash(dir:*)",
+      "Bash(more:*)",
+      "Bash(del \"C:\\Projects\\AI_Chat\\PLCD\\TA_AI_Project\\analyze_data.py\")",
+      "Bash(copy:*)",
+      "Bash(move:*)",
+      "Bash(mkdir database)",
+      "Bash(./venv/Scripts/pip.exe list)",
+      "Bash(mkdir:*)",
+      "Bash(find:*)",
+      "Read(//c/Projects/AI_Chat/PLCD/cri-webapp/client/src/app/create-new/**)",
+      "Read(//c/Projects/AI_Chat/PLCD/cri-webapp/client/src/app/**)",
+      "Bash(./venv/Scripts/python.exe:*)",
+      "Bash(awk:*)",
+      "Bash(\"Jira_Tickets\\RBPLCD-8835.txt\")",
+      "Bash(echo:*)",
+      "Bash(\"Jira_Tickets/RBPLCD-8835.txt\")",
+      "Bash(timeout:*)",
+      "Bash(exit 0)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

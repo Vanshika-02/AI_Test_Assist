@@ -1,0 +1,461 @@
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] Logger initialized for ticket RBPLCD-8862
+[2025-10-08 16:34:45] [DEBUG] [TA_AI_Project] Log file: Logs\RBPLCD-8862_20251008_163445.log
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] Starting workflow execution...
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] Loading configuration...
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] Configuration loaded successfully
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] ======================================================================
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] JIRA PARSER AGENT - Starting
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] ======================================================================
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] Parsing ticket: RBPLCD-8862
+[2025-10-08 16:34:45] [DEBUG] [TA_AI_Project] Looking for file: C:\Projects\AI_Chat\PLCD\TA_AI_Project\Jira_Tickets\RBPLCD-8862.txt
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] Successfully read ticket file (1091 characters)
+[2025-10-08 16:34:45] [DEBUG] [TA_AI_Project] Extracted ticket ID: RBPLCD-8862
+[2025-10-08 16:34:45] [DEBUG] [TA_AI_Project] Extracted title: create button not working in teststep Created: 2025-10-03  Updated: 2025-10-03
+[2025-10-08 16:34:45] [DEBUG] [TA_AI_Project] Extracted module: Teststep
+[2025-10-08 16:34:45] [DEBUG] [TA_AI_Project] Found 'Steps to Reproduce' section
+[2025-10-08 16:34:45] [DEBUG] [TA_AI_Project] Extracted step 1: Login...
+[2025-10-08 16:34:45] [DEBUG] [TA_AI_Project] Extracted step 2: Navigate to teststep...
+[2025-10-08 16:34:45] [DEBUG] [TA_AI_Project] Extracted step 3: Force Click on "... +" button on ....
+[2025-10-08 16:34:45] [DEBUG] [TA_AI_Project] Extracted step 4: Select "Project" from the drop down and click on i...
+[2025-10-08 16:34:45] [DEBUG] [TA_AI_Project] Extracted step 5: Click on Select Product and select "MyProject" fro...
+[2025-10-08 16:34:45] [DEBUG] [TA_AI_Project] Extracted step 6: Click on Name and type "default project"...
+[2025-10-08 16:34:45] [DEBUG] [TA_AI_Project] Extracted step 7: Click on save....
+[2025-10-08 16:34:45] [DEBUG] [TA_AI_Project] Extracted step 8: Click on Delete...
+[2025-10-08 16:34:45] [DEBUG] [TA_AI_Project] Extracted step 9: Click on Remove...
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] Extracted 9 test steps
+[2025-10-08 16:34:45] [DEBUG] [TA_AI_Project] Extracted acceptance criteria: ...
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] Successfully parsed ticket content
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] Jira Data Summary:
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project]   - Ticket ID: RBPLCD-8862
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project]   - Module: Teststep
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project]   - Title: create button not working in teststep Created: 2025-10-03  Updated: 2025-10-03
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project]   - Steps: 9
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project]   - Acceptance Criteria: ...
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] JIRA PARSER AGENT - Complete
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] ======================================================================
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] ======================================================================
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] VISION EXECUTOR AGENT - Starting
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] ======================================================================
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] Executing 9 test steps
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] Azure Vision Client initialized
+[2025-10-08 16:34:45] [DEBUG] [TA_AI_Project] Using deployment: gpt-4o
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] Loaded 888 selectors from Selectors_Folder\selectors.json
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] Module context: Teststep
+[2025-10-08 16:34:45] [INFO] [TA_AI_Project] Initializing browser...
+[2025-10-08 16:34:48] [INFO] [TA_AI_Project] Launched edge browser
+[2025-10-08 16:34:49] [INFO] [TA_AI_Project] Navigating to: http://fe0vm03313.de.bosch.com/rbplcd_t/client/login
+[2025-10-08 16:35:01] [INFO] [TA_AI_Project] Browser initialized successfully
+[2025-10-08 16:35:01] [INFO] [TA_AI_Project] Performing auto-login...
+[2025-10-08 16:35:01] [INFO] [TA_AI_Project] Captured login page screenshot
+[2025-10-08 16:35:01] [INFO] [TA_AI_Project] Attempting login with standard selectors...
+[2025-10-08 16:35:01] [INFO] [TA_AI_Project] Standard selectors not found, will use CV-guided approach
+[2025-10-08 16:35:01] [INFO] [TA_AI_Project] Using CV to identify specific selectors...
+[2025-10-08 16:35:01] [DEBUG] [TA_AI_Project] Calling vision API (attempt 1/3)
+[2025-10-08 16:35:01] [DEBUG] [TA_AI_Project] Prompt: 
+You are analyzing a login page screenshot to identify the BEST CSS selectors for Playwright automation.
+
+Your task: Find the MOST SPECIFIC and RELIABLE selectors for:
+1. Username/Email input field
+2....
+[2025-10-08 16:35:09] [DEBUG] [TA_AI_Project] API Response: {
+    "username_selector": "input[placeholder='Username']",
+    "password_selector": "input[placeholder='Password']",
+    "button_selector": "button:has-text('Login')",
+    "username_fallback": "input...
+[2025-10-08 16:35:09] [INFO] [TA_AI_Project] Vision API call successful
+[2025-10-08 16:35:09] [INFO] [TA_AI_Project] CV identified selectors with confidence: 0.95
+[2025-10-08 16:35:09] [INFO] [TA_AI_Project] CV reasoning: The primary selectors are based on unique and specific attributes like 'placeholder' and button text, which are highly reliable and unlikely to change. Fallbacks use 'name' attributes and button type, which are also specific but slightly less reliable than placeholders and text content. These selectors are visually and semantically tied to the login form, ensuring accuracy.
+[2025-10-08 16:35:09] [INFO] [TA_AI_Project] Primary selectors - Username: input[placeholder='Username'], password=***MASKED***'Password'], Button: button:has-text('Login')
+[2025-10-08 16:35:09] [INFO] [TA_AI_Project] Username filled using CV selector: input[placeholder='Username']
+[2025-10-08 16:35:09] [INFO] [TA_AI_Project] Password filled using CV selector: input[placeholder='Password']
+[2025-10-08 16:35:09] [INFO] [TA_AI_Project] Login button clicked using CV selector: button:has-text('Login')
+[2025-10-08 16:35:12] [INFO] [TA_AI_Project] Current URL after login: http://fe0vm03313.de.bosch.com/rbplcd_t/client/dashboard
+[2025-10-08 16:35:12] [INFO] [TA_AI_Project] Login successful - URL changed from login page
+[2025-10-08 16:35:12] [INFO] [TA_AI_Project] Login successful
+[2025-10-08 16:35:12] [INFO] [TA_AI_Project] Module mapping loaded: {'teststep': 'Runs', 'test': 'Tasks', 'structurelevel': 'Projects'}
+[2025-10-08 16:35:12] [INFO] [TA_AI_Project] Module mapping: 'Teststep' -> 'Runs'
+[2025-10-08 16:35:12] [INFO] [TA_AI_Project] Jira module 'Teststep' maps to web name 'Runs'
+[2025-10-08 16:35:12] [INFO] [TA_AI_Project] Skipping Step 1 (Login) - already completed in auto_login()
+[2025-10-08 16:35:12] [INFO] [TA_AI_Project] 
+======================================================================
+[2025-10-08 16:35:12] [INFO] [TA_AI_Project] Executing Step 2: Navigate to teststep
+[2025-10-08 16:35:12] [INFO] [TA_AI_Project] ======================================================================
+[2025-10-08 16:35:12] [INFO] [TA_AI_Project] 
+Executing Step 2: Navigate to teststep
+[2025-10-08 16:35:14] [INFO] [TA_AI_Project] LEVEL 1: Trying custom selectors from JSON...
+[2025-10-08 16:35:14] [INFO] [TA_AI_Project] Found custom selector: [data-masterviewteststeps="masterViewTestSteps"]
+[2025-10-08 16:35:14] [INFO] [TA_AI_Project] Selector count: 0
+[2025-10-08 16:35:14] [INFO] [TA_AI_Project] Selector not found on page
+[2025-10-08 16:35:14] [INFO] [TA_AI_Project] LEVEL 2: Trying generic HTML patterns...
+[2025-10-08 16:35:14] [INFO] [TA_AI_Project] Navigation detected - looking for 'Runs' in web app
+[2025-10-08 16:35:14] [INFO] [TA_AI_Project] Trying pattern: button:has-text('Runs') -> Count: 0
+[2025-10-08 16:35:14] [INFO] [TA_AI_Project] Trying pattern: a:has-text('Runs') -> Count: 0
+[2025-10-08 16:35:14] [INFO] [TA_AI_Project] Trying pattern: [role='link']:has-text('Runs') -> Count: 1
+[2025-10-08 16:35:14] [INFO] [TA_AI_Project] DEBUG: step_text = 'Navigate to teststep'
+[2025-10-08 16:35:14] [INFO] [TA_AI_Project] DEBUG: step_lower contains 'select': False, contains dropdown: False
+[2025-10-08 16:35:14] [INFO] [TA_AI_Project] Clicked (default): [role='link']:has-text('Runs')
+[2025-10-08 16:35:14] [INFO] [TA_AI_Project] ✅ Level 2 succeeded with selector: [role='link']:has-text('Runs')
+[2025-10-08 16:35:16] [INFO] [TA_AI_Project] Step 2 status: PASSED
+[2025-10-08 16:35:16] [INFO] [TA_AI_Project] Selector used: [role='link']:has-text('Runs')
+[2025-10-08 16:35:16] [INFO] [TA_AI_Project] Level used: Level 2 (Generic)
+[2025-10-08 16:35:16] [INFO] [TA_AI_Project] 
+======================================================================
+[2025-10-08 16:35:16] [INFO] [TA_AI_Project] Executing Step 3: Force Click on "... +" button on .
+[2025-10-08 16:35:16] [INFO] [TA_AI_Project] ======================================================================
+[2025-10-08 16:35:16] [INFO] [TA_AI_Project] 
+Executing Step 3: Force Click on "... +" button on .
+[2025-10-08 16:35:16] [INFO] [TA_AI_Project] LEVEL 1: Trying custom selectors from JSON...
+[2025-10-08 16:35:16] [INFO] [TA_AI_Project] Found custom selector: [data-showmoreverticalbtn="ShowMoreVerticalBtn"]
+[2025-10-08 16:35:16] [INFO] [TA_AI_Project] Selector count: 1
+[2025-10-08 16:35:16] [INFO] [TA_AI_Project] DEBUG: step_text = 'Force Click on "... +" button on .'
+[2025-10-08 16:35:16] [INFO] [TA_AI_Project] DEBUG: step_lower contains 'select': False, contains dropdown: False
+[2025-10-08 16:35:16] [INFO] [TA_AI_Project] Clicked: [data-showmoreverticalbtn="ShowMoreVerticalBtn"]
+[2025-10-08 16:35:16] [INFO] [TA_AI_Project] ✅ Level 1 succeeded with selector: [data-showmoreverticalbtn="ShowMoreVerticalBtn"]
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] Step 3 status: PASSED
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] Selector used: [data-showmoreverticalbtn="ShowMoreVerticalBtn"]
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] Level used: Level 1 (Custom)
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] 
+======================================================================
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] Executing Step 4: Select "Project" from the drop down and click on it.
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] ======================================================================
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] 
+Executing Step 4: Select "Project" from the drop down and click on it.
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] LEVEL 1: Trying custom selectors from JSON...
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] Found custom selector: [data-addexisting="addExisting"]
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] Selector count: 0
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] Selector not found on page
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] LEVEL 2: Trying generic HTML patterns...
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] Trying pattern: [data-attribute='{text}'] -> Count: 0
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] Trying pattern: [data-basicattribute='attribute'][aria-label*='{text}'] -> Count: 0
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] Trying pattern: input.mat-mdc-autocomplete-trigger[data-attribute='{text}'] -> Count: 0
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] Trying pattern: label:has-text('{text}') .mat-select -> Count: 0
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] Trying pattern: label:has-text('{text}') ~ .mat-select -> Count: 0
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] Trying pattern: label:has-text('{text}') input.mat-mdc-autocomplete-trigger -> Count: 0
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] Trying pattern: div:has-text('{text}') >> .mat-select -> Count: 0
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] Trying pattern: div:has-text('{text}') >> input[role='combobox'] -> Count: 0
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] Trying pattern: :text('{text}') >> xpath=.. >> .mat-select -> Count: 0
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] Trying pattern: label:has-text('{text}') ~ select -> Count: 0
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] Trying pattern: [role='combobox'] -> Count: 6
+[2025-10-08 16:35:17] [WARNING] [TA_AI_Project] Pattern [role='combobox'] has 6 matches - ambiguous
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] Trying pattern: .mat-select -> Count: 0
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] Trying pattern: select -> Count: 0
+[2025-10-08 16:35:17] [INFO] [TA_AI_Project] LEVEL 3: Using CV-guided selector discovery...
+[2025-10-08 16:35:17] [DEBUG] [TA_AI_Project] Calling vision API (attempt 1/3)
+[2025-10-08 16:35:17] [DEBUG] [TA_AI_Project] Prompt: You are analyzing a web page to determine the BEST selector strategy for test automation.
+
+Module context: Teststep
+Task: Select "Project" from the drop down and click on it.
+
+Available custom selecto...
+[2025-10-08 16:35:24] [DEBUG] [TA_AI_Project] API Response: {
+    "selector": "[data-addexisting='addExisting'] >> text=Project",
+    "action": "click",
+    "requires_scoping": false,
+    "scope_selector": "",
+    "element_selector": "[data-addexisting='addExi...
+[2025-10-08 16:35:24] [INFO] [TA_AI_Project] Vision API call successful
+[2025-10-08 16:35:24] [INFO] [TA_AI_Project] CV selector strategy: [data-addexisting='addExisting'] >> text=Project
+[2025-10-08 16:35:24] [INFO] [TA_AI_Project] CV reasoning: The custom data attribute [data-addexisting='addExisting'] is specific to the dropdown menu, and combining it with text=Project ensures the correct item is selected. No scoping is required as the dropdown is not tied to a specific row or context.
+[2025-10-08 16:35:24] [INFO] [TA_AI_Project] CV primary selector count: 0
+[2025-10-08 16:35:24] [INFO] [TA_AI_Project] Trying fallback: button:has-text('Project') -> Count: 1
+[2025-10-08 16:35:24] [INFO] [TA_AI_Project] DEBUG: step_text = 'Select "Project" from the drop down and click on it.'
+[2025-10-08 16:35:24] [INFO] [TA_AI_Project] DEBUG: step_lower contains 'select': True, contains dropdown: True
+[2025-10-08 16:35:24] [INFO] [TA_AI_Project] DEBUG: Looking for quoted value in step_text
+[2025-10-08 16:35:24] [INFO] [TA_AI_Project] DEBUG: Characters in 'select...down': [99, 108, 105, 99, 107, 32, 111, 110, 32, 105, 116, 46]
+[2025-10-08 16:35:24] [INFO] [TA_AI_Project] Extracted dropdown value (quoted): Project
+[2025-10-08 16:35:24] [INFO] [TA_AI_Project] Autocomplete/Dropdown selection. Target value: 'Project'
+[2025-10-08 16:35:24] [INFO] [TA_AI_Project] Clicked field: button:has-text('Project')
+[2025-10-08 16:35:24] [ERROR] [TA_AI_Project] ❌ Autocomplete panel didn't open
+[2025-10-08 16:35:25] [WARNING] [TA_AI_Project] Step 4 failed
+[2025-10-08 16:35:25] [WARNING] [TA_AI_Project] Error: 
+[2025-10-08 16:35:25] [INFO] [TA_AI_Project] Step 4 status: FAILED
+[2025-10-08 16:35:25] [INFO] [TA_AI_Project] Selector used: 
+[2025-10-08 16:35:25] [INFO] [TA_AI_Project] Level used: 
+[2025-10-08 16:35:25] [INFO] [TA_AI_Project] 
+======================================================================
+[2025-10-08 16:35:25] [INFO] [TA_AI_Project] Executing Step 5: Click on Select Product and select "MyProject" from drop down.
+[2025-10-08 16:35:25] [INFO] [TA_AI_Project] ======================================================================
+[2025-10-08 16:35:25] [INFO] [TA_AI_Project] 
+Executing Step 5: Click on Select Product and select "MyProject" from drop down.
+[2025-10-08 16:35:26] [INFO] [TA_AI_Project] LEVEL 1: Trying custom selectors from JSON...
+[2025-10-08 16:35:26] [INFO] [TA_AI_Project] Found custom selector: [data-addexisting="addExisting"]
+[2025-10-08 16:35:26] [INFO] [TA_AI_Project] Selector count: 0
+[2025-10-08 16:35:26] [INFO] [TA_AI_Project] Selector not found on page
+[2025-10-08 16:35:26] [INFO] [TA_AI_Project] LEVEL 2: Trying generic HTML patterns...
+[2025-10-08 16:35:26] [INFO] [TA_AI_Project] Extracted dropdown/input field name: Select Product
+[2025-10-08 16:35:26] [INFO] [TA_AI_Project] Trying pattern: [data-attribute='Select Product'] -> Count: 0
+[2025-10-08 16:35:26] [INFO] [TA_AI_Project] Trying pattern: [data-basicattribute='attribute'][aria-label*='Select Product'] -> Count: 0
+[2025-10-08 16:35:26] [INFO] [TA_AI_Project] Trying pattern: input.mat-mdc-autocomplete-trigger[data-attribute='Select Product'] -> Count: 0
+[2025-10-08 16:35:26] [INFO] [TA_AI_Project] Trying pattern: label:has-text('Select Product') .mat-select -> Count: 0
+[2025-10-08 16:35:26] [INFO] [TA_AI_Project] Trying pattern: label:has-text('Select Product') ~ .mat-select -> Count: 0
+[2025-10-08 16:35:26] [INFO] [TA_AI_Project] Trying pattern: label:has-text('Select Product') input.mat-mdc-autocomplete-trigger -> Count: 0
+[2025-10-08 16:35:26] [INFO] [TA_AI_Project] Trying pattern: div:has-text('Select Product') >> .mat-select -> Count: 0
+[2025-10-08 16:35:26] [INFO] [TA_AI_Project] Trying pattern: div:has-text('Select Product') >> input[role='combobox'] -> Count: 0
+[2025-10-08 16:35:26] [INFO] [TA_AI_Project] Trying pattern: :text('Select Product') >> xpath=.. >> .mat-select -> Count: 0
+[2025-10-08 16:35:26] [INFO] [TA_AI_Project] Trying pattern: label:has-text('Select Product') ~ select -> Count: 0
+[2025-10-08 16:35:26] [INFO] [TA_AI_Project] Trying pattern: [role='combobox'] -> Count: 7
+[2025-10-08 16:35:26] [WARNING] [TA_AI_Project] Pattern [role='combobox'] has 7 matches - ambiguous
+[2025-10-08 16:35:26] [INFO] [TA_AI_Project] Trying pattern: .mat-select -> Count: 0
+[2025-10-08 16:35:26] [INFO] [TA_AI_Project] Trying pattern: select -> Count: 0
+[2025-10-08 16:35:26] [INFO] [TA_AI_Project] LEVEL 3: Using CV-guided selector discovery...
+[2025-10-08 16:35:26] [DEBUG] [TA_AI_Project] Calling vision API (attempt 1/3)
+[2025-10-08 16:35:26] [DEBUG] [TA_AI_Project] Prompt: You are analyzing a web page to determine the BEST selector strategy for test automation.
+
+Module context: Teststep
+Task: Click on Select Product and select "MyProject" from drop down.
+
+Available cust...
+[2025-10-08 16:35:31] [DEBUG] [TA_AI_Project] API Response: {
+    "selector": "[data-addexisting='addExisting']",
+    "action": "select",
+    "value": "MyProject",
+    "requires_scoping": false,
+    "scope_selector": "",
+    "element_selector": "[data-addexist...
+[2025-10-08 16:35:31] [INFO] [TA_AI_Project] Vision API call successful
+[2025-10-08 16:35:31] [INFO] [TA_AI_Project] CV selector strategy: [data-addexisting='addExisting']
+[2025-10-08 16:35:31] [INFO] [TA_AI_Project] CV reasoning: The provided custom data attribute '[data-addexisting="addExisting"]' is specific and likely unique for the dropdown. No scoping is required as the dropdown is not part of a list or table. Fallback selectors include text-based and generic selectors for robustness.
+[2025-10-08 16:35:32] [INFO] [TA_AI_Project] CV primary selector count: 0
+[2025-10-08 16:35:32] [INFO] [TA_AI_Project] Trying fallback: select:has-text('Select Product') -> Count: 0
+[2025-10-08 16:35:32] [INFO] [TA_AI_Project] Trying fallback: select -> Count: 0
+[2025-10-08 16:35:33] [WARNING] [TA_AI_Project] Step 5 failed
+[2025-10-08 16:35:33] [WARNING] [TA_AI_Project] Error: 
+[2025-10-08 16:35:33] [INFO] [TA_AI_Project] Step 5 status: FAILED
+[2025-10-08 16:35:33] [INFO] [TA_AI_Project] Selector used: 
+[2025-10-08 16:35:33] [INFO] [TA_AI_Project] Level used: 
+[2025-10-08 16:35:33] [INFO] [TA_AI_Project] 
+======================================================================
+[2025-10-08 16:35:33] [INFO] [TA_AI_Project] Executing Step 6: Click on Name and type "default project"
+[2025-10-08 16:35:33] [INFO] [TA_AI_Project] ======================================================================
+[2025-10-08 16:35:33] [INFO] [TA_AI_Project] 
+Executing Step 6: Click on Name and type "default project"
+[2025-10-08 16:35:33] [INFO] [TA_AI_Project] LEVEL 1: Trying custom selectors from JSON...
+[2025-10-08 16:35:33] [INFO] [TA_AI_Project] LEVEL 2: Trying generic HTML patterns...
+[2025-10-08 16:35:33] [INFO] [TA_AI_Project] Trying pattern: button:has-text('{text}') -> Count: 0
+[2025-10-08 16:35:33] [INFO] [TA_AI_Project] Trying pattern: a:has-text('{text}') -> Count: 0
+[2025-10-08 16:35:33] [INFO] [TA_AI_Project] Trying pattern: [role='link']:has-text('{text}') -> Count: 0
+[2025-10-08 16:35:33] [INFO] [TA_AI_Project] Trying pattern: [role='button']:has-text('{text}') -> Count: 0
+[2025-10-08 16:35:33] [INFO] [TA_AI_Project] Trying pattern: button[type='submit'] -> Count: 0
+[2025-10-08 16:35:33] [INFO] [TA_AI_Project] Trying pattern: input[type='submit'] -> Count: 0
+[2025-10-08 16:35:33] [INFO] [TA_AI_Project] Trying pattern: button -> Count: 49
+[2025-10-08 16:35:33] [WARNING] [TA_AI_Project] Pattern button has 49 matches - ambiguous
+[2025-10-08 16:35:33] [INFO] [TA_AI_Project] LEVEL 3: Using CV-guided selector discovery...
+[2025-10-08 16:35:33] [DEBUG] [TA_AI_Project] Calling vision API (attempt 1/3)
+[2025-10-08 16:35:33] [DEBUG] [TA_AI_Project] Prompt: You are analyzing a web page to determine the BEST selector strategy for test automation.
+
+Module context: Teststep
+Task: Click on Name and type "default project"
+
+NO custom selector available. You ne...
+[2025-10-08 16:35:39] [DEBUG] [TA_AI_Project] API Response: ```json
+{
+    "selector": "text=Name >> input",
+    "action": "fill",
+    "value": "default project",
+    "requires_scoping": false,
+    "scope_selector": "",
+    "element_selector": "input",
+    "fal...
+[2025-10-08 16:35:39] [INFO] [TA_AI_Project] Vision API call successful
+[2025-10-08 16:35:39] [INFO] [TA_AI_Project] CV selector strategy: text=Name >> input
+[2025-10-08 16:35:39] [INFO] [TA_AI_Project] CV reasoning: The input field is labeled 'Name', and the selector strategy uses text-based scoping to locate the input field. No row or context scoping is required as the modal is independent of the table.
+[2025-10-08 16:35:39] [INFO] [TA_AI_Project] CV primary selector count: 0
+[2025-10-08 16:35:39] [INFO] [TA_AI_Project] Trying fallback: label:has-text('Name') >> input -> Count: 0
+[2025-10-08 16:35:39] [INFO] [TA_AI_Project] Trying fallback: input[placeholder='Name'] -> Count: 0
+[2025-10-08 16:35:41] [WARNING] [TA_AI_Project] Step 6 failed
+[2025-10-08 16:35:41] [WARNING] [TA_AI_Project] Error: 
+[2025-10-08 16:35:41] [INFO] [TA_AI_Project] Step 6 status: FAILED
+[2025-10-08 16:35:41] [INFO] [TA_AI_Project] Selector used: 
+[2025-10-08 16:35:41] [INFO] [TA_AI_Project] Level used: 
+[2025-10-08 16:35:41] [INFO] [TA_AI_Project] 
+======================================================================
+[2025-10-08 16:35:41] [INFO] [TA_AI_Project] Executing Step 7: Click on save.
+[2025-10-08 16:35:41] [INFO] [TA_AI_Project] ======================================================================
+[2025-10-08 16:35:41] [INFO] [TA_AI_Project] 
+Executing Step 7: Click on save.
+[2025-10-08 16:35:41] [INFO] [TA_AI_Project] LEVEL 1: Trying custom selectors from JSON...
+[2025-10-08 16:35:41] [INFO] [TA_AI_Project] Found custom selector: [data-savebtn="AddBtn"]
+[2025-10-08 16:35:41] [INFO] [TA_AI_Project] Selector count: 0
+[2025-10-08 16:35:41] [INFO] [TA_AI_Project] Selector not found on page
+[2025-10-08 16:35:41] [INFO] [TA_AI_Project] LEVEL 2: Trying generic HTML patterns...
+[2025-10-08 16:35:41] [INFO] [TA_AI_Project] Trying pattern: button:has-text('Save') -> Count: 1
+[2025-10-08 16:35:41] [INFO] [TA_AI_Project] DEBUG: step_text = 'Click on save.'
+[2025-10-08 16:35:41] [INFO] [TA_AI_Project] DEBUG: step_lower contains 'select': False, contains dropdown: False
+[2025-10-08 16:36:11] [ERROR] [TA_AI_Project] Error executing action: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Save')").first
+    - locator resolved to <button disabled bciprimarybutton="" data-savebtn="SaveBtn" class="button-primary" _ngcontent-ng-c658748272="">…</button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not enabled
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not enabled
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is not enabled
+     - retrying click action
+       - waiting 500ms
+
+[2025-10-08 16:36:11] [INFO] [TA_AI_Project] LEVEL 3: Using CV-guided selector discovery...
+[2025-10-08 16:36:11] [DEBUG] [TA_AI_Project] Calling vision API (attempt 1/3)
+[2025-10-08 16:36:11] [DEBUG] [TA_AI_Project] Prompt: You are analyzing a web page to determine the BEST selector strategy for test automation.
+
+Module context: Teststep
+Task: Click on save.
+
+Available custom selector from JSON: [data-savebtn="AddBtn"]
+
+...
+[2025-10-08 16:36:22] [DEBUG] [TA_AI_Project] API Response: {
+    "selector": "[data-savebtn='AddBtn']",
+    "action": "click",
+    "requires_scoping": false,
+    "scope_selector": "",
+    "element_selector": "[data-savebtn='AddBtn']",
+    "fallback_selectors"...
+[2025-10-08 16:36:22] [INFO] [TA_AI_Project] Vision API call successful
+[2025-10-08 16:36:22] [INFO] [TA_AI_Project] CV selector strategy: [data-savebtn='AddBtn']
+[2025-10-08 16:36:22] [INFO] [TA_AI_Project] CV reasoning: The provided custom data attribute [data-savebtn='AddBtn'] uniquely identifies the Save button. No scoping is required as the button is part of a modal and not tied to a specific row or context.
+[2025-10-08 16:36:22] [INFO] [TA_AI_Project] CV primary selector count: 0
+[2025-10-08 16:36:22] [INFO] [TA_AI_Project] Trying fallback: button:has-text('Save') -> Count: 1
+[2025-10-08 16:36:22] [INFO] [TA_AI_Project] DEBUG: step_text = 'Click on save.'
+[2025-10-08 16:36:22] [INFO] [TA_AI_Project] DEBUG: step_lower contains 'select': False, contains dropdown: False
+[2025-10-08 16:36:52] [ERROR] [TA_AI_Project] Error executing action: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Save')").first
+    - locator resolved to <button disabled bciprimarybutton="" data-savebtn="SaveBtn" class="button-primary" _ngcontent-ng-c658748272="">…</button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not enabled
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not enabled
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is not enabled
+     - retrying click action
+       - waiting 500ms
+
+[2025-10-08 16:36:53] [WARNING] [TA_AI_Project] Step 7 failed
+[2025-10-08 16:36:53] [WARNING] [TA_AI_Project] Error: 
+[2025-10-08 16:36:53] [INFO] [TA_AI_Project] Step 7 status: FAILED
+[2025-10-08 16:36:53] [INFO] [TA_AI_Project] Selector used: 
+[2025-10-08 16:36:53] [INFO] [TA_AI_Project] Level used: 
+[2025-10-08 16:36:53] [INFO] [TA_AI_Project] 
+======================================================================
+[2025-10-08 16:36:53] [INFO] [TA_AI_Project] Executing Step 8: Click on Delete
+[2025-10-08 16:36:53] [INFO] [TA_AI_Project] ======================================================================
+[2025-10-08 16:36:53] [INFO] [TA_AI_Project] 
+Executing Step 8: Click on Delete
+[2025-10-08 16:36:54] [INFO] [TA_AI_Project] LEVEL 1: Trying custom selectors from JSON...
+[2025-10-08 16:36:54] [INFO] [TA_AI_Project] Found custom selector: [data-savebtn="AddBtn"]
+[2025-10-08 16:36:54] [INFO] [TA_AI_Project] Selector count: 0
+[2025-10-08 16:36:54] [INFO] [TA_AI_Project] Selector not found on page
+[2025-10-08 16:36:54] [INFO] [TA_AI_Project] LEVEL 2: Trying generic HTML patterns...
+[2025-10-08 16:36:54] [INFO] [TA_AI_Project] Trying pattern: button:has-text('{text}') -> Count: 0
+[2025-10-08 16:36:54] [INFO] [TA_AI_Project] Trying pattern: a:has-text('{text}') -> Count: 0
+[2025-10-08 16:36:54] [INFO] [TA_AI_Project] Trying pattern: [role='link']:has-text('{text}') -> Count: 0
+[2025-10-08 16:36:54] [INFO] [TA_AI_Project] Trying pattern: [role='button']:has-text('{text}') -> Count: 0
+[2025-10-08 16:36:54] [INFO] [TA_AI_Project] Trying pattern: button[type='submit'] -> Count: 0
+[2025-10-08 16:36:54] [INFO] [TA_AI_Project] Trying pattern: input[type='submit'] -> Count: 0
+[2025-10-08 16:36:54] [INFO] [TA_AI_Project] Trying pattern: button -> Count: 49
+[2025-10-08 16:36:54] [WARNING] [TA_AI_Project] Pattern button has 49 matches - ambiguous
+[2025-10-08 16:36:54] [INFO] [TA_AI_Project] LEVEL 3: Using CV-guided selector discovery...
+[2025-10-08 16:36:54] [DEBUG] [TA_AI_Project] Calling vision API (attempt 1/3)
+[2025-10-08 16:36:54] [DEBUG] [TA_AI_Project] Prompt: You are analyzing a web page to determine the BEST selector strategy for test automation.
+
+Module context: Teststep
+Task: Click on Delete
+
+Available custom selector from JSON: [data-savebtn="AddBtn"]
+...
+[2025-10-08 16:37:10] [DEBUG] [TA_AI_Project] API Response: {
+    "selector": "button:has-text('Delete')",
+    "action": "click",
+    "requires_scoping": true,
+    "scope_selector": "tr:has-text('default_testobject_01')",
+    "element_selector": "button:has-te...
+[2025-10-08 16:37:10] [INFO] [TA_AI_Project] Vision API call successful
+[2025-10-08 16:37:10] [INFO] [TA_AI_Project] CV selector strategy: button:has-text('Delete')
+[2025-10-08 16:37:10] [INFO] [TA_AI_Project] CV reasoning: The 'Delete' button is likely associated with a specific row in the table. Scoping to the row containing 'default_testobject_01' ensures the correct button is targeted. Text-based selector is preferred for clarity, with fallback to custom attributes or CSS classes if available.
+[2025-10-08 16:37:10] [INFO] [TA_AI_Project] CV primary selector count: 0
+[2025-10-08 16:37:10] [INFO] [TA_AI_Project] Trying fallback: tr:has-text('default_testobject_01') [data-deletebtn] -> Count: 0
+[2025-10-08 16:37:10] [INFO] [TA_AI_Project] Trying fallback: tr:has-text('default_testobject_01') button.delete-btn -> Count: 0
+[2025-10-08 16:37:12] [WARNING] [TA_AI_Project] Step 8 failed
+[2025-10-08 16:37:12] [WARNING] [TA_AI_Project] Error: 
+[2025-10-08 16:37:12] [INFO] [TA_AI_Project] Step 8 status: FAILED
+[2025-10-08 16:37:12] [INFO] [TA_AI_Project] Selector used: 
+[2025-10-08 16:37:12] [INFO] [TA_AI_Project] Level used: 
+[2025-10-08 16:37:12] [INFO] [TA_AI_Project] 
+======================================================================
+[2025-10-08 16:37:12] [INFO] [TA_AI_Project] Executing Step 9: Click on Remove
+[2025-10-08 16:37:12] [INFO] [TA_AI_Project] ======================================================================
+[2025-10-08 16:37:12] [INFO] [TA_AI_Project] 
+Executing Step 9: Click on Remove
+[2025-10-08 16:37:12] [INFO] [TA_AI_Project] LEVEL 1: Trying custom selectors from JSON...
+[2025-10-08 16:37:12] [INFO] [TA_AI_Project] Found custom selector: [data-savebtn="AddBtn"]
+[2025-10-08 16:37:12] [INFO] [TA_AI_Project] Selector count: 0
+[2025-10-08 16:37:12] [INFO] [TA_AI_Project] Selector not found on page
+[2025-10-08 16:37:12] [INFO] [TA_AI_Project] LEVEL 2: Trying generic HTML patterns...
+[2025-10-08 16:37:12] [INFO] [TA_AI_Project] Trying pattern: button:has-text('{text}') -> Count: 0
+[2025-10-08 16:37:12] [INFO] [TA_AI_Project] Trying pattern: a:has-text('{text}') -> Count: 0
+[2025-10-08 16:37:12] [INFO] [TA_AI_Project] Trying pattern: [role='link']:has-text('{text}') -> Count: 0
+[2025-10-08 16:37:12] [INFO] [TA_AI_Project] Trying pattern: [role='button']:has-text('{text}') -> Count: 0
+[2025-10-08 16:37:12] [INFO] [TA_AI_Project] Trying pattern: button[type='submit'] -> Count: 0
+[2025-10-08 16:37:12] [INFO] [TA_AI_Project] Trying pattern: input[type='submit'] -> Count: 0
+[2025-10-08 16:37:12] [INFO] [TA_AI_Project] Trying pattern: button -> Count: 49
+[2025-10-08 16:37:12] [WARNING] [TA_AI_Project] Pattern button has 49 matches - ambiguous
+[2025-10-08 16:37:12] [INFO] [TA_AI_Project] LEVEL 3: Using CV-guided selector discovery...
+[2025-10-08 16:37:12] [DEBUG] [TA_AI_Project] Calling vision API (attempt 1/3)
+[2025-10-08 16:37:12] [DEBUG] [TA_AI_Project] Prompt: You are analyzing a web page to determine the BEST selector strategy for test automation.
+
+Module context: Teststep
+Task: Click on Remove
+
+Available custom selector from JSON: [data-savebtn="AddBtn"]
+...
+[2025-10-08 16:37:20] [DEBUG] [TA_AI_Project] API Response: {
+    "selector": "button:has-text('Remove')",
+    "action": "click",
+    "requires_scoping": true,
+    "scope_selector": "tr:has-text('default_testobject_01')",
+    "element_selector": "button:has-te...
+[2025-10-08 16:37:20] [INFO] [TA_AI_Project] Vision API call successful
+[2025-10-08 16:37:20] [INFO] [TA_AI_Project] CV selector strategy: button:has-text('Remove')
+[2025-10-08 16:37:20] [INFO] [TA_AI_Project] CV reasoning: The 'Remove' button is likely associated with a specific row in the table. Scoping to the row containing 'default_testobject_01' ensures the correct button is targeted. The primary selector uses text-based identification for clarity, with fallback options including custom data attributes and CSS classes.
+[2025-10-08 16:37:20] [INFO] [TA_AI_Project] CV primary selector count: 0
+[2025-10-08 16:37:20] [INFO] [TA_AI_Project] Trying fallback: tr:has-text('default_testobject_01') [data-savebtn='AddBtn'] -> Count: 0
+[2025-10-08 16:37:20] [INFO] [TA_AI_Project] Trying fallback: tr:has-text('default_testobject_01') button.remove-btn -> Count: 0
+[2025-10-08 16:37:21] [WARNING] [TA_AI_Project] Step 9 failed
+[2025-10-08 16:37:21] [WARNING] [TA_AI_Project] Error: 
+[2025-10-08 16:37:21] [INFO] [TA_AI_Project] Step 9 status: FAILED
+[2025-10-08 16:37:21] [INFO] [TA_AI_Project] Selector used: 
+[2025-10-08 16:37:21] [INFO] [TA_AI_Project] Level used: 
+[2025-10-08 16:37:21] [INFO] [TA_AI_Project] 
+Total execution time: 156.27 seconds
+[2025-10-08 16:37:21] [INFO] [TA_AI_Project] Video recorded at: C:\Projects\AI_Chat\PLCD\TA_AI_Project\Videos\b3bfd698310359fdfbaed31b5b987d54.webm
+[2025-10-08 16:37:21] [INFO] [TA_AI_Project] Video saved: C:\Projects\AI_Chat\PLCD\TA_AI_Project\Videos\b3bfd698310359fdfbaed31b5b987d54.webm
+[2025-10-08 16:37:23] [INFO] [TA_AI_Project] Browser closed
+[2025-10-08 16:37:23] [INFO] [TA_AI_Project] ======================================================================
+[2025-10-08 16:37:23] [INFO] [TA_AI_Project] VISION EXECUTOR AGENT - Complete
+[2025-10-08 16:37:23] [INFO] [TA_AI_Project] Overall Status: FAILED
+[2025-10-08 16:37:23] [INFO] [TA_AI_Project] Steps Passed: 3/9
+[2025-10-08 16:37:23] [INFO] [TA_AI_Project] ======================================================================
+[2025-10-08 16:37:23] [INFO] [TA_AI_Project] ======================================================================
+[2025-10-08 16:37:23] [INFO] [TA_AI_Project] REPORT GENERATOR AGENT - Starting
+[2025-10-08 16:37:23] [INFO] [TA_AI_Project] ======================================================================
+[2025-10-08 16:37:23] [INFO] [TA_AI_Project] Generating HTML report...
+[2025-10-08 16:37:23] [WARNING] [TA_AI_Project] Template not found: templates\report_template.html, using built-in template
+[2025-10-08 16:37:23] [INFO] [TA_AI_Project] Report saved: C:\Projects\AI_Chat\PLCD\TA_AI_Project\Reports\RBPLCD-8862_report_20251008_163723.html
+[2025-10-08 16:37:23] [INFO] [TA_AI_Project] HTML report generated: C:\Projects\AI_Chat\PLCD\TA_AI_Project\Reports\RBPLCD-8862_report_20251008_163723.html
+[2025-10-08 16:37:23] [INFO] [TA_AI_Project] Generating Playwright script...
+[2025-10-08 16:37:23] [INFO] [TA_AI_Project] Script saved: C:\Projects\AI_Chat\PLCD\TA_AI_Project\Generated_Scripts\RBPLCD-8862_script_20251008_163723.py
+[2025-10-08 16:37:23] [INFO] [TA_AI_Project] Playwright script generated: C:\Projects\AI_Chat\PLCD\TA_AI_Project\Generated_Scripts\RBPLCD-8862_script_20251008_163723.py
+[2025-10-08 16:37:23] [INFO] [TA_AI_Project] REPORT GENERATOR AGENT - Complete
+[2025-10-08 16:37:23] [INFO] [TA_AI_Project] ======================================================================
+[2025-10-08 16:37:23] [INFO] [TA_AI_Project] Workflow execution completed
