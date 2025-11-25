@@ -28,7 +28,20 @@
       "Bash(echo:*)",
       "Bash(\"Jira_Tickets/RBPLCD-8835.txt\")",
       "Bash(timeout:*)",
-      "Bash(exit 0)"
+      "Bash(exit 0)",
+      "Bash(cat:*)",
+      "Bash(taskkill:*)",
+      "Bash(nul)",
+      "Bash(tasklist:*)",
+      "Bash(pip show:*)",
+      "Bash(pip uninstall:*)",
+      "Bash(./venv/Scripts/pip.exe:*)",
+      "Bash(requirements_generated.txt)",
+      "Bash(./venv/Scripts/playwright.exe:*)",
+      "Bash(start Reports/RBPLCD-8002_20251124_140526_report.html)",
+      "Bash(start Reports/RBPLCD-8002_20251124_141456_report.html)",
+      "Bash(start Reports/RBPLCD-8002_20251124_141757_report.html)",
+      "Bash(start Reports/RBPLCD-8002_20251124_185018_report.html)"
     ],
     "deny": [],
     "ask": []

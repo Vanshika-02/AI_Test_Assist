@@ -23,6 +23,7 @@ wait_times:
   after_click: 1000
   after_type: 1500
   after_dropdown: 1500
+  after_save: 3000          # Wait longer after save/submit for success messages
   page_load: 5000
 
 # Folder Paths (relative to base_folder)
@@ -61,7 +62,7 @@ azure_openai:
 # ============================================================================
 vector_database:
   type: "chromadb"
-  persist_directory: "./data/chromadb"
+  persist_directory: "./data/chromadb_llm"  # New ChromaDB with LLM conversion
   
   # Collections
   collections:
@@ -80,8 +81,49 @@ selectors:
   
   # Embedding Strategy
   embedding_strategy:
-    composite_format: "{attr}_{value} {module} {elementType} {label} {context}"
-    include_fields: ["attr", "value", "module", "elementType", "label", "context"]
+    # Use LLM to convert technical fields to natural language
+    use_llm_conversion: true
+
+    # Fields to send to LLM for natural language conversion
+    include_fields:
+      - "textContent"      # Visible text on element (e.g., "Runs", "Save")
+      - "ariaLabel"        # Accessibility label
+      - "role"             # Element role (button, link, input)
+      - "tagName"          # HTML tag (button, mat-list-item, etc.)
+      - "module"           # Module/page context
+      - "context"          # Keywords (list or string)
+      - "pageUrl"          # URL pattern (converted to page_context)
+
+    # LLM prompt template for conversion
+    conversion_prompt: |
+      Convert these technical element details into a natural action description.
+
+      Element details:
+      - Text displayed: {textContent}
+      - Element type: {role} {tagName}
+      - Context keywords: {context}
+      - Module: {module}
+      - Page location: {page_context}
+
+      Generate a single natural language sentence (max 15 words) describing what action this element performs.
+      Focus on the user's intent, not technical details.
+
+      Examples:
+      - "Click link to navigate to Teststep runs from sidebar on dashboard page"
+      - "Click button to save changes in Teststep module"
+      - "Type text in search field on projects page"
+
+      Output only the natural language sentence, nothing else.
+
+    # Fields to store as metadata only (NOT in embedding)
+    metadata_fields:
+      - "attr"             # Data attribute name (data-test, data-id)
+      - "value"            # Data attribute value
+      - "full_selector"    # Complete CSS selector (built from attr+value)
+      - "id"               # Unique identifier
+      - "priority"         # Ranking priority
+      - "isDynamic"        # Has dynamic variables
+      - "elementType"      # Element type classification
     
  
 # ============================================================================
@@ -291,6 +333,7 @@ modules:
     - "SearchBar"
     - "BreadCrumbs"
     - "Shared"
+    - "EntityAttribute"  # For dropdown options and entity attributes
 
 # ============================================================================
 # LOGGING CONFIGURATION
@@ -348,6 +391,10 @@ features:
   enable_module_detection: true            # Auto-detect current module
   enable_multi_agent: true                 # Use all 3 agents
   enable_vision_fallback: true             # Use L3 vision agent
+  enable_sequential_context: true          # NEW: Sequential context tracking
+  enable_llm_jira_parsing: true            # NEW: LLM-based Jira parsing
+  enable_multi_agent_orchestration: true   # NEW: Orchestrator agent
+  enable_continuous_learning: true         # NEW: Learn from failures
 
 # ============================================================================
 # GENERATED TEST SCRIPTS CONFIGURATION
@@ -394,3 +441,180 @@ generated_scripts:
     auto_validate: true                     # Run generated script once to verify
     add_to_regression_suite: true           # Add to regression test collection
     mark_as_stable_after_runs: 3            # Mark stable after 3 successful runs
+
+# ============================================================================
+# SEQUENTIAL CONTEXT TRACKING - LANGGRAPH AGENTS (NEW)
+# ============================================================================
+
+agents:
+  # -------------------------------------------------------------------------
+  # OrchestratorAgent - Supervisor
+  # -------------------------------------------------------------------------
+  orchestrator_agent:
+    enabled: true
+    model: "gpt-4o"
+    temperature: 0.1
+    max_tokens: 1000
+
+    system_prompt: |
+      You are the Test Execution Orchestrator. Route to appropriate agents based on state.
+
+      AGENTS AVAILABLE:
+      - JiraAgent: Parse ticket (call once at start)
+      - ContextAgent: Capture/update context (before/after each step)
+      - LearningAgent: Check past failures/corrections (before selector discovery)
+      - SelectorAgent_L1: RAG search with LLM validation (try first)
+      - SelectorAgent_L2: DOM discovery with LLM analysis (if L1 conf < 0.70)
+      - SelectorAgent_L3: Vision-based identification (if L1/L2 fail)
+
+      ROUTING RULES:
+      1. Always check LearningAgent first for high-confidence corrections
+      2. If found correction with conf > 0.90: execute directly
+      3. Otherwise: L1 → (if conf < 0.70) → L2 → (if fail) → L3
+      4. After each action: Update ContextAgent
+      5. After failures: Store to LearningAgent
+
+      Return JSON: {"next_agent": "...", "reasoning": "...", "skip": [...]}
+
+  # -------------------------------------------------------------------------
+  # JiraAgent - LLM-Based Ticket Parsing
+  # -------------------------------------------------------------------------
+  jira_agent:
+    enabled: true
+    model: "gpt-4o"
+    temperature: 0.1
+    max_tokens: 2000
+
+    system_prompt: |
+      You are a Jira ticket parser. Extract test steps from any ticket format.
+      Parse ticket text and identify: module, test steps, expected results.
+      Handle various formats (numbered lists, tables, bullet points).
+
+      OUTPUT FORMAT:
+      {
+        "ticket_id": "RBPLCD-XXXX",
+        "title": "...",
+        "module": "Teststep",
+        "steps": [
+          {"number": 1, "text": "Login", "expected": "Dashboard visible"}
+        ]
+      }
+
+    format_examples: |
+      Format 1: "1. Login to app\nExpected: Dashboard loads"
+      Format 2: "Step 1: Navigate | Expected: List shown"
+
+  # -------------------------------------------------------------------------
+  # ContextAgent - Execution Context Tracking
+  # -------------------------------------------------------------------------
+  context_agent:
+    enabled: true
+    model: "gpt-4o-mini"
+    temperature: 0
+    max_tokens: 500
+
+    system_prompt: |
+      Track execution context. Extract: current_url, visible_data_attributes, last_action.
+      Generate context summary for selector agents.
+
+  # -------------------------------------------------------------------------
+  # LearningAgent - Continuous Learning
+  # -------------------------------------------------------------------------
+  learning_agent:
+    enabled: true
+    model: "gpt-4o-mini"
+    temperature: 0.1
+    max_tokens: 1000
+
+    system_prompt: |
+      Learn from failures and human corrections.
+      Query memory for similar contexts and suggest high-confidence corrections.
+
+  # -------------------------------------------------------------------------
+  # SelectorAgent_L1 - RAG + LLM
+  # -------------------------------------------------------------------------
+  selector_agent_l1:
+    enabled: true
+    model: "gpt-4o"
+    temperature: 0.2
+    max_tokens: 1000
+    confidence_threshold: 0.75
+    retry_threshold: 0.70
+
+  # -------------------------------------------------------------------------
+  # SelectorAgent_L2 - DOM + LLM
+  # -------------------------------------------------------------------------
+  selector_agent_l2:
+    enabled: true
+    model: "gpt-4o"
+    temperature: 0.2
+    max_tokens: 1500
+    activation_threshold: 0.70
+
+  # -------------------------------------------------------------------------
+  # SelectorAgent_L3 - Vision
+  # -------------------------------------------------------------------------
+  selector_agent_l3:
+    enabled: true
+    model: "gpt-4o"
+    temperature: 0.1
+    max_tokens: 1000
+
+# ============================================================================
+# MEMORY CONFIGURATION (NEW)
+# ============================================================================
+
+memory:
+  # Context Agent - Recent execution history
+  context_agent:
+    type: "short_term"
+    retention_steps: 10
+    retention_strategy: "sliding_window"
+
+  # Learning Agent - Persistent learning
+  learning_agent:
+    type: "long_term"
+    storage: "chromadb:learning_collection"
+    max_patterns: 1000
+    similarity_threshold: 0.85
+
+  # Selector Agents - Per-step attempts
+  selector_agents:
+    type: "session"
+    retention_steps: 3
+    clear_on_success: true
+    store_reasoning: true
+
+  # Orchestrator - Full test run
+  orchestrator:
+    type: "full_session"
+    max_steps: 100
+
+# ============================================================================
+# LANGGRAPH WORKFLOW (NEW)
+# ============================================================================
+
+langgraph:
+  workflow:
+    max_iterations: 200
+    timeout_seconds: 600
+
+# ============================================================================
+# ARTIFACTS (NEW)
+# ============================================================================
+
+artifacts:
+  video_recording:
+    enabled: true
+    format: "webm"
+    quality: "medium"
+    path: "Videos/{ticket_id}_{timestamp}.webm"
+
+  script_generation:
+    enabled: true
+    include_context_checks: true
+
+  report_generation:
+    include_context_trace: true
+    include_agent_decisions: true
+    include_llm_reasoning: true

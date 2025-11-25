@@ -23,6 +23,7 @@ from chromadb.utils.embedding_functions.google_embedding_function import (
     GooglePalmEmbeddingFunction,
     GoogleGenerativeAiEmbeddingFunction,
     GoogleVertexEmbeddingFunction,
+    GoogleGenaiEmbeddingFunction,
 )
 from chromadb.utils.embedding_functions.ollama_embedding_function import (
     OllamaEmbeddingFunction,
@@ -68,6 +69,10 @@ from chromadb.utils.embedding_functions.mistral_embedding_function import (
 from chromadb.utils.embedding_functions.morph_embedding_function import (
     MorphEmbeddingFunction,
 )
+from chromadb.utils.embedding_functions.nomic_embedding_function import (
+    NomicEmbeddingFunction,
+    NomicQueryConfig,
+)
 from chromadb.utils.embedding_functions.huggingface_sparse_embedding_function import (
     HuggingFaceSparseEmbeddingFunction,
 )
@@ -98,11 +103,13 @@ _all_classes: Set[str] = {
     "GooglePalmEmbeddingFunction",
     "GoogleGenerativeAiEmbeddingFunction",
     "GoogleVertexEmbeddingFunction",
+    "GoogleGenaiEmbeddingFunction",
     "OllamaEmbeddingFunction",
     "InstructorEmbeddingFunction",
     "JinaEmbeddingFunction",
     "MistralEmbeddingFunction",
     "MorphEmbeddingFunction",
+    "NomicEmbeddingFunction",
     "VoyageAIEmbeddingFunction",
     "ONNXMiniLM_L6_V2",
     "OpenCLIPEmbeddingFunction",
@@ -137,11 +144,13 @@ known_embedding_functions: Dict[str, Type[EmbeddingFunction]] = {  # type: ignor
     "google_palm": GooglePalmEmbeddingFunction,
     "google_generative_ai": GoogleGenerativeAiEmbeddingFunction,
     "google_vertex": GoogleVertexEmbeddingFunction,
+    "google_genai": GoogleGenaiEmbeddingFunction,
     "ollama": OllamaEmbeddingFunction,
     "instructor": InstructorEmbeddingFunction,
     "jina": JinaEmbeddingFunction,
     "mistral": MistralEmbeddingFunction,
     "morph": MorphEmbeddingFunction,
+    "nomic": NomicEmbeddingFunction,
     "voyageai": VoyageAIEmbeddingFunction,
     "onnx_mini_lm_l6_v2": ONNXMiniLM_L6_V2,
     "open_clip": OpenCLIPEmbeddingFunction,
@@ -259,12 +268,15 @@ __all__ = [
     "GooglePalmEmbeddingFunction",
     "GoogleGenerativeAiEmbeddingFunction",
     "GoogleVertexEmbeddingFunction",
+    "GoogleGenaiEmbeddingFunction",
     "OllamaEmbeddingFunction",
     "InstructorEmbeddingFunction",
     "JinaEmbeddingFunction",
     "JinaQueryConfig",
     "MistralEmbeddingFunction",
     "MorphEmbeddingFunction",
+    "NomicEmbeddingFunction",
+    "NomicQueryConfig",
     "VoyageAIEmbeddingFunction",
     "ONNXMiniLM_L6_V2",
     "OpenCLIPEmbeddingFunction",

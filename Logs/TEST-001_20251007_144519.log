@@ -1,7 +1,0 @@
-[2025-10-07 14:45:19] [INFO] [TestLogger] Logger initialized for ticket TEST-001
-[2025-10-07 14:45:19] [DEBUG] [TestLogger] Log file: C:\Projects\AI_Chat\PLCD\TA_AI_Project\Logs\TEST-001_20251007_144519.log
-[2025-10-07 14:45:19] [INFO] [TestLogger] Test INFO message
-[2025-10-07 14:45:19] [DEBUG] [TestLogger] Test DEBUG message with password=***MASKED***'
-[2025-10-07 14:45:19] [WARNING] [TestLogger] Test WARNING message
-[2025-10-07 14:45:20] [INFO] [TestLogger] Azure Vision Client initialized
-[2025-10-07 14:45:20] [DEBUG] [TestLogger] Using deployment: gpt-4o

@@ -58,35 +58,161 @@ def load_selectors(json_path: Path) -> List[Dict[str, Any]]:
     return selectors
 
 
-def create_composite_text(selector: Dict[str, Any]) -> str:
+def extract_page_context(page_url: str) -> str:
     """
-    Create composite text for embedding based on YAML format
+    Extract page context from URL
 
-    Format: {attr}_{value} {module} {elementType} {label} {context}
+    Args:
+        page_url: Full URL
+
+    Returns:
+        Page context string (e.g., "dashboard", "login")
+    """
+    if not page_url:
+        return ""
+
+    # Extract path from URL
+    # http://.../client/dashboard → "dashboard"
+    # http://.../client/steps → "steps"
+    try:
+        from urllib.parse import urlparse
+        path = urlparse(page_url).path
+        parts = [p for p in path.split('/') if p]
+        if parts:
+            return parts[-1]  # Last path segment
+    except:
+        pass
+
+    return ""
+
+
+def convert_to_natural_language(selector: Dict[str, Any], config: Dict[str, Any], azure_client) -> str:
+    """
+    Use LLM to convert technical selector fields to natural language action description
 
     Args:
         selector: Selector dictionary
+        config: Configuration dictionary
+        azure_client: Azure OpenAI client
 
     Returns:
-        Composite text string
+        Natural language description string
     """
-    attr = selector.get('attr', '')
-    value = selector.get('value', '')
-    module = selector.get('module', '')
-    element_type = selector.get('elementType', 'element')
-    label = selector.get('label', '')
+    embedding_strategy = config.get('selectors', {}).get('embedding_strategy', {})
 
-    # Handle context - can be list or string
-    context = selector.get('context', [])
-    if isinstance(context, list):
-        context_str = ' '.join(context)
-    else:
-        context_str = str(context)
+    # Check if LLM conversion is enabled
+    if not embedding_strategy.get('use_llm_conversion', False):
+        return create_composite_text(selector, config)
 
-    # Build composite text
-    composite = f"{attr}_{value} {module} {element_type} {label} {context_str}"
+    # Extract fields for LLM
+    include_fields = embedding_strategy.get('include_fields', [])
+    field_values = {}
 
-    return composite.strip()
+    for field in include_fields:
+        if field == "pageUrl":
+            field_values['page_context'] = extract_page_context(selector.get('pageUrl', ''))
+        elif field == "context":
+            context = selector.get('context', [])
+            field_values['context'] = ', '.join(context) if isinstance(context, list) else str(context)
+        else:
+            value = selector.get(field, '')
+            field_values[field] = value if value else ''
+
+    # Build LLM prompt
+    prompt_template = embedding_strategy.get('conversion_prompt', '')
+    if not prompt_template:
+        logger.warning("No conversion_prompt in YAML, using template-based format")
+        return create_composite_text(selector, config)
+
+    try:
+        prompt = prompt_template.format(**field_values)
+    except KeyError as e:
+        logger.warning(f"Missing field in prompt template: {e}")
+        return create_composite_text(selector, config)
+
+    # Call LLM
+    try:
+        chat_model = config['azure_openai']['models']['chat']
+
+        response = azure_client.chat.completions.create(
+            model=chat_model,
+            messages=[
+                {"role": "system", "content": "You convert technical UI element details into natural action descriptions. Be concise and action-oriented."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.3,
+            max_tokens=50
+        )
+
+        natural_language = response.choices[0].message.content.strip()
+
+        # Ensure it's not empty
+        if not natural_language:
+            logger.warning(f"Empty LLM response, falling back to template")
+            return create_composite_text(selector, config)
+
+        return natural_language
+
+    except Exception as e:
+        logger.error(f"LLM conversion failed: {e}")
+        return create_composite_text(selector, config)
+
+
+def create_composite_text(selector: Dict[str, Any], config: Dict[str, Any]) -> str:
+    """
+    Create composite text for embedding based on YAML configuration
+
+    Reads embedding_strategy from YAML to determine which fields to include
+    and how to format them.
+
+    Args:
+        selector: Selector dictionary
+        config: Configuration dictionary with embedding_strategy
+
+    Returns:
+        Composite text string for embedding
+    """
+    embedding_strategy = config.get('selectors', {}).get('embedding_strategy', {})
+    composite_format = embedding_strategy.get('composite_format', '')
+    include_fields = embedding_strategy.get('include_fields', [])
+
+    # If no config, fall back to default
+    if not composite_format:
+        logger.warning("No embedding_strategy in YAML, using default format")
+        composite_format = "{attr}_{value} {module} {elementType} {label} {context}"
+        include_fields = ["attr", "value", "module", "elementType", "label", "context"]
+
+    # Build field values dictionary
+    field_values = {}
+
+    for field in include_fields:
+        if field == "pageUrl":
+            # Special handling: convert URL to page_context
+            page_url = selector.get('pageUrl', '')
+            field_values['page_context'] = extract_page_context(page_url)
+        elif field == "context":
+            # Handle context - can be list or string
+            context = selector.get('context', [])
+            if isinstance(context, list):
+                field_values['context'] = ' '.join(context)
+            else:
+                field_values['context'] = str(context) if context else ''
+        else:
+            # Regular field
+            field_values[field] = selector.get(field, '')
+
+    # Replace placeholders in composite format
+    try:
+        composite = composite_format.format(**field_values)
+    except KeyError as e:
+        logger.warning(f"Missing field in composite_format: {e}")
+        # Fall back to simple concatenation
+        composite = ' '.join(str(v) for v in field_values.values() if v)
+
+    # Clean up extra spaces and separators
+    composite = composite.replace('  ', ' ').replace(' | |', ' |').strip()
+
+    return composite
 
 
 def embed_batch(
@@ -202,8 +328,12 @@ def setup_chromadb(config: Dict[str, Any]):
 
     # Process all selectors
     for idx, selector in enumerate(selectors):
-        # Build composite text
-        doc_text = create_composite_text(selector)
+        # Convert to natural language using LLM
+        doc_text = convert_to_natural_language(selector, config, azure_client)
+
+        # Log first 5 for verification
+        if idx < 5:
+            logger.info(f"  Selector {idx}: {doc_text}")
 
         # Build selector string
         attr = selector.get('attr', '')
@@ -231,18 +361,48 @@ def setup_chromadb(config: Dict[str, Any]):
         seen_ids.add(selector_id)
         ids.append(selector_id)
         documents.append(doc_text)
-        metadatas.append({
+
+        # Build metadata - include both embedding fields and metadata-only fields
+        embedding_strategy = config.get('selectors', {}).get('embedding_strategy', {})
+        metadata_fields = embedding_strategy.get('metadata_fields', [])
+        include_fields = embedding_strategy.get('include_fields', [])
+
+        # Start with basic metadata
+        metadata = {
             "id": selector_id,
-            "attr": attr,
-            "value": value,
-            "module": selector.get('module', ''),
-            "elementType": selector.get('elementType', 'element'),
-            "label": selector.get('label', ''),
-            "context": context_str,
-            "priority": selector.get('priority', 50),
-            "isDynamic": selector.get('isDynamic', False),
             "full_selector": full_selector
-        })
+        }
+
+        # Add all embedding fields to metadata (for filtering/debugging)
+        for field in include_fields:
+            if field == "pageUrl":
+                page_val = extract_page_context(selector.get('pageUrl', ''))
+                metadata['page_context'] = page_val if page_val is not None else ''
+            elif field == "context":
+                metadata['context'] = context_str if context_str is not None else ''
+            else:
+                field_val = selector.get(field, '')
+                metadata[field] = field_val if field_val is not None else ''
+
+        # Add metadata-only fields
+        for field in metadata_fields:
+            if field not in metadata:  # Don't duplicate
+                field_val = selector.get(field, '')
+                metadata[field] = field_val if field_val is not None else ''
+
+        # Ensure critical fields are present
+        if 'attr' not in metadata:
+            metadata['attr'] = attr
+        if 'value' not in metadata:
+            metadata['value'] = value
+        if 'module' not in metadata:
+            metadata['module'] = selector.get('module', '')
+        if 'priority' not in metadata:
+            metadata['priority'] = selector.get('priority', 50)
+        if 'isDynamic' not in metadata:
+            metadata['isDynamic'] = selector.get('isDynamic', False)
+
+        metadatas.append(metadata)
 
     # Step 5: Embed in batches
     total_batches = (len(documents) + batch_size - 1) // batch_size

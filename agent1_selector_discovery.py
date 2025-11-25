@@ -85,6 +85,7 @@ class Agent1SelectorDiscovery:
         self,
         step_text: str,
         current_module: str,
+        page_context: str = None,
         n_results: Optional[int] = None
     ) -> Dict[str, Any]:
         """
@@ -93,6 +94,7 @@ class Agent1SelectorDiscovery:
         Args:
             step_text: Test step description
             current_module: Current UI module
+            page_context: Current page context for filtering
             n_results: Number of results to return (default from config)
 
         Returns:
@@ -110,11 +112,25 @@ class Agent1SelectorDiscovery:
         if n_results is None:
             n_results = self.agent_config['retrieval']['n_results']
 
-        # Query ChromaDB with module filter
+        # Build metadata filter
+        if page_context:
+            # Use $and for compound filter
+            where_filter = {
+                "$and": [
+                    {"module": {"$in": module_filter}},
+                    {"page_context": page_context}
+                ]
+            }
+            logger.info(f"Page context filter: {page_context}")
+        else:
+            # Simple module filter only
+            where_filter = {"module": {"$in": module_filter}}
+
+        # Query ChromaDB with metadata filters
         results = self.collection.query(
             query_embeddings=[step_embedding],
             n_results=n_results,
-            where={"module": {"$in": module_filter}}
+            where=where_filter
         )
 
         return results
@@ -161,7 +177,9 @@ class Agent1SelectorDiscovery:
     def discover_selector(
         self,
         step_text: str,
-        current_module: str
+        current_module: str,
+        page_context: str = None,
+        n_results: Optional[int] = None
     ) -> Dict[str, Any]:
         """
         Main entry point: Discover best selector for test step
@@ -169,6 +187,8 @@ class Agent1SelectorDiscovery:
         Args:
             step_text: Test step description
             current_module: Current UI module
+            page_context: Current page context for metadata filtering
+            n_results: Number of results to return (default from config)
 
         Returns:
             Dictionary containing:
@@ -179,9 +199,11 @@ class Agent1SelectorDiscovery:
         logger.info(f"Agent 1: Discovering selector")
         logger.info(f"Step: {step_text}")
         logger.info(f"Module: {current_module}")
+        if page_context:
+            logger.info(f"Page context: {page_context}")
 
         # Query ChromaDB
-        results = self.query_selectors(step_text, current_module)
+        results = self.query_selectors(step_text, current_module, page_context, n_results)
 
         # Build candidates list
         candidates = []
@@ -214,6 +236,7 @@ class Agent1SelectorDiscovery:
                     "elementType": metadata.get('elementType', ''),
                     "label": metadata.get('label', ''),
                     "priority": metadata.get('priority', 50),
+                    "isDynamic": metadata.get('isDynamic', False),
                     "distance": distance,
                     "similarity": 1.0 - distance,
                     "document": document

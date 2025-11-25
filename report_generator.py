@@ -229,6 +229,13 @@ def generate_html_report(
         confidence = step_result.get('confidence', 0)
         status = step_result.get('status', 'UNKNOWN')
 
+        # Make skipped login steps more readable
+        if status == 'skipped' and step_text in ['N/A', 'Login', 'login']:
+            step_num = '1'
+            step_text = 'Login (already authenticated)'
+            selector = 'N/A - Session reused'
+            agent = 'Auth'
+
         html_content += f"""
                 <tr>
                     <td>{step_num}</td>
