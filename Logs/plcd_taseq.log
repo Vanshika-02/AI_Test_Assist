@@ -1,0 +1,896 @@
+2025-11-26 13:22:28,795 - INFO - jira_agent initialized (model: gpt-4o)
+2025-11-26 13:22:28,795 - INFO - context_agent initialized (model: gpt-4o-mini)
+2025-11-26 13:22:28,795 - INFO - learning_agent initialized (model: gpt-4o-mini)
+2025-11-26 13:22:30,292 - INFO - LearningAgent: Collection 'runtime_learned_collection' initialized
+2025-11-26 13:22:30,292 - INFO - selector_agent_l1 initialized (model: gpt-4o)
+2025-11-26 13:22:30,331 - INFO - Agent 1 initialized with collection: selectors_base_collection
+2025-11-26 13:22:30,566 - INFO - Collection contains 1341 selectors
+2025-11-26 13:22:30,571 - INFO - selector_agent_l2 initialized (model: gpt-4o)
+2025-11-26 13:22:30,571 - INFO - selector_agent_l3 initialized (model: gpt-4o)
+2025-11-26 13:22:30,573 - INFO - orchestrator_agent initialized (model: gpt-4o)
+2025-11-26 13:22:30,573 - INFO - PLCD Testing Assistant (Sequential) initialized
+2025-11-26 13:22:30,575 - INFO - JiraAgent: Parsing ticket RBPLCD-8002
+2025-11-26 13:22:38,505 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 13:22:38,512 - INFO - JiraAgent: Parsed 7 steps
+2025-11-26 13:23:04,744 - INFO - ContextAgent: Captured context from /rbplcd_t/client/login
+2025-11-26 13:23:04,744 - INFO - ContextAgent: Found 7 visible data-* elements
+2025-11-26 13:23:07,988 - INFO - ContextAgent: Captured context from /rbplcd_t/client/dashboard
+2025-11-26 13:23:07,990 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 13:23:07,992 - INFO - Detected login step. logged_in flag: True
+2025-11-26 13:23:08,015 - INFO - ContextAgent: Captured context from /rbplcd_t/client/dashboard
+2025-11-26 13:23:08,022 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 13:23:08,024 - INFO - SelectorAgent_L1: Discovering selector for 'Click Runs link in sidebar to navigate to Teststep module'
+2025-11-26 13:23:08,030 - INFO - SelectorAgent_L1: Enhanced query: 'Click Runs link in sidebar to navigate to Teststep module from sidebar nav on dashboard page'
+2025-11-26 13:23:08,032 - INFO - Navigation query detected, skipping page_context filter
+2025-11-26 13:23:08,034 - INFO - ================================================================================
+2025-11-26 13:23:08,036 - INFO - Agent 1: Discovering selector
+2025-11-26 13:23:08,039 - INFO - Step: Click Runs link in sidebar to navigate to Teststep module from sidebar nav on dashboard page
+2025-11-26 13:23:08,042 - INFO - Module: Teststep
+2025-11-26 13:23:08,044 - INFO - Generating embedding for: 'Click Runs link in sidebar to navigate to Teststep module from sidebar nav on dashboard page'
+2025-11-26 13:23:10,189 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 13:23:10,205 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 13:23:10,306 - INFO - Candidate 1: [data-test='sidebar-nav-item-nav_item_teststeps'] (conf: 0.720, dist: 0.171, module: Teststep)
+2025-11-26 13:23:10,306 - INFO - Candidate 2: [data-mat-icon-name='bosch-ic-wrench-calibrate'] (conf: 0.688, dist: 0.199, module: Teststep)
+2025-11-26 13:23:10,306 - INFO - Candidate 3: [data-index='0'] (conf: 0.698, dist: 0.200, module: Teststep)
+2025-11-26 13:23:10,306 - INFO - Candidate 4: [data-index='2'] (conf: 0.698, dist: 0.200, module: Teststep)
+2025-11-26 13:23:10,306 - INFO - Candidate 5: [data-index='4'] (conf: 0.698, dist: 0.200, module: Teststep)
+2025-11-26 13:23:10,322 - INFO - --------------------------------------------------------------------------------
+2025-11-26 13:23:10,322 - INFO - Best match: [data-test='sidebar-nav-item-nav_item_teststeps']
+2025-11-26 13:23:10,322 - INFO - Confidence: 0.720
+2025-11-26 13:23:10,322 - INFO - Agent: L1
+2025-11-26 13:23:10,322 - INFO - ================================================================================
+2025-11-26 13:23:10,322 - INFO - Validating selector [data-test='sidebar-nav-item-nav_item_teststeps'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/dashboard
+2025-11-26 13:23:10,322 - INFO - Selector found in visible elements: data-test='sidebar-nav-item-nav_item_teststeps'
+2025-11-26 13:23:10,322 - INFO - SelectorAgent_L1: Result - [data-test='sidebar-nav-item-nav_item_teststeps'] (conf: 0.87)
+2025-11-26 13:23:11,874 - INFO - Captured post-action screenshot (35298 bytes)
+2025-11-26 13:23:13,527 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 13:23:13,794 - INFO - LearningAgent: Stored selector for 'Click Runs link in sidebar to navigate to Teststep module'
+2025-11-26 13:23:13,809 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps
+2025-11-26 13:23:13,809 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 13:23:13,809 - INFO - SelectorAgent_L1: Discovering selector for 'Click on table row for Teststep named default_Measurement01'
+2025-11-26 13:23:13,825 - INFO - SelectorAgent_L1: Enhanced query: 'Click on table row for Teststep named default_Measurement01 on steps page'
+2025-11-26 13:23:13,826 - INFO - ================================================================================
+2025-11-26 13:23:13,826 - INFO - Agent 1: Discovering selector
+2025-11-26 13:23:13,826 - INFO - Step: Click on table row for Teststep named default_Measurement01 on steps page
+2025-11-26 13:23:13,826 - INFO - Module: Teststep
+2025-11-26 13:23:13,826 - INFO - Page context: steps
+2025-11-26 13:23:13,826 - INFO - Generating embedding for: 'Click on table row for Teststep named default_Measurement01 on steps page'
+2025-11-26 13:23:14,421 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 13:23:14,438 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 13:23:14,438 - INFO - Page context filter: steps
+2025-11-26 13:23:14,456 - INFO - Candidate 1: [data-attribute='default_test_meas_2'] (conf: 0.691, dist: 0.211, module: Teststep)
+2025-11-26 13:23:14,456 - INFO - Candidate 2: [data-routerlinkid='2697'] (conf: 0.682, dist: 0.226, module: Teststep)
+2025-11-26 13:23:14,457 - INFO - Candidate 3: [data-attribute='default_Measurement01'] (conf: 0.671, dist: 0.245, module: Teststep)
+2025-11-26 13:23:14,458 - INFO - Candidate 4: [data-attribute='default_Measurement_02'] (conf: 0.668, dist: 0.250, module: Teststep)
+2025-11-26 13:23:14,458 - INFO - Candidate 5: [data-attribute='Measurement'] (conf: 0.663, dist: 0.258, module: Teststep)
+2025-11-26 13:23:14,459 - INFO - --------------------------------------------------------------------------------
+2025-11-26 13:23:14,460 - INFO - Best match: [data-attribute='default_test_meas_2']
+2025-11-26 13:23:14,461 - INFO - Confidence: 0.691
+2025-11-26 13:23:14,461 - INFO - Agent: L1
+2025-11-26 13:23:14,464 - INFO - ================================================================================
+2025-11-26 13:23:14,465 - INFO - Detected name patterns in step: ['default_Measurement01']
+2025-11-26 13:23:14,465 - INFO - Name match found: 'default_Measurement01' in [data-attribute='default_Measurement01'], boosting confidence
+2025-11-26 13:23:14,465 - INFO - Validating selector [data-attribute='default_Measurement01'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/steps
+2025-11-26 13:23:14,465 - WARNING - Selector not found in 100 visible elements
+2025-11-26 13:23:14,470 - INFO - SelectorAgent_L1: Result - [data-attribute='default_Measurement01'] (conf: 0.77)
+2025-11-26 13:23:15,957 - INFO - Captured post-action screenshot (172221 bytes)
+2025-11-26 13:23:17,067 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 13:23:17,159 - INFO - LearningAgent: Stored selector for 'Click on table row for Teststep named default_Measurement01'
+2025-11-26 13:23:17,189 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps/905/TestStep
+2025-11-26 13:23:17,189 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 13:23:17,189 - INFO - SelectorAgent_L1: Discovering selector for 'Click to expand Details accordion section'
+2025-11-26 13:23:17,189 - INFO - SelectorAgent_L1: Enhanced query: 'Click to expand Details accordion section on TestStep page'
+2025-11-26 13:23:17,189 - INFO - ================================================================================
+2025-11-26 13:23:17,194 - INFO - Agent 1: Discovering selector
+2025-11-26 13:23:17,194 - INFO - Step: Click to expand Details accordion section on TestStep page
+2025-11-26 13:23:17,194 - INFO - Module: Teststep
+2025-11-26 13:23:17,194 - INFO - Page context: TestStep
+2025-11-26 13:23:17,199 - INFO - Generating embedding for: 'Click to expand Details accordion section on TestStep page'
+2025-11-26 13:23:17,771 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 13:23:17,787 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 13:23:17,788 - INFO - Page context filter: TestStep
+2025-11-26 13:23:17,805 - INFO - Candidate 1: [data-detailstitle='detailsTitle'] (conf: 0.650, dist: 0.280, module: Teststep)
+2025-11-26 13:23:17,807 - INFO - Candidate 2: [data-detailspanel='detailsPanel'] (conf: 0.637, dist: 0.301, module: Teststep)
+2025-11-26 13:23:17,808 - INFO - Candidate 3: [data-shareddetailview='expansionPanel'] (conf: 0.635, dist: 0.305, module: Teststep)
+2025-11-26 13:23:17,811 - INFO - Candidate 4: [data-showmorevertical='showMoreVertical'] (conf: 0.614, dist: 0.323, module: Teststep)
+2025-11-26 13:23:17,813 - INFO - Candidate 5: [data-editnode='default_testpart_01'] (conf: 0.612, dist: 0.326, module: Teststep)
+2025-11-26 13:23:17,817 - INFO - --------------------------------------------------------------------------------
+2025-11-26 13:23:17,817 - INFO - Best match: [data-detailstitle='detailsTitle']
+2025-11-26 13:23:17,817 - INFO - Confidence: 0.650
+2025-11-26 13:23:17,820 - INFO - Agent: L1
+2025-11-26 13:23:17,821 - INFO - ================================================================================
+2025-11-26 13:23:17,823 - INFO - Validating selector [data-detailstitle='detailsTitle'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/steps/905/TestStep?overviewTableUuid=745e7e06-411d-440b-98d1-bd1f2727f4b8
+2025-11-26 13:23:17,825 - INFO - UI element step detected (accordion/dropdown/etc), boosting confidence
+2025-11-26 13:23:17,825 - INFO - SelectorAgent_L1: Result - [data-detailstitle='detailsTitle'] (conf: 0.75)
+2025-11-26 13:23:19,131 - INFO - Captured post-action screenshot (111578 bytes)
+2025-11-26 13:23:20,176 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 13:23:20,320 - INFO - LearningAgent: Stored selector for 'Click to expand Details accordion section'
+2025-11-26 13:23:20,325 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps/905/TestStep
+2025-11-26 13:23:20,325 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 13:23:20,325 - INFO - SelectorAgent_L1: Discovering selector for 'Click to expand Parts accordion section'
+2025-11-26 13:23:20,325 - INFO - SelectorAgent_L1: Enhanced query: 'Click to expand Parts accordion section on TestStep page'
+2025-11-26 13:23:20,341 - INFO - ================================================================================
+2025-11-26 13:23:20,341 - INFO - Agent 1: Discovering selector
+2025-11-26 13:23:20,341 - INFO - Step: Click to expand Parts accordion section on TestStep page
+2025-11-26 13:23:20,341 - INFO - Module: Teststep
+2025-11-26 13:23:20,341 - INFO - Page context: TestStep
+2025-11-26 13:23:20,341 - INFO - Generating embedding for: 'Click to expand Parts accordion section on TestStep page'
+2025-11-26 13:23:20,947 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 13:23:20,947 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 13:23:20,947 - INFO - Page context filter: TestStep
+2025-11-26 13:23:20,964 - INFO - Candidate 1: [data-shareddetailview='expansionPanel'] (conf: 0.672, dist: 0.244, module: Teststep)
+2025-11-26 13:23:20,964 - INFO - Candidate 2: [data-expensionpanelheader='aeName.UnitUnderTest.names'] (conf: 0.635, dist: 0.305, module: Teststep)
+2025-11-26 13:23:20,964 - INFO - Candidate 3: [data-shareddetailview='sharedDetailView'] (conf: 0.632, dist: 0.309, module: Teststep)
+2025-11-26 13:23:20,964 - INFO - Candidate 4: [data-statusname='Defining'] (conf: 0.632, dist: 0.310, module: Teststep)
+2025-11-26 13:23:20,964 - INFO - Candidate 5: [data-showmorevertical='showMoreVertical'] (conf: 0.617, dist: 0.318, module: Teststep)
+2025-11-26 13:23:20,964 - INFO - --------------------------------------------------------------------------------
+2025-11-26 13:23:20,964 - INFO - Best match: [data-shareddetailview='expansionPanel']
+2025-11-26 13:23:20,964 - INFO - Confidence: 0.672
+2025-11-26 13:23:20,964 - INFO - Agent: L1
+2025-11-26 13:23:20,980 - INFO - ================================================================================
+2025-11-26 13:23:20,980 - INFO - Validating selector [data-shareddetailview='expansionPanel'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/steps/905/TestStep?overviewTableUuid=745e7e06-411d-440b-98d1-bd1f2727f4b8
+2025-11-26 13:23:20,982 - INFO - UI element step detected (accordion/dropdown/etc), boosting confidence
+2025-11-26 13:23:20,983 - INFO - SelectorAgent_L1: Result - [data-shareddetailview='expansionPanel'] (conf: 0.77)
+2025-11-26 13:23:22,270 - INFO - Captured post-action screenshot (122916 bytes)
+2025-11-26 13:23:22,916 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 13:23:23,031 - INFO - LearningAgent: Stored selector for 'Click to expand Parts accordion section'
+2025-11-26 13:23:23,047 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps/905/TestStep
+2025-11-26 13:23:23,047 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 13:23:23,047 - INFO - SelectorAgent_L1: Discovering selector for 'Click to expand Equipments accordion section'
+2025-11-26 13:23:23,047 - INFO - SelectorAgent_L1: Enhanced query: 'Click to expand Equipments accordion section on TestStep page'
+2025-11-26 13:23:23,063 - INFO - ================================================================================
+2025-11-26 13:23:23,065 - INFO - Agent 1: Discovering selector
+2025-11-26 13:23:23,066 - INFO - Step: Click to expand Equipments accordion section on TestStep page
+2025-11-26 13:23:23,066 - INFO - Module: Teststep
+2025-11-26 13:23:23,066 - INFO - Page context: TestStep
+2025-11-26 13:23:23,070 - INFO - Generating embedding for: 'Click to expand Equipments accordion section on TestStep page'
+2025-11-26 13:23:23,669 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 13:23:23,669 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 13:23:23,669 - INFO - Page context filter: TestStep
+2025-11-26 13:23:23,686 - INFO - Candidate 1: [data-expensionpanelheader='aeName.TestEquipment.names'] (conf: 0.667, dist: 0.252, module: Teststep)
+2025-11-26 13:23:23,686 - INFO - Candidate 2: [data-aename='TestStep'] (conf: 0.645, dist: 0.289, module: Teststep)
+2025-11-26 13:23:23,686 - INFO - Candidate 3: [data-equipmentpanel='equipmentPanel'] (conf: 0.635, dist: 0.304, module: Teststep)
+2025-11-26 13:23:23,686 - INFO - Candidate 4: [data-statusname='Defining'] (conf: 0.607, dist: 0.351, module: Teststep)
+2025-11-26 13:23:23,686 - INFO - Candidate 5: [data-shareddetailview='expansionPanel'] (conf: 0.602, dist: 0.361, module: Teststep)
+2025-11-26 13:23:23,686 - INFO - --------------------------------------------------------------------------------
+2025-11-26 13:23:23,686 - INFO - Best match: [data-expensionpanelheader='aeName.TestEquipment.names']
+2025-11-26 13:23:23,686 - INFO - Confidence: 0.667
+2025-11-26 13:23:23,686 - INFO - Agent: L1
+2025-11-26 13:23:23,686 - INFO - ================================================================================
+2025-11-26 13:23:23,686 - INFO - Validating selector [data-expensionpanelheader='aeName.TestEquipment.names'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/steps/905/TestStep?overviewTableUuid=745e7e06-411d-440b-98d1-bd1f2727f4b8
+2025-11-26 13:23:23,686 - INFO - UI element step detected (accordion/dropdown/etc), boosting confidence
+2025-11-26 13:23:23,686 - INFO - SelectorAgent_L1: Result - [data-expensionpanelheader='aeName.TestEquipment.names'] (conf: 0.77)
+2025-11-26 13:23:24,919 - INFO - Captured post-action screenshot (122967 bytes)
+2025-11-26 13:23:25,515 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 13:23:25,606 - INFO - LearningAgent: Stored selector for 'Click to expand Equipments accordion section'
+2025-11-26 13:23:25,622 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps/905/TestStep
+2025-11-26 13:23:25,622 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 13:23:25,622 - INFO - SelectorAgent_L1: Discovering selector for 'Click to expand Sequences accordion section'
+2025-11-26 13:23:25,622 - INFO - SelectorAgent_L1: Enhanced query: 'Click to expand Sequences accordion section on TestStep page'
+2025-11-26 13:23:25,622 - INFO - ================================================================================
+2025-11-26 13:23:25,622 - INFO - Agent 1: Discovering selector
+2025-11-26 13:23:25,622 - INFO - Step: Click to expand Sequences accordion section on TestStep page
+2025-11-26 13:23:25,622 - INFO - Module: Teststep
+2025-11-26 13:23:25,622 - INFO - Page context: TestStep
+2025-11-26 13:23:25,622 - INFO - Generating embedding for: 'Click to expand Sequences accordion section on TestStep page'
+2025-11-26 13:23:26,228 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 13:23:26,244 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 13:23:26,245 - INFO - Page context filter: TestStep
+2025-11-26 13:23:26,261 - INFO - Candidate 1: [data-expensionpanelheader='aeName.TestSequence.names'] (conf: 0.688, dist: 0.217, module: Teststep)
+2025-11-26 13:23:26,263 - INFO - Candidate 2: [data-sequencepanel='sequencePanel'] (conf: 0.661, dist: 0.262, module: Teststep)
+2025-11-26 13:23:26,264 - INFO - Candidate 3: [data-aename='TestStep'] (conf: 0.621, dist: 0.329, module: Teststep)
+2025-11-26 13:23:26,266 - INFO - Candidate 4: [data-statusname='Defining'] (conf: 0.612, dist: 0.343, module: Teststep)
+2025-11-26 13:23:26,266 - INFO - Candidate 5: [data-showmorevertical='showMoreVertical'] (conf: 0.597, dist: 0.351, module: Teststep)
+2025-11-26 13:23:26,269 - INFO - --------------------------------------------------------------------------------
+2025-11-26 13:23:26,269 - INFO - Best match: [data-expensionpanelheader='aeName.TestSequence.names']
+2025-11-26 13:23:26,269 - INFO - Confidence: 0.688
+2025-11-26 13:23:26,269 - INFO - Agent: L1
+2025-11-26 13:23:26,269 - INFO - ================================================================================
+2025-11-26 13:23:26,269 - INFO - Validating selector [data-expensionpanelheader='aeName.TestSequence.names'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/steps/905/TestStep?overviewTableUuid=745e7e06-411d-440b-98d1-bd1f2727f4b8
+2025-11-26 13:23:26,269 - INFO - UI element step detected (accordion/dropdown/etc), boosting confidence
+2025-11-26 13:23:26,269 - INFO - SelectorAgent_L1: Result - [data-expensionpanelheader='aeName.TestSequence.names'] (conf: 0.79)
+2025-11-26 13:23:27,515 - INFO - Captured post-action screenshot (127226 bytes)
+2025-11-26 13:23:30,057 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 13:23:30,182 - INFO - LearningAgent: Stored selector for 'Click to expand Sequences accordion section'
+2025-11-26 19:35:59,412 - INFO - jira_agent initialized (model: gpt-4o)
+2025-11-26 19:35:59,413 - INFO - context_agent initialized (model: gpt-4o-mini)
+2025-11-26 19:35:59,414 - INFO - learning_agent initialized (model: gpt-4o-mini)
+2025-11-26 19:35:59,629 - INFO - LearningAgent: Collection 'runtime_learned_collection' initialized
+2025-11-26 19:35:59,630 - INFO - selector_agent_l1 initialized (model: gpt-4o)
+2025-11-26 19:35:59,659 - INFO - Agent 1 initialized with collection: selectors_base_collection
+2025-11-26 19:35:59,701 - INFO - Collection contains 1341 selectors
+2025-11-26 19:35:59,702 - INFO - selector_agent_l2 initialized (model: gpt-4o)
+2025-11-26 19:35:59,702 - INFO - selector_agent_l3 initialized (model: gpt-4o)
+2025-11-26 19:35:59,703 - INFO - orchestrator_agent initialized (model: gpt-4o)
+2025-11-26 19:35:59,703 - INFO - PLCD Testing Assistant (Sequential) initialized
+2025-11-26 19:35:59,704 - INFO - JiraAgent: Parsing ticket RBPLCD-8005
+2025-11-26 19:36:04,210 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:36:04,216 - INFO - JiraAgent: Parsed 7 steps
+2025-11-26 19:36:18,778 - INFO - ContextAgent: Captured context from /rbplcd_t/client/login
+2025-11-26 19:36:18,779 - INFO - ContextAgent: Found 7 visible data-* elements
+2025-11-26 19:36:22,194 - INFO - ContextAgent: Captured context from /rbplcd_t/client/dashboard
+2025-11-26 19:36:22,195 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:36:22,198 - INFO - Detected login step. logged_in flag: True
+2025-11-26 19:36:22,211 - INFO - ContextAgent: Captured context from /rbplcd_t/client/dashboard
+2025-11-26 19:36:22,211 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:36:22,212 - INFO - SelectorAgent_L1: Discovering selector for 'Click Runs link in sidebar to navigate to Teststep module'
+2025-11-26 19:36:22,213 - INFO - SelectorAgent_L1: Enhanced query: 'Click Runs link in sidebar to navigate to Teststep module from nav sidebar on dashboard page'
+2025-11-26 19:36:22,214 - INFO - Navigation query detected, skipping page_context filter
+2025-11-26 19:36:22,214 - INFO - ================================================================================
+2025-11-26 19:36:22,216 - INFO - Agent 1: Discovering selector
+2025-11-26 19:36:22,216 - INFO - Step: Click Runs link in sidebar to navigate to Teststep module from nav sidebar on dashboard page
+2025-11-26 19:36:22,217 - INFO - Module: Teststep
+2025-11-26 19:36:22,218 - INFO - Generating embedding for: 'Click Runs link in sidebar to navigate to Teststep module from nav sidebar on dashboard page'
+2025-11-26 19:36:24,185 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:36:24,190 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 19:36:24,338 - INFO - Candidate 1: [data-test='sidebar-nav-item-nav_item_teststeps'] (conf: 0.719, dist: 0.172, module: Teststep)
+2025-11-26 19:36:24,339 - INFO - Candidate 2: [data-index='0'] (conf: 0.700, dist: 0.196, module: Teststep)
+2025-11-26 19:36:24,339 - INFO - Candidate 3: [data-index='2'] (conf: 0.700, dist: 0.196, module: Teststep)
+2025-11-26 19:36:24,339 - INFO - Candidate 4: [data-index='4'] (conf: 0.700, dist: 0.196, module: Teststep)
+2025-11-26 19:36:24,340 - INFO - Candidate 5: [data-index='6'] (conf: 0.700, dist: 0.196, module: Teststep)
+2025-11-26 19:36:24,340 - INFO - --------------------------------------------------------------------------------
+2025-11-26 19:36:24,340 - INFO - Best match: [data-test='sidebar-nav-item-nav_item_teststeps']
+2025-11-26 19:36:24,341 - INFO - Confidence: 0.719
+2025-11-26 19:36:24,341 - INFO - Agent: L1
+2025-11-26 19:36:24,341 - INFO - ================================================================================
+2025-11-26 19:36:24,342 - INFO - Validating selector [data-test='sidebar-nav-item-nav_item_teststeps'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/dashboard
+2025-11-26 19:36:24,342 - INFO - Selector found in visible elements: data-test='sidebar-nav-item-nav_item_teststeps'
+2025-11-26 19:36:24,343 - INFO - SelectorAgent_L1: Result - [data-test='sidebar-nav-item-nav_item_teststeps'] (conf: 0.87)
+2025-11-26 19:36:26,255 - INFO - Captured post-action screenshot (152936 bytes)
+2025-11-26 19:36:27,803 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:36:28,023 - INFO - LearningAgent: Stored selector for 'Click Runs link in sidebar to navigate to Teststep module'
+2025-11-26 19:36:28,039 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps
+2025-11-26 19:36:28,040 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:36:28,040 - INFO - SelectorAgent_L1: Discovering selector for 'Click on table row for Teststep named default_Measurement01'
+2025-11-26 19:36:28,041 - INFO - SelectorAgent_L1: Enhanced query: 'Click on table row for Teststep named default_Measurement01 on steps page'
+2025-11-26 19:36:28,042 - INFO - ================================================================================
+2025-11-26 19:36:28,042 - INFO - Agent 1: Discovering selector
+2025-11-26 19:36:28,043 - INFO - Step: Click on table row for Teststep named default_Measurement01 on steps page
+2025-11-26 19:36:28,044 - INFO - Module: Teststep
+2025-11-26 19:36:28,044 - INFO - Page context: steps
+2025-11-26 19:36:28,046 - INFO - Generating embedding for: 'Click on table row for Teststep named default_Measurement01 on steps page'
+2025-11-26 19:36:28,667 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:36:28,670 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 19:36:28,670 - INFO - Page context filter: steps
+2025-11-26 19:36:28,683 - INFO - Candidate 1: [data-attribute='default_test_meas_2'] (conf: 0.691, dist: 0.211, module: Teststep)
+2025-11-26 19:36:28,685 - INFO - Candidate 2: [data-routerlinkid='2697'] (conf: 0.682, dist: 0.226, module: Teststep)
+2025-11-26 19:36:28,686 - INFO - Candidate 3: [data-attribute='default_Measurement01'] (conf: 0.671, dist: 0.245, module: Teststep)
+2025-11-26 19:36:28,687 - INFO - Candidate 4: [data-attribute='default_Measurement_02'] (conf: 0.668, dist: 0.250, module: Teststep)
+2025-11-26 19:36:28,687 - INFO - Candidate 5: [data-attribute='Measurement'] (conf: 0.663, dist: 0.258, module: Teststep)
+2025-11-26 19:36:28,687 - INFO - --------------------------------------------------------------------------------
+2025-11-26 19:36:28,689 - INFO - Best match: [data-attribute='default_test_meas_2']
+2025-11-26 19:36:28,689 - INFO - Confidence: 0.691
+2025-11-26 19:36:28,690 - INFO - Agent: L1
+2025-11-26 19:36:28,691 - INFO - ================================================================================
+2025-11-26 19:36:28,691 - INFO - Detected name patterns in step: ['default_Measurement01']
+2025-11-26 19:36:28,692 - INFO - Name match found: 'default_Measurement01' in [data-attribute='default_Measurement01'], boosting confidence
+2025-11-26 19:36:28,692 - INFO - Validating selector [data-attribute='default_Measurement01'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/steps
+2025-11-26 19:36:28,693 - WARNING - Selector not found in 100 visible elements
+2025-11-26 19:36:28,695 - INFO - SelectorAgent_L1: Result - [data-attribute='default_Measurement01'] (conf: 0.77)
+2025-11-26 19:36:30,267 - INFO - Captured post-action screenshot (201682 bytes)
+2025-11-26 19:36:31,041 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:36:31,137 - INFO - LearningAgent: Stored selector for 'Click on table row for Teststep named default_Measurement01'
+2025-11-26 19:36:31,155 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps/905/TestStep
+2025-11-26 19:36:31,157 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:36:31,157 - INFO - SelectorAgent_L1: Discovering selector for 'Click Copy Button in details view'
+2025-11-26 19:36:31,158 - INFO - SelectorAgent_L1: Enhanced query: 'Click Copy Button in details view on TestStep page'
+2025-11-26 19:36:31,159 - INFO - ================================================================================
+2025-11-26 19:36:31,159 - INFO - Agent 1: Discovering selector
+2025-11-26 19:36:31,160 - INFO - Step: Click Copy Button in details view on TestStep page
+2025-11-26 19:36:31,160 - INFO - Module: Teststep
+2025-11-26 19:36:31,161 - INFO - Page context: TestStep
+2025-11-26 19:36:31,161 - INFO - Generating embedding for: 'Click Copy Button in details view on TestStep page'
+2025-11-26 19:36:31,787 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:36:31,788 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 19:36:31,788 - INFO - Page context filter: TestStep
+2025-11-26 19:36:31,799 - INFO - Candidate 1: [data-copybtn='CopyBtn'] (conf: 0.679, dist: 0.232, module: Teststep)
+2025-11-26 19:36:31,802 - INFO - Candidate 2: [data-copybtnicon='CopyBtnIcon'] (conf: 0.670, dist: 0.247, module: Teststep)
+2025-11-26 19:36:31,803 - INFO - Candidate 3: [data-buttontop='buttonTop'] (conf: 0.624, dist: 0.323, module: Teststep)
+2025-11-26 19:36:31,805 - INFO - Candidate 4: [data-detailsheader='detailsHeader'] (conf: 0.608, dist: 0.350, module: Teststep)
+2025-11-26 19:36:31,805 - INFO - Candidate 5: [data-exchangenodebtn='default_testpart_01'] (conf: 0.597, dist: 0.351, module: Teststep)
+2025-11-26 19:36:31,806 - INFO - --------------------------------------------------------------------------------
+2025-11-26 19:36:31,806 - INFO - Best match: [data-copybtn='CopyBtn']
+2025-11-26 19:36:31,807 - INFO - Confidence: 0.679
+2025-11-26 19:36:31,808 - INFO - Agent: L1
+2025-11-26 19:36:31,809 - INFO - ================================================================================
+2025-11-26 19:36:31,810 - INFO - Validating selector [data-copybtn='CopyBtn'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/steps/905/TestStep?overviewTableUuid=f2abd9c4-6fda-4bc0-9826-3c5267384fba
+2025-11-26 19:36:31,812 - WARNING - Selector not found in 100 visible elements
+2025-11-26 19:36:31,814 - INFO - SelectorAgent_L1: Result - [data-copybtn='CopyBtn'] (conf: 0.58)
+2025-11-26 19:36:31,814 - INFO - SelectorAgent_L2: Discovering from live DOM for 'Click Copy Button in details view'
+2025-11-26 19:36:31,844 - INFO - SelectorAgent_L2: Scraped 65 DOM elements
+2025-11-26 19:36:35,296 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:36:35,298 - INFO - SelectorAgent_L2: Result -  (conf: 0.00)
+2025-11-26 19:36:35,299 - ERROR - Step 4 failed: No selector found (L1: 0.58, L2: 0.00)
+2025-11-26 19:36:55,267 - INFO - jira_agent initialized (model: gpt-4o)
+2025-11-26 19:36:55,267 - INFO - context_agent initialized (model: gpt-4o-mini)
+2025-11-26 19:36:55,268 - INFO - learning_agent initialized (model: gpt-4o-mini)
+2025-11-26 19:36:55,495 - INFO - LearningAgent: Collection 'runtime_learned_collection' initialized
+2025-11-26 19:36:55,495 - INFO - selector_agent_l1 initialized (model: gpt-4o)
+2025-11-26 19:36:55,527 - INFO - Agent 1 initialized with collection: selectors_base_collection
+2025-11-26 19:36:55,567 - INFO - Collection contains 1341 selectors
+2025-11-26 19:36:55,568 - INFO - selector_agent_l2 initialized (model: gpt-4o)
+2025-11-26 19:36:55,569 - INFO - selector_agent_l3 initialized (model: gpt-4o)
+2025-11-26 19:36:55,570 - INFO - orchestrator_agent initialized (model: gpt-4o)
+2025-11-26 19:36:55,571 - INFO - PLCD Testing Assistant (Sequential) initialized
+2025-11-26 19:36:55,571 - INFO - JiraAgent: Parsing ticket RBPLCD-8002
+2025-11-26 19:36:59,464 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:36:59,474 - INFO - JiraAgent: Parsed 7 steps
+2025-11-26 19:37:14,925 - INFO - ContextAgent: Captured context from /rbplcd_t/client/login
+2025-11-26 19:37:14,926 - INFO - ContextAgent: Found 7 visible data-* elements
+2025-11-26 19:37:19,193 - INFO - ContextAgent: Captured context from /rbplcd_t/client/dashboard
+2025-11-26 19:37:19,194 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:37:19,195 - INFO - Detected login step. logged_in flag: True
+2025-11-26 19:37:19,228 - INFO - ContextAgent: Captured context from /rbplcd_t/client/dashboard
+2025-11-26 19:37:19,229 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:37:19,229 - INFO - SelectorAgent_L1: Discovering selector for 'Click Runs link in sidebar to navigate to Teststep module'
+2025-11-26 19:37:19,229 - INFO - SelectorAgent_L1: Enhanced query: 'Click Runs link in sidebar to navigate to Teststep module from nav sidebar on dashboard page'
+2025-11-26 19:37:19,229 - INFO - Navigation query detected, skipping page_context filter
+2025-11-26 19:37:19,229 - INFO - ================================================================================
+2025-11-26 19:37:19,229 - INFO - Agent 1: Discovering selector
+2025-11-26 19:37:19,230 - INFO - Step: Click Runs link in sidebar to navigate to Teststep module from nav sidebar on dashboard page
+2025-11-26 19:37:19,230 - INFO - Module: Teststep
+2025-11-26 19:37:19,230 - INFO - Generating embedding for: 'Click Runs link in sidebar to navigate to Teststep module from nav sidebar on dashboard page'
+2025-11-26 19:37:21,190 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:37:21,193 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 19:37:21,233 - INFO - Candidate 1: [data-test='sidebar-nav-item-nav_item_teststeps'] (conf: 0.719, dist: 0.172, module: Teststep)
+2025-11-26 19:37:21,234 - INFO - Candidate 2: [data-index='0'] (conf: 0.700, dist: 0.196, module: Teststep)
+2025-11-26 19:37:21,234 - INFO - Candidate 3: [data-index='2'] (conf: 0.700, dist: 0.196, module: Teststep)
+2025-11-26 19:37:21,234 - INFO - Candidate 4: [data-index='4'] (conf: 0.700, dist: 0.196, module: Teststep)
+2025-11-26 19:37:21,234 - INFO - Candidate 5: [data-index='6'] (conf: 0.700, dist: 0.196, module: Teststep)
+2025-11-26 19:37:21,234 - INFO - --------------------------------------------------------------------------------
+2025-11-26 19:37:21,234 - INFO - Best match: [data-test='sidebar-nav-item-nav_item_teststeps']
+2025-11-26 19:37:21,235 - INFO - Confidence: 0.719
+2025-11-26 19:37:21,235 - INFO - Agent: L1
+2025-11-26 19:37:21,235 - INFO - ================================================================================
+2025-11-26 19:37:21,235 - INFO - Validating selector [data-test='sidebar-nav-item-nav_item_teststeps'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/dashboard
+2025-11-26 19:37:21,235 - INFO - Selector found in visible elements: data-test='sidebar-nav-item-nav_item_teststeps'
+2025-11-26 19:37:21,235 - INFO - SelectorAgent_L1: Result - [data-test='sidebar-nav-item-nav_item_teststeps'] (conf: 0.87)
+2025-11-26 19:37:22,768 - INFO - Captured post-action screenshot (167826 bytes)
+2025-11-26 19:37:24,300 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:37:24,389 - INFO - LearningAgent: Stored selector for 'Click Runs link in sidebar to navigate to Teststep module'
+2025-11-26 19:37:24,395 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps
+2025-11-26 19:37:24,395 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:37:24,395 - INFO - SelectorAgent_L1: Discovering selector for 'Click on table row for Teststep named default_Measurement01'
+2025-11-26 19:37:24,396 - INFO - SelectorAgent_L1: Enhanced query: 'Click on table row for Teststep named default_Measurement01 on steps page'
+2025-11-26 19:37:24,396 - INFO - ================================================================================
+2025-11-26 19:37:24,396 - INFO - Agent 1: Discovering selector
+2025-11-26 19:37:24,396 - INFO - Step: Click on table row for Teststep named default_Measurement01 on steps page
+2025-11-26 19:37:24,396 - INFO - Module: Teststep
+2025-11-26 19:37:24,396 - INFO - Page context: steps
+2025-11-26 19:37:24,396 - INFO - Generating embedding for: 'Click on table row for Teststep named default_Measurement01 on steps page'
+2025-11-26 19:37:24,996 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:37:24,998 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 19:37:24,999 - INFO - Page context filter: steps
+2025-11-26 19:37:25,003 - INFO - Candidate 1: [data-attribute='default_test_meas_2'] (conf: 0.691, dist: 0.211, module: Teststep)
+2025-11-26 19:37:25,003 - INFO - Candidate 2: [data-routerlinkid='2697'] (conf: 0.682, dist: 0.226, module: Teststep)
+2025-11-26 19:37:25,003 - INFO - Candidate 3: [data-attribute='default_Measurement01'] (conf: 0.671, dist: 0.245, module: Teststep)
+2025-11-26 19:37:25,004 - INFO - Candidate 4: [data-attribute='default_Measurement_02'] (conf: 0.668, dist: 0.250, module: Teststep)
+2025-11-26 19:37:25,004 - INFO - Candidate 5: [data-attribute='Measurement'] (conf: 0.663, dist: 0.258, module: Teststep)
+2025-11-26 19:37:25,004 - INFO - --------------------------------------------------------------------------------
+2025-11-26 19:37:25,004 - INFO - Best match: [data-attribute='default_test_meas_2']
+2025-11-26 19:37:25,004 - INFO - Confidence: 0.691
+2025-11-26 19:37:25,004 - INFO - Agent: L1
+2025-11-26 19:37:25,004 - INFO - ================================================================================
+2025-11-26 19:37:25,006 - INFO - Detected name patterns in step: ['default_Measurement01']
+2025-11-26 19:37:25,006 - INFO - Name match found: 'default_Measurement01' in [data-attribute='default_Measurement01'], boosting confidence
+2025-11-26 19:37:25,006 - INFO - Validating selector [data-attribute='default_Measurement01'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/steps
+2025-11-26 19:37:25,006 - WARNING - Selector not found in 100 visible elements
+2025-11-26 19:37:25,006 - INFO - SelectorAgent_L1: Result - [data-attribute='default_Measurement01'] (conf: 0.77)
+2025-11-26 19:37:26,681 - INFO - Captured post-action screenshot (302129 bytes)
+2025-11-26 19:37:27,279 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:37:27,323 - INFO - LearningAgent: Stored selector for 'Click on table row for Teststep named default_Measurement01'
+2025-11-26 19:37:27,329 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps/905/TestStep
+2025-11-26 19:37:27,329 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:37:27,329 - INFO - SelectorAgent_L1: Discovering selector for 'Click to expand Details accordion section'
+2025-11-26 19:37:27,330 - INFO - SelectorAgent_L1: Enhanced query: 'Click to expand Details accordion section on TestStep page'
+2025-11-26 19:37:27,330 - INFO - ================================================================================
+2025-11-26 19:37:27,330 - INFO - Agent 1: Discovering selector
+2025-11-26 19:37:27,330 - INFO - Step: Click to expand Details accordion section on TestStep page
+2025-11-26 19:37:27,330 - INFO - Module: Teststep
+2025-11-26 19:37:27,330 - INFO - Page context: TestStep
+2025-11-26 19:37:27,330 - INFO - Generating embedding for: 'Click to expand Details accordion section on TestStep page'
+2025-11-26 19:37:27,624 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:37:27,624 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 19:37:27,625 - INFO - Page context filter: TestStep
+2025-11-26 19:37:27,630 - INFO - Candidate 1: [data-detailstitle='detailsTitle'] (conf: 0.650, dist: 0.280, module: Teststep)
+2025-11-26 19:37:27,630 - INFO - Candidate 2: [data-detailspanel='detailsPanel'] (conf: 0.637, dist: 0.301, module: Teststep)
+2025-11-26 19:37:27,633 - INFO - Candidate 3: [data-shareddetailview='expansionPanel'] (conf: 0.635, dist: 0.305, module: Teststep)
+2025-11-26 19:37:27,633 - INFO - Candidate 4: [data-showmorevertical='showMoreVertical'] (conf: 0.614, dist: 0.323, module: Teststep)
+2025-11-26 19:37:27,634 - INFO - Candidate 5: [data-editnode='default_testpart_01'] (conf: 0.612, dist: 0.326, module: Teststep)
+2025-11-26 19:37:27,634 - INFO - --------------------------------------------------------------------------------
+2025-11-26 19:37:27,634 - INFO - Best match: [data-detailstitle='detailsTitle']
+2025-11-26 19:37:27,635 - INFO - Confidence: 0.650
+2025-11-26 19:37:27,635 - INFO - Agent: L1
+2025-11-26 19:37:27,635 - INFO - ================================================================================
+2025-11-26 19:37:27,635 - INFO - Validating selector [data-detailstitle='detailsTitle'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/steps/905/TestStep?overviewTableUuid=133c557e-2385-4b6b-b224-b47b541abca0
+2025-11-26 19:37:27,635 - INFO - UI element step detected (accordion/dropdown/etc), boosting confidence
+2025-11-26 19:37:27,636 - INFO - SelectorAgent_L1: Result - [data-detailstitle='detailsTitle'] (conf: 0.75)
+2025-11-26 19:37:28,828 - INFO - Captured post-action screenshot (111588 bytes)
+2025-11-26 19:37:29,427 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:37:29,474 - INFO - LearningAgent: Stored selector for 'Click to expand Details accordion section'
+2025-11-26 19:37:29,480 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps/905/TestStep
+2025-11-26 19:37:29,481 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:37:29,481 - INFO - SelectorAgent_L1: Discovering selector for 'Click to expand Parts accordion section'
+2025-11-26 19:37:29,481 - INFO - SelectorAgent_L1: Enhanced query: 'Click to expand Parts accordion section on TestStep page'
+2025-11-26 19:37:29,481 - INFO - ================================================================================
+2025-11-26 19:37:29,481 - INFO - Agent 1: Discovering selector
+2025-11-26 19:37:29,482 - INFO - Step: Click to expand Parts accordion section on TestStep page
+2025-11-26 19:37:29,482 - INFO - Module: Teststep
+2025-11-26 19:37:29,482 - INFO - Page context: TestStep
+2025-11-26 19:37:29,482 - INFO - Generating embedding for: 'Click to expand Parts accordion section on TestStep page'
+2025-11-26 19:37:29,759 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:37:29,760 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 19:37:29,761 - INFO - Page context filter: TestStep
+2025-11-26 19:37:29,765 - INFO - Candidate 1: [data-shareddetailview='expansionPanel'] (conf: 0.672, dist: 0.244, module: Teststep)
+2025-11-26 19:37:29,765 - INFO - Candidate 2: [data-expensionpanelheader='aeName.UnitUnderTest.names'] (conf: 0.635, dist: 0.305, module: Teststep)
+2025-11-26 19:37:29,766 - INFO - Candidate 3: [data-shareddetailview='sharedDetailView'] (conf: 0.632, dist: 0.309, module: Teststep)
+2025-11-26 19:37:29,766 - INFO - Candidate 4: [data-statusname='Defining'] (conf: 0.632, dist: 0.310, module: Teststep)
+2025-11-26 19:37:29,766 - INFO - Candidate 5: [data-showmorevertical='showMoreVertical'] (conf: 0.617, dist: 0.318, module: Teststep)
+2025-11-26 19:37:29,766 - INFO - --------------------------------------------------------------------------------
+2025-11-26 19:37:29,766 - INFO - Best match: [data-shareddetailview='expansionPanel']
+2025-11-26 19:37:29,767 - INFO - Confidence: 0.672
+2025-11-26 19:37:29,767 - INFO - Agent: L1
+2025-11-26 19:37:29,767 - INFO - ================================================================================
+2025-11-26 19:37:29,767 - INFO - Validating selector [data-shareddetailview='expansionPanel'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/steps/905/TestStep?overviewTableUuid=133c557e-2385-4b6b-b224-b47b541abca0
+2025-11-26 19:37:29,767 - INFO - UI element step detected (accordion/dropdown/etc), boosting confidence
+2025-11-26 19:37:29,767 - INFO - SelectorAgent_L1: Result - [data-shareddetailview='expansionPanel'] (conf: 0.77)
+2025-11-26 19:37:30,958 - INFO - Captured post-action screenshot (122913 bytes)
+2025-11-26 19:37:31,554 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:37:31,590 - INFO - LearningAgent: Stored selector for 'Click to expand Parts accordion section'
+2025-11-26 19:37:31,596 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps/905/TestStep
+2025-11-26 19:37:31,596 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:37:31,596 - INFO - SelectorAgent_L1: Discovering selector for 'Click to expand Equipments accordion section'
+2025-11-26 19:37:31,596 - INFO - SelectorAgent_L1: Enhanced query: 'Click to expand Equipments accordion section on TestStep page'
+2025-11-26 19:37:31,596 - INFO - ================================================================================
+2025-11-26 19:37:31,597 - INFO - Agent 1: Discovering selector
+2025-11-26 19:37:31,597 - INFO - Step: Click to expand Equipments accordion section on TestStep page
+2025-11-26 19:37:31,597 - INFO - Module: Teststep
+2025-11-26 19:37:31,597 - INFO - Page context: TestStep
+2025-11-26 19:37:31,597 - INFO - Generating embedding for: 'Click to expand Equipments accordion section on TestStep page'
+2025-11-26 19:37:32,294 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:37:32,295 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 19:37:32,296 - INFO - Page context filter: TestStep
+2025-11-26 19:37:32,300 - INFO - Candidate 1: [data-expensionpanelheader='aeName.TestEquipment.names'] (conf: 0.667, dist: 0.252, module: Teststep)
+2025-11-26 19:37:32,300 - INFO - Candidate 2: [data-aename='TestStep'] (conf: 0.645, dist: 0.289, module: Teststep)
+2025-11-26 19:37:32,301 - INFO - Candidate 3: [data-equipmentpanel='equipmentPanel'] (conf: 0.635, dist: 0.304, module: Teststep)
+2025-11-26 19:37:32,301 - INFO - Candidate 4: [data-statusname='Defining'] (conf: 0.607, dist: 0.351, module: Teststep)
+2025-11-26 19:37:32,301 - INFO - Candidate 5: [data-shareddetailview='expansionPanel'] (conf: 0.602, dist: 0.361, module: Teststep)
+2025-11-26 19:37:32,301 - INFO - --------------------------------------------------------------------------------
+2025-11-26 19:37:32,301 - INFO - Best match: [data-expensionpanelheader='aeName.TestEquipment.names']
+2025-11-26 19:37:32,301 - INFO - Confidence: 0.667
+2025-11-26 19:37:32,301 - INFO - Agent: L1
+2025-11-26 19:37:32,302 - INFO - ================================================================================
+2025-11-26 19:37:32,302 - INFO - Validating selector [data-expensionpanelheader='aeName.TestEquipment.names'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/steps/905/TestStep?overviewTableUuid=133c557e-2385-4b6b-b224-b47b541abca0
+2025-11-26 19:37:32,302 - INFO - UI element step detected (accordion/dropdown/etc), boosting confidence
+2025-11-26 19:37:32,302 - INFO - SelectorAgent_L1: Result - [data-expensionpanelheader='aeName.TestEquipment.names'] (conf: 0.77)
+2025-11-26 19:37:33,490 - INFO - Captured post-action screenshot (122985 bytes)
+2025-11-26 19:37:34,191 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:37:34,238 - INFO - LearningAgent: Stored selector for 'Click to expand Equipments accordion section'
+2025-11-26 19:37:34,245 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps/905/TestStep
+2025-11-26 19:37:34,246 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:37:34,246 - INFO - SelectorAgent_L1: Discovering selector for 'Click to expand Sequences accordion section'
+2025-11-26 19:37:34,246 - INFO - SelectorAgent_L1: Enhanced query: 'Click to expand Sequences accordion section on TestStep page'
+2025-11-26 19:37:34,246 - INFO - ================================================================================
+2025-11-26 19:37:34,247 - INFO - Agent 1: Discovering selector
+2025-11-26 19:37:34,247 - INFO - Step: Click to expand Sequences accordion section on TestStep page
+2025-11-26 19:37:34,247 - INFO - Module: Teststep
+2025-11-26 19:37:34,247 - INFO - Page context: TestStep
+2025-11-26 19:37:34,247 - INFO - Generating embedding for: 'Click to expand Sequences accordion section on TestStep page'
+2025-11-26 19:37:34,555 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:37:34,556 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 19:37:34,556 - INFO - Page context filter: TestStep
+2025-11-26 19:37:34,561 - INFO - Candidate 1: [data-expensionpanelheader='aeName.TestSequence.names'] (conf: 0.688, dist: 0.217, module: Teststep)
+2025-11-26 19:37:34,561 - INFO - Candidate 2: [data-sequencepanel='sequencePanel'] (conf: 0.661, dist: 0.262, module: Teststep)
+2025-11-26 19:37:34,561 - INFO - Candidate 3: [data-aename='TestStep'] (conf: 0.621, dist: 0.329, module: Teststep)
+2025-11-26 19:37:34,561 - INFO - Candidate 4: [data-statusname='Defining'] (conf: 0.612, dist: 0.343, module: Teststep)
+2025-11-26 19:37:34,562 - INFO - Candidate 5: [data-showmorevertical='showMoreVertical'] (conf: 0.597, dist: 0.351, module: Teststep)
+2025-11-26 19:37:34,562 - INFO - --------------------------------------------------------------------------------
+2025-11-26 19:37:34,562 - INFO - Best match: [data-expensionpanelheader='aeName.TestSequence.names']
+2025-11-26 19:37:34,562 - INFO - Confidence: 0.688
+2025-11-26 19:37:34,562 - INFO - Agent: L1
+2025-11-26 19:37:34,562 - INFO - ================================================================================
+2025-11-26 19:37:34,562 - INFO - Validating selector [data-expensionpanelheader='aeName.TestSequence.names'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/steps/905/TestStep?overviewTableUuid=133c557e-2385-4b6b-b224-b47b541abca0
+2025-11-26 19:37:34,562 - INFO - UI element step detected (accordion/dropdown/etc), boosting confidence
+2025-11-26 19:37:34,563 - INFO - SelectorAgent_L1: Result - [data-expensionpanelheader='aeName.TestSequence.names'] (conf: 0.79)
+2025-11-26 19:37:35,747 - INFO - Captured post-action screenshot (127235 bytes)
+2025-11-26 19:37:36,031 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:37:36,080 - INFO - LearningAgent: Stored selector for 'Click to expand Sequences accordion section'
+2025-11-26 19:37:46,958 - INFO - jira_agent initialized (model: gpt-4o)
+2025-11-26 19:37:46,959 - INFO - context_agent initialized (model: gpt-4o-mini)
+2025-11-26 19:37:46,959 - INFO - learning_agent initialized (model: gpt-4o-mini)
+2025-11-26 19:37:47,158 - INFO - LearningAgent: Collection 'runtime_learned_collection' initialized
+2025-11-26 19:37:47,159 - INFO - selector_agent_l1 initialized (model: gpt-4o)
+2025-11-26 19:37:47,188 - INFO - Agent 1 initialized with collection: selectors_base_collection
+2025-11-26 19:37:47,224 - INFO - Collection contains 1341 selectors
+2025-11-26 19:37:47,226 - INFO - selector_agent_l2 initialized (model: gpt-4o)
+2025-11-26 19:37:47,227 - INFO - selector_agent_l3 initialized (model: gpt-4o)
+2025-11-26 19:37:47,227 - INFO - orchestrator_agent initialized (model: gpt-4o)
+2025-11-26 19:37:47,228 - INFO - PLCD Testing Assistant (Sequential) initialized
+2025-11-26 19:37:47,228 - INFO - JiraAgent: Parsing ticket RBPLCD-8004
+2025-11-26 19:37:52,597 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:37:52,609 - INFO - JiraAgent: Parsed 7 steps
+2025-11-26 19:38:05,060 - INFO - ContextAgent: Captured context from /rbplcd_t/client/login
+2025-11-26 19:38:05,061 - INFO - ContextAgent: Found 7 visible data-* elements
+2025-11-26 19:38:09,489 - INFO - ContextAgent: Captured context from /rbplcd_t/client/dashboard
+2025-11-26 19:38:09,490 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:38:09,491 - INFO - Detected login step. logged_in flag: True
+2025-11-26 19:38:09,541 - INFO - ContextAgent: Captured context from /rbplcd_t/client/dashboard
+2025-11-26 19:38:09,541 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:38:09,541 - INFO - SelectorAgent_L1: Discovering selector for 'Click Runs link in sidebar to navigate to Teststep module'
+2025-11-26 19:38:09,543 - INFO - SelectorAgent_L1: Enhanced query: 'Click Runs link in sidebar to navigate to Teststep module from nav sidebar on dashboard page'
+2025-11-26 19:38:09,543 - INFO - Navigation query detected, skipping page_context filter
+2025-11-26 19:38:09,544 - INFO - ================================================================================
+2025-11-26 19:38:09,544 - INFO - Agent 1: Discovering selector
+2025-11-26 19:38:09,544 - INFO - Step: Click Runs link in sidebar to navigate to Teststep module from nav sidebar on dashboard page
+2025-11-26 19:38:09,544 - INFO - Module: Teststep
+2025-11-26 19:38:09,544 - INFO - Generating embedding for: 'Click Runs link in sidebar to navigate to Teststep module from nav sidebar on dashboard page'
+2025-11-26 19:38:11,387 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:38:11,390 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 19:38:11,434 - INFO - Candidate 1: [data-test='sidebar-nav-item-nav_item_teststeps'] (conf: 0.719, dist: 0.172, module: Teststep)
+2025-11-26 19:38:11,434 - INFO - Candidate 2: [data-index='0'] (conf: 0.700, dist: 0.196, module: Teststep)
+2025-11-26 19:38:11,435 - INFO - Candidate 3: [data-index='2'] (conf: 0.700, dist: 0.196, module: Teststep)
+2025-11-26 19:38:11,435 - INFO - Candidate 4: [data-index='4'] (conf: 0.700, dist: 0.196, module: Teststep)
+2025-11-26 19:38:11,435 - INFO - Candidate 5: [data-index='6'] (conf: 0.700, dist: 0.196, module: Teststep)
+2025-11-26 19:38:11,435 - INFO - --------------------------------------------------------------------------------
+2025-11-26 19:38:11,435 - INFO - Best match: [data-test='sidebar-nav-item-nav_item_teststeps']
+2025-11-26 19:38:11,437 - INFO - Confidence: 0.719
+2025-11-26 19:38:11,437 - INFO - Agent: L1
+2025-11-26 19:38:11,437 - INFO - ================================================================================
+2025-11-26 19:38:11,438 - INFO - Validating selector [data-test='sidebar-nav-item-nav_item_teststeps'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/dashboard
+2025-11-26 19:38:11,438 - INFO - Selector found in visible elements: data-test='sidebar-nav-item-nav_item_teststeps'
+2025-11-26 19:38:11,438 - INFO - SelectorAgent_L1: Result - [data-test='sidebar-nav-item-nav_item_teststeps'] (conf: 0.87)
+2025-11-26 19:38:12,969 - INFO - Captured post-action screenshot (89174 bytes)
+2025-11-26 19:38:14,863 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:38:14,971 - INFO - LearningAgent: Stored selector for 'Click Runs link in sidebar to navigate to Teststep module'
+2025-11-26 19:38:14,977 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps
+2025-11-26 19:38:14,977 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:38:14,978 - INFO - SelectorAgent_L1: Discovering selector for 'Click on table row for Teststep named default_Measurement01'
+2025-11-26 19:38:14,978 - INFO - SelectorAgent_L1: Enhanced query: 'Click on table row for Teststep named default_Measurement01 on steps page'
+2025-11-26 19:38:14,978 - INFO - ================================================================================
+2025-11-26 19:38:14,978 - INFO - Agent 1: Discovering selector
+2025-11-26 19:38:14,979 - INFO - Step: Click on table row for Teststep named default_Measurement01 on steps page
+2025-11-26 19:38:14,979 - INFO - Module: Teststep
+2025-11-26 19:38:14,979 - INFO - Page context: steps
+2025-11-26 19:38:14,979 - INFO - Generating embedding for: 'Click on table row for Teststep named default_Measurement01 on steps page'
+2025-11-26 19:38:15,761 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:38:15,763 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 19:38:15,764 - INFO - Page context filter: steps
+2025-11-26 19:38:15,767 - INFO - Candidate 1: [data-attribute='default_test_meas_2'] (conf: 0.691, dist: 0.211, module: Teststep)
+2025-11-26 19:38:15,768 - INFO - Candidate 2: [data-routerlinkid='2697'] (conf: 0.682, dist: 0.226, module: Teststep)
+2025-11-26 19:38:15,768 - INFO - Candidate 3: [data-attribute='default_Measurement01'] (conf: 0.671, dist: 0.245, module: Teststep)
+2025-11-26 19:38:15,768 - INFO - Candidate 4: [data-attribute='default_Measurement_02'] (conf: 0.668, dist: 0.250, module: Teststep)
+2025-11-26 19:38:15,768 - INFO - Candidate 5: [data-attribute='Measurement'] (conf: 0.663, dist: 0.258, module: Teststep)
+2025-11-26 19:38:15,769 - INFO - --------------------------------------------------------------------------------
+2025-11-26 19:38:15,769 - INFO - Best match: [data-attribute='default_test_meas_2']
+2025-11-26 19:38:15,769 - INFO - Confidence: 0.691
+2025-11-26 19:38:15,769 - INFO - Agent: L1
+2025-11-26 19:38:15,769 - INFO - ================================================================================
+2025-11-26 19:38:15,769 - INFO - Detected name patterns in step: ['default_Measurement01']
+2025-11-26 19:38:15,769 - INFO - Name match found: 'default_Measurement01' in [data-attribute='default_Measurement01'], boosting confidence
+2025-11-26 19:38:15,770 - INFO - Validating selector [data-attribute='default_Measurement01'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/steps
+2025-11-26 19:38:15,770 - WARNING - Selector not found in 100 visible elements
+2025-11-26 19:38:15,770 - INFO - SelectorAgent_L1: Result - [data-attribute='default_Measurement01'] (conf: 0.77)
+2025-11-26 19:38:17,611 - INFO - Captured post-action screenshot (287610 bytes)
+2025-11-26 19:38:18,327 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:38:18,378 - INFO - LearningAgent: Stored selector for 'Click on table row for Teststep named default_Measurement01'
+2025-11-26 19:38:18,384 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps/905/TestStep
+2025-11-26 19:38:18,384 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:38:18,385 - INFO - Text verification step detected, using L3 Vision Agent
+2025-11-26 19:38:18,385 - INFO - SelectorAgent_L3: Verifying text 'teststep name default_Measurement01'
+2025-11-26 19:38:18,386 - INFO - Using pre-captured screenshot from previous step
+2025-11-26 19:38:27,317 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:38:27,318 - INFO - SelectorAgent_L3: Text found=True, confidence=0.95
+2025-11-26 19:38:27,329 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps/905/TestStep
+2025-11-26 19:38:27,329 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:38:27,330 - INFO - SelectorAgent_L1: Discovering selector for 'Click to expand Details accordion section'
+2025-11-26 19:38:27,330 - INFO - SelectorAgent_L1: Enhanced query: 'Click to expand Details accordion section on TestStep page'
+2025-11-26 19:38:27,330 - INFO - ================================================================================
+2025-11-26 19:38:27,330 - INFO - Agent 1: Discovering selector
+2025-11-26 19:38:27,330 - INFO - Step: Click to expand Details accordion section on TestStep page
+2025-11-26 19:38:27,330 - INFO - Module: Teststep
+2025-11-26 19:38:27,331 - INFO - Page context: TestStep
+2025-11-26 19:38:27,331 - INFO - Generating embedding for: 'Click to expand Details accordion section on TestStep page'
+2025-11-26 19:38:29,388 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:38:29,389 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 19:38:29,389 - INFO - Page context filter: TestStep
+2025-11-26 19:38:29,394 - INFO - Candidate 1: [data-detailstitle='detailsTitle'] (conf: 0.650, dist: 0.280, module: Teststep)
+2025-11-26 19:38:29,394 - INFO - Candidate 2: [data-detailspanel='detailsPanel'] (conf: 0.637, dist: 0.301, module: Teststep)
+2025-11-26 19:38:29,394 - INFO - Candidate 3: [data-shareddetailview='expansionPanel'] (conf: 0.635, dist: 0.305, module: Teststep)
+2025-11-26 19:38:29,395 - INFO - Candidate 4: [data-showmorevertical='showMoreVertical'] (conf: 0.614, dist: 0.323, module: Teststep)
+2025-11-26 19:38:29,395 - INFO - Candidate 5: [data-editnode='default_testpart_01'] (conf: 0.612, dist: 0.326, module: Teststep)
+2025-11-26 19:38:29,396 - INFO - --------------------------------------------------------------------------------
+2025-11-26 19:38:29,396 - INFO - Best match: [data-detailstitle='detailsTitle']
+2025-11-26 19:38:29,396 - INFO - Confidence: 0.650
+2025-11-26 19:38:29,396 - INFO - Agent: L1
+2025-11-26 19:38:29,397 - INFO - ================================================================================
+2025-11-26 19:38:29,397 - INFO - Validating selector [data-detailstitle='detailsTitle'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/steps/905/TestStep?overviewTableUuid=511d3fd6-ed1a-4388-abbc-092efbd4cce6
+2025-11-26 19:38:29,398 - INFO - UI element step detected (accordion/dropdown/etc), boosting confidence
+2025-11-26 19:38:29,398 - INFO - SelectorAgent_L1: Result - [data-detailstitle='detailsTitle'] (conf: 0.75)
+2025-11-26 19:38:30,618 - INFO - Captured post-action screenshot (111588 bytes)
+2025-11-26 19:38:32,106 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:38:32,151 - INFO - LearningAgent: Stored selector for 'Click to expand Details accordion section'
+2025-11-26 19:38:32,157 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps/905/TestStep
+2025-11-26 19:38:32,157 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:38:32,158 - INFO - Text verification step detected, using L3 Vision Agent
+2025-11-26 19:38:32,158 - INFO - SelectorAgent_L3: Verifying text 'Name attribute'
+2025-11-26 19:38:32,159 - INFO - Using pre-captured screenshot from previous step
+2025-11-26 19:38:37,970 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:38:37,970 - INFO - SelectorAgent_L3: Text found=True, confidence=0.95
+2025-11-26 19:38:37,980 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps/905/TestStep
+2025-11-26 19:38:37,980 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:38:37,980 - INFO - Text verification step detected, using L3 Vision Agent
+2025-11-26 19:38:37,981 - INFO - SelectorAgent_L3: Verifying text 'Id attribute'
+2025-11-26 19:38:37,981 - INFO - Using pre-captured screenshot from previous step
+2025-11-26 19:38:43,216 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:38:43,218 - INFO - SelectorAgent_L3: Text found=True, confidence=0.95
+2025-11-26 19:39:16,291 - INFO - jira_agent initialized (model: gpt-4o)
+2025-11-26 19:39:16,291 - INFO - context_agent initialized (model: gpt-4o-mini)
+2025-11-26 19:39:16,291 - INFO - learning_agent initialized (model: gpt-4o-mini)
+2025-11-26 19:39:16,478 - INFO - LearningAgent: Collection 'runtime_learned_collection' initialized
+2025-11-26 19:39:16,479 - INFO - selector_agent_l1 initialized (model: gpt-4o)
+2025-11-26 19:39:16,506 - INFO - Agent 1 initialized with collection: selectors_base_collection
+2025-11-26 19:39:16,539 - INFO - Collection contains 1341 selectors
+2025-11-26 19:39:16,540 - INFO - selector_agent_l2 initialized (model: gpt-4o)
+2025-11-26 19:39:16,541 - INFO - selector_agent_l3 initialized (model: gpt-4o)
+2025-11-26 19:39:16,541 - INFO - orchestrator_agent initialized (model: gpt-4o)
+2025-11-26 19:39:16,541 - INFO - PLCD Testing Assistant (Sequential) initialized
+2025-11-26 19:39:16,543 - INFO - JiraAgent: Parsing ticket RBPLCD-8001
+2025-11-26 19:39:22,147 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:39:22,155 - INFO - JiraAgent: Parsed 9 steps
+2025-11-26 19:39:34,931 - INFO - ContextAgent: Captured context from /rbplcd_t/client/login
+2025-11-26 19:39:34,931 - INFO - ContextAgent: Found 7 visible data-* elements
+2025-11-26 19:39:39,062 - INFO - ContextAgent: Captured context from /rbplcd_t/client/dashboard
+2025-11-26 19:39:39,062 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:39:39,063 - INFO - Detected login step. logged_in flag: True
+2025-11-26 19:39:39,092 - INFO - ContextAgent: Captured context from /rbplcd_t/client/dashboard
+2025-11-26 19:39:39,092 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:39:39,093 - INFO - SelectorAgent_L1: Discovering selector for 'Click Runs link in sidebar to navigate to Teststep module'
+2025-11-26 19:39:39,093 - INFO - SelectorAgent_L1: Enhanced query: 'Click Runs link in sidebar to navigate to Teststep module from sidebar nav on dashboard page'
+2025-11-26 19:39:39,093 - INFO - Navigation query detected, skipping page_context filter
+2025-11-26 19:39:39,094 - INFO - ================================================================================
+2025-11-26 19:39:39,094 - INFO - Agent 1: Discovering selector
+2025-11-26 19:39:39,094 - INFO - Step: Click Runs link in sidebar to navigate to Teststep module from sidebar nav on dashboard page
+2025-11-26 19:39:39,094 - INFO - Module: Teststep
+2025-11-26 19:39:39,094 - INFO - Generating embedding for: 'Click Runs link in sidebar to navigate to Teststep module from sidebar nav on dashboard page'
+2025-11-26 19:39:43,121 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:39:43,125 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 19:39:43,177 - INFO - Candidate 1: [data-test='sidebar-nav-item-nav_item_teststeps'] (conf: 0.720, dist: 0.171, module: Teststep)
+2025-11-26 19:39:43,177 - INFO - Candidate 2: [data-mat-icon-name='bosch-ic-wrench-calibrate'] (conf: 0.688, dist: 0.199, module: Teststep)
+2025-11-26 19:39:43,178 - INFO - Candidate 3: [data-index='0'] (conf: 0.698, dist: 0.200, module: Teststep)
+2025-11-26 19:39:43,178 - INFO - Candidate 4: [data-index='2'] (conf: 0.698, dist: 0.200, module: Teststep)
+2025-11-26 19:39:43,178 - INFO - Candidate 5: [data-index='4'] (conf: 0.698, dist: 0.200, module: Teststep)
+2025-11-26 19:39:43,178 - INFO - --------------------------------------------------------------------------------
+2025-11-26 19:39:43,178 - INFO - Best match: [data-test='sidebar-nav-item-nav_item_teststeps']
+2025-11-26 19:39:43,178 - INFO - Confidence: 0.720
+2025-11-26 19:39:43,179 - INFO - Agent: L1
+2025-11-26 19:39:43,179 - INFO - ================================================================================
+2025-11-26 19:39:43,179 - INFO - Validating selector [data-test='sidebar-nav-item-nav_item_teststeps'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/dashboard
+2025-11-26 19:39:43,179 - INFO - Selector found in visible elements: data-test='sidebar-nav-item-nav_item_teststeps'
+2025-11-26 19:39:43,180 - INFO - SelectorAgent_L1: Result - [data-test='sidebar-nav-item-nav_item_teststeps'] (conf: 0.87)
+2025-11-26 19:39:44,907 - INFO - Captured post-action screenshot (59270 bytes)
+2025-11-26 19:39:48,689 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:39:48,830 - INFO - LearningAgent: Stored selector for 'Click Runs link in sidebar to navigate to Teststep module'
+2025-11-26 19:39:48,842 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps
+2025-11-26 19:39:48,843 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:39:48,844 - INFO - SelectorAgent_L1: Discovering selector for 'Click on table row for Teststep named default_Measurement01'
+2025-11-26 19:39:48,844 - INFO - SelectorAgent_L1: Enhanced query: 'Click on table row for Teststep named default_Measurement01 on steps page'
+2025-11-26 19:39:48,844 - INFO - ================================================================================
+2025-11-26 19:39:48,845 - INFO - Agent 1: Discovering selector
+2025-11-26 19:39:48,845 - INFO - Step: Click on table row for Teststep named default_Measurement01 on steps page
+2025-11-26 19:39:48,845 - INFO - Module: Teststep
+2025-11-26 19:39:48,846 - INFO - Page context: steps
+2025-11-26 19:39:48,846 - INFO - Generating embedding for: 'Click on table row for Teststep named default_Measurement01 on steps page'
+2025-11-26 19:39:55,435 - INFO - Retrying request to /embeddings in 0.378127 seconds
+2025-11-26 19:39:59,098 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:39:59,099 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 19:39:59,099 - INFO - Page context filter: steps
+2025-11-26 19:39:59,103 - INFO - Candidate 1: [data-attribute='default_test_meas_2'] (conf: 0.691, dist: 0.211, module: Teststep)
+2025-11-26 19:39:59,103 - INFO - Candidate 2: [data-routerlinkid='2697'] (conf: 0.682, dist: 0.226, module: Teststep)
+2025-11-26 19:39:59,103 - INFO - Candidate 3: [data-attribute='default_Measurement01'] (conf: 0.671, dist: 0.245, module: Teststep)
+2025-11-26 19:39:59,103 - INFO - Candidate 4: [data-attribute='default_Measurement_02'] (conf: 0.668, dist: 0.250, module: Teststep)
+2025-11-26 19:39:59,103 - INFO - Candidate 5: [data-attribute='Measurement'] (conf: 0.663, dist: 0.258, module: Teststep)
+2025-11-26 19:39:59,103 - INFO - --------------------------------------------------------------------------------
+2025-11-26 19:39:59,104 - INFO - Best match: [data-attribute='default_test_meas_2']
+2025-11-26 19:39:59,104 - INFO - Confidence: 0.691
+2025-11-26 19:39:59,104 - INFO - Agent: L1
+2025-11-26 19:39:59,105 - INFO - ================================================================================
+2025-11-26 19:39:59,105 - INFO - Detected name patterns in step: ['default_Measurement01']
+2025-11-26 19:39:59,106 - INFO - Name match found: 'default_Measurement01' in [data-attribute='default_Measurement01'], boosting confidence
+2025-11-26 19:39:59,106 - INFO - Validating selector [data-attribute='default_Measurement01'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/steps
+2025-11-26 19:39:59,106 - WARNING - Selector not found in 100 visible elements
+2025-11-26 19:39:59,106 - INFO - SelectorAgent_L1: Result - [data-attribute='default_Measurement01'] (conf: 0.77)
+2025-11-26 19:40:00,919 - INFO - Captured post-action screenshot (256251 bytes)
+2025-11-26 19:40:02,519 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:40:02,568 - INFO - LearningAgent: Stored selector for 'Click on table row for Teststep named default_Measurement01'
+2025-11-26 19:40:02,575 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps/905/TestStep
+2025-11-26 19:40:02,575 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:40:02,575 - INFO - SelectorAgent_L1: Discovering selector for 'Click to expand Parts accordion section'
+2025-11-26 19:40:02,575 - INFO - SelectorAgent_L1: Enhanced query: 'Click to expand Parts accordion section on TestStep page'
+2025-11-26 19:40:02,575 - INFO - ================================================================================
+2025-11-26 19:40:02,575 - INFO - Agent 1: Discovering selector
+2025-11-26 19:40:02,575 - INFO - Step: Click to expand Parts accordion section on TestStep page
+2025-11-26 19:40:02,575 - INFO - Module: Teststep
+2025-11-26 19:40:02,575 - INFO - Page context: TestStep
+2025-11-26 19:40:02,576 - INFO - Generating embedding for: 'Click to expand Parts accordion section on TestStep page'
+2025-11-26 19:40:03,256 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:40:03,258 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 19:40:03,258 - INFO - Page context filter: TestStep
+2025-11-26 19:40:03,265 - INFO - Candidate 1: [data-shareddetailview='expansionPanel'] (conf: 0.672, dist: 0.244, module: Teststep)
+2025-11-26 19:40:03,265 - INFO - Candidate 2: [data-expensionpanelheader='aeName.UnitUnderTest.names'] (conf: 0.635, dist: 0.305, module: Teststep)
+2025-11-26 19:40:03,265 - INFO - Candidate 3: [data-shareddetailview='sharedDetailView'] (conf: 0.632, dist: 0.309, module: Teststep)
+2025-11-26 19:40:03,265 - INFO - Candidate 4: [data-statusname='Defining'] (conf: 0.632, dist: 0.310, module: Teststep)
+2025-11-26 19:40:03,265 - INFO - Candidate 5: [data-showmorevertical='showMoreVertical'] (conf: 0.617, dist: 0.318, module: Teststep)
+2025-11-26 19:40:03,266 - INFO - --------------------------------------------------------------------------------
+2025-11-26 19:40:03,266 - INFO - Best match: [data-shareddetailview='expansionPanel']
+2025-11-26 19:40:03,266 - INFO - Confidence: 0.672
+2025-11-26 19:40:03,266 - INFO - Agent: L1
+2025-11-26 19:40:03,266 - INFO - ================================================================================
+2025-11-26 19:40:03,266 - INFO - Validating selector [data-shareddetailview='expansionPanel'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/steps/905/TestStep?overviewTableUuid=0ca35e96-87bc-4eff-bc93-63622af0931c
+2025-11-26 19:40:03,266 - INFO - UI element step detected (accordion/dropdown/etc), boosting confidence
+2025-11-26 19:40:03,267 - INFO - SelectorAgent_L1: Result - [data-shareddetailview='expansionPanel'] (conf: 0.77)
+2025-11-26 19:40:04,458 - INFO - Captured post-action screenshot (123460 bytes)
+2025-11-26 19:40:04,746 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:40:04,803 - INFO - LearningAgent: Stored selector for 'Click to expand Parts accordion section'
+2025-11-26 19:40:04,809 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps/905/TestStep
+2025-11-26 19:40:04,809 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:40:04,809 - INFO - SelectorAgent_L1: Discovering selector for 'Click edit button for test object default_testobject_01'
+2025-11-26 19:40:04,809 - INFO - SelectorAgent_L1: Enhanced query: 'Click edit button for test object default_testobject_01 on TestStep page'
+2025-11-26 19:40:04,810 - INFO - ================================================================================
+2025-11-26 19:40:04,810 - INFO - Agent 1: Discovering selector
+2025-11-26 19:40:04,810 - INFO - Step: Click edit button for test object default_testobject_01 on TestStep page
+2025-11-26 19:40:04,810 - INFO - Module: Teststep
+2025-11-26 19:40:04,810 - INFO - Page context: TestStep
+2025-11-26 19:40:04,810 - INFO - Generating embedding for: 'Click edit button for test object default_testobject_01 on TestStep page'
+2025-11-26 19:40:05,156 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:40:05,157 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 19:40:05,157 - INFO - Page context filter: TestStep
+2025-11-26 19:40:05,163 - INFO - Candidate 1: [data-toggle='default_testobject_01'] (conf: 0.724, dist: 0.140, module: Teststep)
+2025-11-26 19:40:05,163 - INFO - Candidate 2: [data-editnode='default_testobject_01'] (conf: 0.723, dist: 0.140, module: Teststep)
+2025-11-26 19:40:05,163 - INFO - Candidate 3: [data-deletebtn='default_testobject_01DeleteBtn'] (conf: 0.734, dist: 0.140, module: Teststep)
+2025-11-26 19:40:05,164 - INFO - Candidate 4: [data-exchangenodebtn='default_testobject_01'] (conf: 0.723, dist: 0.140, module: Teststep)
+2025-11-26 19:40:05,164 - INFO - Candidate 5: [data-toggle='TestObject'] (conf: 0.718, dist: 0.150, module: Teststep)
+2025-11-26 19:40:05,164 - INFO - --------------------------------------------------------------------------------
+2025-11-26 19:40:05,164 - INFO - Best match: [data-deletebtn='default_testobject_01DeleteBtn']
+2025-11-26 19:40:05,164 - INFO - Confidence: 0.734
+2025-11-26 19:40:05,164 - INFO - Agent: L1
+2025-11-26 19:40:05,164 - INFO - ================================================================================
+2025-11-26 19:40:05,165 - INFO - Detected name patterns in step: ['default_testobject_01']
+2025-11-26 19:40:05,165 - INFO - Name match found: 'default_testobject_01' in [data-deletebtn='default_testobject_01DeleteBtn'], boosting confidence
+2025-11-26 19:40:05,165 - INFO - Name match found: 'default_testobject_01' in [data-toggle='default_testobject_01'], boosting confidence
+2025-11-26 19:40:05,165 - INFO - Name match found: 'default_testobject_01' in [data-editnode='default_testobject_01'], boosting confidence
+2025-11-26 19:40:05,165 - INFO - Name match found: 'default_testobject_01' in [data-exchangenodebtn='default_testobject_01'], boosting confidence
+2025-11-26 19:40:05,165 - INFO - Detected 'edit' action in step, applying keyword matching
+2025-11-26 19:40:05,165 - INFO - Action conflict: 'delete' in [data-deletebtn='default_testobject_01DeleteBtn'], penalizing
+2025-11-26 19:40:05,165 - INFO - Action match: 'edit' in [data-editnode='default_testobject_01'], boosting
+2025-11-26 19:40:05,165 - INFO - Validating selector [data-editnode='default_testobject_01'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/steps/905/TestStep?overviewTableUuid=0ca35e96-87bc-4eff-bc93-63622af0931c
+2025-11-26 19:40:05,165 - WARNING - Selector not found in 100 visible elements
+2025-11-26 19:40:05,165 - INFO - SelectorAgent_L1: Result - [data-editnode='default_testobject_01'] (conf: 0.90)
+2025-11-26 19:40:06,720 - INFO - Captured post-action screenshot (327216 bytes)
+2025-11-26 19:40:07,319 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:40:07,372 - INFO - LearningAgent: Stored selector for 'Click edit button for test object default_testobject_01'
+2025-11-26 19:40:07,383 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps/905/TestStep
+2025-11-26 19:40:07,383 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:40:07,384 - INFO - SelectorAgent_L1: Discovering selector for 'Click on Type dropdown field'
+2025-11-26 19:40:07,385 - INFO - SelectorAgent_L1: Enhanced query: 'Click on Type dropdown field on TestStep page'
+2025-11-26 19:40:07,386 - INFO - Dropdown selection query detected, skipping page_context filter
+2025-11-26 19:40:07,386 - INFO - ================================================================================
+2025-11-26 19:40:07,386 - INFO - Agent 1: Discovering selector
+2025-11-26 19:40:07,387 - INFO - Step: Click on Type dropdown field on TestStep page
+2025-11-26 19:40:07,387 - INFO - Module: Teststep
+2025-11-26 19:40:07,387 - INFO - Generating embedding for: 'Click on Type dropdown field on TestStep page'
+2025-11-26 19:40:07,666 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:40:07,668 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 19:40:07,673 - INFO - Candidate 1: [data-attributegroupattribute='Type'] (conf: 0.705, dist: 0.188, module: Teststep)
+2025-11-26 19:40:07,673 - INFO - Candidate 2: [data-attribute='Type'] (conf: 0.696, dist: 0.203, module: Teststep)
+2025-11-26 19:40:07,674 - INFO - Candidate 3: [data-notdate='notDate'] (conf: 0.659, dist: 0.265, module: Teststep)
+2025-11-26 19:40:07,674 - INFO - Candidate 4: [data-basicattribute='attribute'] (conf: 0.632, dist: 0.292, module: Teststep)
+2025-11-26 19:40:07,674 - INFO - Candidate 5: [data-attributegroupattribute='Id'] (conf: 0.642, dist: 0.293, module: Teststep)
+2025-11-26 19:40:07,674 - INFO - Candidate 6: [data-attributegroupattribute='Name'] (conf: 0.637, dist: 0.301, module: Teststep)
+2025-11-26 19:40:07,674 - INFO - Candidate 7: [data-checkuniquename='TestAttribute'] (conf: 0.625, dist: 0.305, module: Teststep)
+2025-11-26 19:40:07,674 - INFO - Candidate 8: [data-entityattribute='entityAttribute'] (conf: 0.634, dist: 0.307, module: Teststep)
+2025-11-26 19:40:07,675 - INFO - Candidate 9: [data-attribute='Name'] (conf: 0.633, dist: 0.309, module: Teststep)
+2025-11-26 19:40:07,675 - INFO - Candidate 10: [data-threedotsbutton='threeDotsButton'] (conf: 0.622, dist: 0.309, module: Teststep)
+2025-11-26 19:40:07,675 - INFO - Candidate 11: [data-showmoreverticalbtn='ShowMoreVerticalBtn'] (conf: 0.632, dist: 0.310, module: Teststep)
+2025-11-26 19:40:07,675 - INFO - Candidate 12: [data-statusname='Defining'] (conf: 0.632, dist: 0.311, module: Teststep)
+2025-11-26 19:40:07,675 - INFO - Candidate 13: [data-name='Optional Data'] (conf: 0.629, dist: 0.315, module: Teststep)
+2025-11-26 19:40:07,675 - INFO - Candidate 14: [data-txtarea='Description'] (conf: 0.618, dist: 0.317, module: Teststep)
+2025-11-26 19:40:07,675 - INFO - Candidate 15: [data-checkbox-id='905'] (conf: 0.617, dist: 0.317, module: Teststep)
+2025-11-26 19:40:07,675 - INFO - --------------------------------------------------------------------------------
+2025-11-26 19:40:07,675 - INFO - Best match: [data-attributegroupattribute='Type']
+2025-11-26 19:40:07,675 - INFO - Confidence: 0.705
+2025-11-26 19:40:07,675 - INFO - Agent: L1
+2025-11-26 19:40:07,675 - INFO - ================================================================================
+2025-11-26 19:40:07,675 - INFO - Validating selector [data-attributegroupattribute='Type'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/steps/905/TestStep?overviewTableUuid=0ca35e96-87bc-4eff-bc93-63622af0931c
+2025-11-26 19:40:07,675 - INFO - UI element step detected (accordion/dropdown/etc), boosting confidence
+2025-11-26 19:40:07,676 - INFO - SelectorAgent_L1: Result - [data-attributegroupattribute='Type'] (conf: 0.81)
+2025-11-26 19:40:08,935 - INFO - Captured post-action screenshot (249267 bytes)
+2025-11-26 19:40:09,224 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:40:09,306 - INFO - LearningAgent: Stored selector for 'Click on Type dropdown field'
+2025-11-26 19:40:09,318 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps/905/TestStep
+2025-11-26 19:40:09,320 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:40:09,320 - INFO - SelectorAgent_L1: Discovering selector for 'Choose Type 3 in dropdown menu'
+2025-11-26 19:40:09,321 - INFO - SelectorAgent_L1: Enhanced query: 'Choose Type 3 in dropdown menu on TestStep page'
+2025-11-26 19:40:09,322 - INFO - Dropdown selection query detected, skipping page_context filter
+2025-11-26 19:40:09,322 - INFO - ================================================================================
+2025-11-26 19:40:09,322 - INFO - Agent 1: Discovering selector
+2025-11-26 19:40:09,323 - INFO - Step: Choose Type 3 in dropdown menu on TestStep page
+2025-11-26 19:40:09,323 - INFO - Module: Teststep
+2025-11-26 19:40:09,323 - INFO - Generating embedding for: 'Choose Type 3 in dropdown menu on TestStep page'
+2025-11-26 19:40:09,941 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:40:09,943 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 19:40:09,949 - INFO - Candidate 1: [data-attribute='Type'] (conf: 0.679, dist: 0.231, module: Teststep)
+2025-11-26 19:40:09,950 - INFO - Candidate 2: [data-attributegroupattribute='Type'] (conf: 0.673, dist: 0.241, module: Teststep)
+2025-11-26 19:40:09,950 - INFO - Candidate 3: [data-basicattribute='attribute'] (conf: 0.622, dist: 0.310, module: Teststep)
+2025-11-26 19:40:09,950 - INFO - Candidate 4: [data-dropdownentitiesname='MyProject'] (conf: 0.637, dist: 0.347, module: Teststep)
+2025-11-26 19:40:09,950 - INFO - Candidate 5: [data-showmoreverticalbtn='ShowMoreVerticalBtn'] (conf: 0.610, dist: 0.347, module: Teststep)
+2025-11-26 19:40:09,950 - INFO - Candidate 6: [data-name='Optional Data'] (conf: 0.609, dist: 0.348, module: Teststep)
+2025-11-26 19:40:09,951 - INFO - Candidate 7: [data-mat-icon-name='bosch-ic-down'] (conf: 0.594, dist: 0.356, module: Teststep)
+2025-11-26 19:40:09,951 - INFO - Candidate 8: [data-isrequired='Condition'] (conf: 0.603, dist: 0.358, module: Teststep)
+2025-11-26 19:40:09,951 - INFO - Candidate 9: [data-attributegroupattribute='Name'] (conf: 0.603, dist: 0.359, module: Teststep)
+2025-11-26 19:40:09,951 - INFO - Candidate 10: [data-attributegroupattribute='Id'] (conf: 0.602, dist: 0.359, module: Teststep)
+2025-11-26 19:40:09,951 - INFO - Candidate 11: [data-threedotsbutton='threeDotsButton'] (conf: 0.591, dist: 0.361, module: Teststep)
+2025-11-26 19:40:09,951 - INFO - Candidate 12: [data-attribute='Name'] (conf: 0.600, dist: 0.363, module: Teststep)
+2025-11-26 19:40:09,952 - INFO - Candidate 13: [data-name='Mandatory Data'] (conf: 0.598, dist: 0.366, module: Teststep)
+2025-11-26 19:40:09,952 - INFO - Candidate 14: [data-index='5'] (conf: 0.598, dist: 0.367, module: Teststep)
+2025-11-26 19:40:09,952 - INFO - Candidate 15: [data-checkbox-id='905'] (conf: 0.586, dist: 0.369, module: Teststep)
+2025-11-26 19:40:09,952 - INFO - --------------------------------------------------------------------------------
+2025-11-26 19:40:09,952 - INFO - Best match: [data-attribute='Type']
+2025-11-26 19:40:09,952 - INFO - Confidence: 0.679
+2025-11-26 19:40:09,952 - INFO - Agent: L1
+2025-11-26 19:40:09,953 - INFO - ================================================================================
+2025-11-26 19:40:09,953 - INFO - Dropdown selection detected: 'type 3'
+2025-11-26 19:40:09,953 - INFO - No autoCompleteItem selector in candidates, adding it manually
+2025-11-26 19:40:09,953 - INFO - Added dynamic selector: [data-autoCompleteItem='Type 3'] with conf: 0.70
+2025-11-26 19:40:09,953 - INFO - Field selector detected (not value): [data-attribute='Type'], penalizing
+2025-11-26 19:40:09,953 - INFO - Field selector detected (not value): [data-attributegroupattribute='Type'], penalizing
+2025-11-26 19:40:09,953 - INFO - Field selector detected (not value): [data-basicattribute='attribute'], penalizing
+2025-11-26 19:40:09,953 - INFO - Field selector detected (not value): [data-attributegroupattribute='Name'], penalizing
+2025-11-26 19:40:09,953 - INFO - Field selector detected (not value): [data-attributegroupattribute='Id'], penalizing
+2025-11-26 19:40:09,953 - INFO - Field selector detected (not value): [data-attribute='Name'], penalizing
+2025-11-26 19:40:09,953 - INFO - Value match: 'type 3' in [data-autoCompleteItem='Type 3'], boosting
+2025-11-26 19:40:09,953 - INFO - Option selector detected: [data-name='Optional Data'], boosting
+2025-11-26 19:40:09,954 - INFO - Option selector detected: [data-autoCompleteItem='Type 3'], boosting
+2025-11-26 19:40:09,954 - INFO - Validating selector [data-autoCompleteItem='Type 3'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/steps/905/TestStep?overviewTableUuid=0ca35e96-87bc-4eff-bc93-63622af0931c
+2025-11-26 19:40:09,954 - INFO - UI element step detected (accordion/dropdown/etc), boosting confidence
+2025-11-26 19:40:09,954 - INFO - SelectorAgent_L1: Result - [data-autoCompleteItem='Type 3'] (conf: 1.10)
+2025-11-26 19:40:11,195 - INFO - Captured post-action screenshot (254008 bytes)
+2025-11-26 19:40:11,633 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:40:11,681 - INFO - LearningAgent: Stored selector for 'Choose Type 3 in dropdown menu'
+2025-11-26 19:40:11,688 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps/905/TestStep
+2025-11-26 19:40:11,688 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:40:11,688 - INFO - SelectorAgent_L1: Discovering selector for 'Click Save button'
+2025-11-26 19:40:11,688 - INFO - SelectorAgent_L1: Enhanced query: 'Click Save button on TestStep page'
+2025-11-26 19:40:11,688 - INFO - ================================================================================
+2025-11-26 19:40:11,689 - INFO - Agent 1: Discovering selector
+2025-11-26 19:40:11,689 - INFO - Step: Click Save button on TestStep page
+2025-11-26 19:40:11,689 - INFO - Module: Teststep
+2025-11-26 19:40:11,689 - INFO - Page context: TestStep
+2025-11-26 19:40:11,689 - INFO - Generating embedding for: 'Click Save button on TestStep page'
+2025-11-26 19:40:11,983 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:40:11,984 - INFO - Module filter: ['Teststep', 'Common', 'CommandBarWithTable', 'SearchBar', 'BreadCrumbs', 'Shared', 'EntityAttribute']
+2025-11-26 19:40:11,984 - INFO - Page context filter: TestStep
+2025-11-26 19:40:11,999 - INFO - Candidate 1: [data-detailsheader='detailsHeader'] (conf: 0.730, dist: 0.146, module: Teststep)
+2025-11-26 19:40:11,999 - INFO - Candidate 2: [data-savebtn='SaveBtn'] (conf: 0.746, dist: 0.153, module: Teststep)
+2025-11-26 19:40:12,000 - INFO - Candidate 3: [data-editmessage='editMessage'] (conf: 0.691, dist: 0.212, module: Teststep)
+2025-11-26 19:40:12,000 - INFO - Candidate 4: [data-addnewentity='AddBtn'] (conf: 0.639, dist: 0.298, module: Teststep)
+2025-11-26 19:40:12,001 - INFO - Candidate 5: [data-copybtn='CopyBtn'] (conf: 0.632, dist: 0.309, module: Teststep)
+2025-11-26 19:40:12,001 - INFO - --------------------------------------------------------------------------------
+2025-11-26 19:40:12,001 - INFO - Best match: [data-savebtn='SaveBtn']
+2025-11-26 19:40:12,002 - INFO - Confidence: 0.746
+2025-11-26 19:40:12,002 - INFO - Agent: L1
+2025-11-26 19:40:12,002 - INFO - ================================================================================
+2025-11-26 19:40:12,002 - INFO - Detected 'save' action in step, applying keyword matching
+2025-11-26 19:40:12,003 - INFO - Action match: 'save' in [data-savebtn='SaveBtn'], boosting
+2025-11-26 19:40:12,003 - INFO - Validating selector [data-savebtn='SaveBtn'] against 100 visible elements on page http://fe0vm03313.de.bosch.com/rbplcd_t/client/steps/905/TestStep?overviewTableUuid=0ca35e96-87bc-4eff-bc93-63622af0931c
+2025-11-26 19:40:12,003 - WARNING - Selector not found in 100 visible elements
+2025-11-26 19:40:12,003 - INFO - SelectorAgent_L1: Result - [data-savebtn='SaveBtn'] (conf: 0.80)
+2025-11-26 19:40:15,412 - INFO - Captured post-action screenshot (296695 bytes)
+2025-11-26 19:40:16,017 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/text-embedding-3-small/embeddings?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:40:16,057 - INFO - LearningAgent: Stored selector for 'Click Save button'
+2025-11-26 19:40:16,063 - INFO - ContextAgent: Captured context from /rbplcd_t/client/steps/905/TestStep
+2025-11-26 19:40:16,063 - INFO - ContextAgent: Found 100 visible data-* elements
+2025-11-26 19:40:16,063 - INFO - Text verification step detected, using L3 Vision Agent
+2025-11-26 19:40:16,064 - INFO - SelectorAgent_L3: Verifying text 'Successfully edited: 'TestObject' default_testobject_01'
+2025-11-26 19:40:16,064 - INFO - Using pre-captured screenshot from previous step
+2025-11-26 19:40:25,699 - INFO - HTTP Request: POST https://ai2ets.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-02-15-preview "HTTP/1.1 200 OK"
+2025-11-26 19:40:25,700 - INFO - SelectorAgent_L3: Text found=True, confidence=1.00

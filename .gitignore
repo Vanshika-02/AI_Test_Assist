@@ -1,1 +1,3 @@
 nul
+.venv
+.pytest_cache
