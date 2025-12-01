@@ -36,6 +36,7 @@ export interface ExecutionStatus {
   report_path?: string;
   script_path?: string;
   video_path?: string;
+  summary_available?: boolean;
 }
 
 export interface ScriptInfo {
@@ -49,6 +50,108 @@ export interface ScriptsListResponse {
   ticket_id: string;
   scripts_count: number;
   scripts: ScriptInfo[];
+}
+
+// ============================================================================
+// NEW: Summary Interfaces
+// ============================================================================
+
+export interface TestSummary {
+  ticket_id: string;
+  ticket_title: string;
+  module: string;
+  execution_date: string;
+  generated_at: string;
+  
+  summary: {
+    overall_status: 'PASSED' | 'FAILED' | 'UNKNOWN';
+    total_steps: number;
+    passed: number;
+    failed: number;
+    skipped: number;
+    execution_time: string;
+    execution_time_seconds: number;
+    avg_confidence: number;
+  };
+  
+  agent_usage: {
+    l1_semantic_search: number;
+    l2_dom_discovery: number;
+    l3_vision: number;
+    formatted: string;
+  };
+  
+  step_details: Array<{
+    step_number: number;
+    step_text: string;
+    selector: string;
+    agent_used: string;
+    confidence: number;
+    status: string;
+    error?: string;
+  }>;
+  
+  artifacts: {
+    video_path: string | null;
+    report_path: string | null;
+    has_video: boolean;
+    has_report: boolean;
+  };
+  
+  insights: {
+    status_emoji: string;
+    status_color: string;
+    performance_rating: string;
+    performance_emoji: string;
+    automation_quality: string;
+    quality_emoji: string;
+    confidence_rating: string;
+    confidence_emoji: string;
+    recommendations: string[];
+    critical_failures: Array<{
+      step_number: number;
+      step_text: string;
+      error: string;
+    }>;
+  };
+}
+
+export interface SummaryListItem {
+  ticket_id: string;
+  ticket_title: string;
+  module: string;
+  execution_date: string;
+  overall_status: string;
+  total_steps: number;
+  passed: number;
+  failed: number;
+  execution_time: string;
+  avg_confidence: number;
+  status_emoji: string;
+  file_path: string;
+}
+
+export interface SummaryStats {
+  total_executions: number;
+  total_passed: number;
+  total_failed: number;
+  success_rate: number;
+  avg_execution_time: number;
+  avg_confidence: number;
+  recent_executions: Array<{
+    ticket_id: string;
+    status: string;
+    execution_date: string;
+  }>;
+}
+
+export interface SummaryExistsResponse {
+  exists: boolean;
+  ticket_id: string;
+  latest_execution: string | null;
+  overall_status?: string;
+  has_report?: boolean;
+  has_video?: boolean;
 }
 
 @Injectable({
@@ -121,5 +224,55 @@ export class ApiService {
     return this.http.get(`${this.apiUrl}/download-video/${executionId}`, {
       responseType: 'blob'
     });
+  }
+
+  // ============================================================================
+  // NEW: Summary API Methods
+  // ============================================================================
+
+  /**
+   * Get latest test summary for a ticket (lightweight JSON)
+   * Use this before downloading full HTML report
+   */
+  getTestSummary(ticketId: string): Observable<TestSummary> {
+    return this.http.get<TestSummary>(`${this.apiUrl}/summary/${ticketId}`);
+  }
+
+  /**
+   * Get specific summary by timestamp
+   */
+  getTestSummaryByTimestamp(ticketId: string, timestamp: string): Observable<TestSummary> {
+    return this.http.get<TestSummary>(`${this.apiUrl}/summary/${ticketId}/${timestamp}`);
+  }
+
+  /**
+   * List all available summaries with filtering
+   */
+  listAllSummaries(limit: number = 50, status?: string, module?: string): Observable<{ count: number; summaries: SummaryListItem[] }> {
+    let params = new HttpParams().set('limit', limit.toString());
+    
+    if (status) {
+      params = params.set('status', status);
+    }
+    
+    if (module) {
+      params = params.set('module', module);
+    }
+    
+    return this.http.get<{ count: number; summaries: SummaryListItem[] }>(`${this.apiUrl}/summaries`, { params });
+  }
+
+  /**
+   * Get overall statistics across all tests
+   */
+  getSummaryStats(): Observable<SummaryStats> {
+    return this.http.get<SummaryStats>(`${this.apiUrl}/summary-stats`);
+  }
+
+  /**
+   * Check if summary exists for a ticket
+   */
+  checkSummaryExists(ticketId: string): Observable<SummaryExistsResponse> {
+    return this.http.get<SummaryExistsResponse>(`${this.apiUrl}/summary-exists/${ticketId}`);
   }
 }

@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ApiService, TicketDetail } from '../services/api.service';
+import { ApiService, TestSummary, TicketDetail } from '../services/api.service';
 import { interval, Subscription } from 'rxjs';
 import { switchMap, takeWhile } from 'rxjs/operators';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,6 +29,8 @@ interface ChatMessage {
   generatedFiles?: string[];
   hasExistingScripts?: boolean;
   scriptsCount?: number;
+  summary?: TestSummary;
+  showSummary?: boolean;
 }
 
 interface ChatSession {
@@ -137,6 +139,150 @@ export class TestGenerationComponent implements OnInit, OnDestroy {
     }
   }
 
+ private pollExecutionStatus(executionId: string, message: ChatMessage) {
+  this.pollingSubscription = interval(3000).pipe(
+    switchMap(() => {
+      console.log('📊 Execution completed, checking summary...');
+      return this.apiService.getExecutionStatus(executionId);
+    }),
+    takeWhile((status) => {
+      return status.status === 'running' || status.status === 'pending';
+    }, true)
+  ).subscribe({
+    next: (status) => {
+      message.executionProgress = status.progress || 0;
+
+      if (status.status === 'running') {
+        message.text = `🔄 Test execution in progress...\n\n🆔 Execution ID: ${executionId}\n📊 Progress: ${status.progress}%\n⏱️ Status: ${status.message}`;
+      }
+
+      if (status.status === 'completed') {
+        message.isRunning = false;
+        message.executionProgress = 100;
+        message.executionStatus = status.overall_status === 'PASSED' ? 'success' : 'failed';
+        
+        const statusIcon = status.overall_status === 'PASSED' ? '✅' : '❌';
+        const statusText = status.overall_status === 'PASSED' ? 'PASSED' : 'FAILED';
+        
+        message.executionMessage = `${statusIcon} Test execution completed!\n\nOverall Status: ${statusText}`;
+        message.text = message.executionMessage;
+        
+        message.reportGenerated = true;
+        message.reportPath = status.report_path;
+        message.scriptPath = status.script_path;
+        message.videoPath = status.video_path;
+        
+        message.generatedFiles = [
+          status.report_path,
+          status.script_path,
+          status.video_path
+        ].filter((path): path is string => !!path && path.trim() !== '');
+
+        console.log('📊 Execution completed, checking summary...');
+        console.log('Summary available:', status.summary_available);
+        console.log('Ticket ID:', message.ticketDetails?.ticket_id);
+        console.log('📊 Execution completed, checking summary...');
+        console.log('Summary available:', status.summary_available);
+        console.log('Ticket ID from status:', status.ticket_id);
+
+        if (status.summary_available && status.ticket_id) {
+          console.log('✅ Loading summary for ticket:', status.ticket_id);
+          
+          if (!message.ticketDetails) {
+            message.ticketDetails = { ticket_id: status.ticket_id } as TicketDetail;
+          }
+          
+          this.loadTestSummary(message);
+        } else {
+          console.warn('⚠️ Summary not available:', {
+            summary_available: status.summary_available,
+            ticket_id: status.ticket_id,
+            has_ticketDetails: !!message.ticketDetails
+          });
+        }
+      
+
+        this.saveChatToHistory();
+      } else if (status.status === 'failed') {
+        message.isRunning = false;
+        message.executionProgress = 100;
+        message.executionStatus = 'failed';
+        message.executionMessage = `❌ Test execution failed!\n\nError: ${status.message || 'Unknown error'}`;
+        message.text = message.executionMessage;
+        
+        if (status.summary_available && message.ticketDetails?.ticket_id) {
+          console.log('⚠️ Loading summary for failed execution...');
+          this.loadTestSummary(message);
+        }
+        
+        this.saveChatToHistory();
+      }
+    },
+    error: (error) => {
+      console.error('❌ Polling error:', error);
+      message.isRunning = false;
+      message.executionStatus = 'failed';
+      message.executionMessage = '❌ Error monitoring test execution. Please check the logs.';
+      message.text = message.executionMessage;
+      this.saveChatToHistory();
+    }
+  });
+}
+
+private loadTestSummary(message: ChatMessage) {
+  if (!message.ticketDetails?.ticket_id) {
+    console.error('❌ No ticket ID available for summary');
+    return;
+  }
+
+  const ticketId = message.ticketDetails.ticket_id;
+  console.log(`📊 Fetching summary for ticket: ${ticketId}`);
+
+  this.apiService.getTestSummary(ticketId).subscribe({
+    next: (summary) => {
+      console.log('✅ Summary loaded successfully:', summary);
+      message.summary = summary;
+      message.showSummary = true;
+      this.saveChatToHistory();
+    },
+    error: (error) => {
+      console.error('❌ Could not load summary:', error);
+      console.error('Error details:', error.error);
+      console.error('Status:', error.status);
+    }
+  });
+}
+
+toggleSummary(message: ChatMessage) {
+  if (message.summary) {
+    message.showSummary = !message.showSummary;
+    this.saveChatToHistory();
+  }
+}
+
+getStatusColorClass(status: string): string {
+  switch (status) {
+    case 'PASSED':
+      return 'status-passed';
+    case 'FAILED':
+      return 'status-failed';
+    default:
+      return 'status-unknown';
+  }
+}
+
+getAgentBadgeClass(agent: string): string {
+  switch (agent) {
+    case 'L1':
+      return 'agent-l1';
+    case 'L2':
+      return 'agent-l2';
+    case 'L3':
+      return 'agent-l3';
+    default:
+      return 'agent-default';
+  }
+}
   private fetchTicketAndGenerate(ticketId: string) {
     this.apiService.getTicketDetails(ticketId).subscribe({
       next: (ticketDetails) => {
@@ -294,65 +440,6 @@ export class TestGenerationComponent implements OnInit, OnDestroy {
         }
         
         botMessage.text = botMessage.executionMessage;
-        this.saveChatToHistory();
-      }
-    });
-  }
-
-  private pollExecutionStatus(executionId: string, message: ChatMessage) {
-    this.pollingSubscription = interval(3000).pipe(
-      switchMap(() => {
-        return this.apiService.getExecutionStatus(executionId);
-      }),
-      takeWhile((status) => {
-        return status.status === 'running' || status.status === 'pending';
-      }, true)
-    ).subscribe({
-      next: (status) => {
-        message.executionProgress = status.progress || 0;
-
-        if (status.status === 'running') {
-          message.text = `🔄 Test execution in progress...\n\n🆔 Execution ID: ${executionId}\n📊 Progress: ${status.progress}%\n⏱️ Status: ${status.message}`;
-        }
-
-        if (status.status === 'completed') {
-          message.isRunning = false;
-          message.executionProgress = 100;
-          message.executionStatus = status.overall_status === 'PASSED' ? 'success' : 'failed';
-          
-          const statusIcon = status.overall_status === 'PASSED' ? '✅' : '❌';
-          const statusText = status.overall_status === 'PASSED' ? 'PASSED' : 'FAILED';
-          
-          message.executionMessage = `${statusIcon} Test execution completed!\n\nOverall Status: ${statusText}`;
-          message.text = message.executionMessage;
-          
-          message.reportGenerated = true;
-          message.reportPath = status.report_path;
-          message.scriptPath = status.script_path;
-          message.videoPath = status.video_path;
-          
-          message.generatedFiles = [
-            status.report_path,
-            status.script_path,
-            status.video_path
-          ].filter((path): path is string => !!path && path.trim() !== '');
-
-          this.saveChatToHistory();
-        } else if (status.status === 'failed') {
-          message.isRunning = false;
-          message.executionProgress = 100;
-          message.executionStatus = 'failed';
-          message.executionMessage = `❌ Test execution failed!\n\nError: ${status.message || 'Unknown error'}`;
-          message.text = message.executionMessage;
-          
-          this.saveChatToHistory();
-        }
-      },
-      error: (error) => {
-        message.isRunning = false;
-        message.executionStatus = 'failed';
-        message.executionMessage = '❌ Error monitoring test execution. Please check the logs.';
-        message.text = message.executionMessage;
         this.saveChatToHistory();
       }
     });

@@ -29,7 +29,7 @@
                 <div class="message-text" *ngIf="message.text && !message.ticketDetails && !message.waitingForConfirmation && !message.isRunning && !message.executionStatus">
                   {{ message.text }}
                 </div>
-                <div class="ticket-details-card" *ngIf="message.ticketDetails">
+                <div class="ticket-details-card" *ngIf="message.ticketDetails && !message.executionStatus">
                   <div class="detail-row">
                     <strong>Found JIRA ticket:</strong> {{ message.ticketDetails.ticket_id }}
                   </div>
@@ -42,7 +42,7 @@
                       <polyline points="16 18 22 12 16 6"></polyline>
                       <polyline points="8 6 2 12 8 18"></polyline>
                     </svg>
-                    <strong>{{ message.scriptsCount }} test script(s) found</strong>
+                    <strong>Test Script Available to Rerun</strong>
                   </div>
                 </div>
                 <div class="yes-no-buttons" *ngIf="message.waitingForConfirmation">
@@ -82,6 +82,105 @@
                     </svg>
                     <span>Execution Complete</span>
                   </div>
+
+                  <!-- Add this AFTER the execution-result div and BEFORE download-actions -->
+
+<!-- NEW: Test Summary Section -->
+<div class="test-summary-section compact"  *ngIf="message.summary && message.showSummary">
+  <div class="summary-header" (click)="toggleSummary(message)">
+    <h3 class="summary-title">
+      <mat-icon>assessment</mat-icon>
+      Test Execution Summary
+    </h3>
+    <button class="toggle-summary-btn" >
+      <mat-icon>{{ message.showSummary ? 'expand_less' : 'expand_more' }}</mat-icon>
+    </button>
+  </div>
+
+  <div class="summary-content" *ngIf="message.showSummary">
+    <!-- Overall Status Card -->
+    <div class="summary-card main-status" [ngClass]="getStatusColorClass(message.summary.summary.overall_status)">
+      <div class="card-icon">{{ message.summary.insights.status_emoji }}</div>
+      <div class="card-content">
+        <div class="card-label">Overall Status</div>
+        <div class="card-value">{{ message.summary.summary.overall_status }}</div>
+      </div>
+    </div>
+
+    <!-- Metrics Grid -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-icon">📊</div>
+        <div class="metric-content">
+          <div class="metric-label">Total Steps</div>
+          <div class="metric-value">{{ message.summary.summary.total_steps }}</div>
+        </div>
+      </div>
+
+      <div class="metric-card success">
+        <div class="metric-icon">✅</div>
+        <div class="metric-content">
+          <div class="metric-label">Passed</div>
+          <div class="metric-value">{{ message.summary.summary.passed }}</div>
+        </div>
+      </div>
+
+      <div class="metric-card failed" *ngIf="message.summary.summary.failed > 0">
+        <div class="metric-icon">❌</div>
+        <div class="metric-content">
+          <div class="metric-label">Failed</div>
+          <div class="metric-value">{{ message.summary.summary.failed }}</div>
+        </div>
+      </div>
+
+      
+      <div class="metric-card" *ngIf="message.summary.summary.skipped > 0">
+        <div class="metric-icon">⏭️</div>
+        <div class="metric-content">
+          <div class="metric-label">Skipped</div>
+          <div class="metric-value">{{ message.summary.summary.skipped }}</div>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon">⏱️</div>
+        <div class="metric-content">
+          <div class="metric-label">Execution Time</div>
+          <div class="metric-value">{{ message.summary.summary.execution_time }}</div>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon">🎯</div>
+        <div class="metric-content">
+          <div class="metric-label">Avg Confidence</div>
+          <div class="metric-value">{{ (message.summary.summary.avg_confidence * 100).toFixed(0) }}%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Critical Failures (if any) -->
+    <div class="critical-failures-section" *ngIf="message.summary.insights.critical_failures.length > 0">
+      <h4 class="section-title error">
+        <mat-icon>error</mat-icon>
+        Critical Failures
+      </h4>
+      <div class="failure-card" *ngFor="let failure of message.summary.insights.critical_failures">
+        <div class="failure-step">Step {{ failure.step_number }}: {{ failure.step_text }}</div>
+        <div class="failure-error">{{ failure.error }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Show summary toggle button if summary exists but is hidden -->
+<button class="show-summary-btn" 
+        *ngIf="message.summary && !message.showSummary" 
+        (click)="toggleSummary(message)">
+  <mat-icon>assessment</mat-icon>
+  View Test Summary
+</button>
+
                   <div class="download-actions" *ngIf="message.reportGenerated && message.executionId">
                     <h4 class="download-title">Download Generated Files</h4>
                     <div class="download-buttons">
@@ -109,6 +208,7 @@
                         Test Video
                       </button>
                     </div>
+                    
                     <div class="generated-files-list" *ngIf="message.generatedFiles && message.generatedFiles.length > 0">
                       <div class="files-header">📁 Generated Files:</div>
                       <div class="file-item" *ngFor="let file of message.generatedFiles">
