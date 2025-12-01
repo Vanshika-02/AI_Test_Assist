@@ -1,4 +1,4 @@
-import { Component, Input, signal, computed, HostListener } from '@angular/core';
+import { Component, Input, signal, computed, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -9,6 +9,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule } from '@angular/material/badge';
 import { SidebarNavItem } from '../models/sidebar-nav-item.model';
 import { AuthService } from '../auth.service';
+import { Subject, takeUntil } from 'rxjs';
+
 
 @Component({
   selector: 'app-sidebar',
@@ -25,10 +27,14 @@ import { AuthService } from '../auth.service';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit{
   @Input() applicationTitle: string = 'Application';
   @Input() currentUser: string = 'User';
+  username = '';
+  ntid: string = '';
+  department: string = '';
   @Input() sidebarLinks: SidebarNavItem[] = [];
+  private destroy$ = new Subject<void>();
 
   private _isOpen = signal(true);
   private _isMobile = signal(false);
@@ -39,7 +45,23 @@ export class SidebarComponent {
   isInMobileMode = computed(() => this._isMobile());
 
   constructor(private router: Router, private authService: AuthService) {
+    // this.getuserId()
     this.checkScreenSize();
+  }
+
+  ngOnInit(): void {
+    this.authService.userId$
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((ntid) => {
+
+      if (ntid) {
+        const userId = this.authService.getUserId() || '';
+
+        this.ntid = ntid.toUpperCase();
+        this.username = userId.split('(')[0].trim();
+        this.department = userId.match(/\(([^)]+)\)/)?.[1] || '';
+      }
+    });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -57,6 +79,12 @@ export class SidebarComponent {
   toggleSideNavigationBar() {
     this._isOpen.set(!this._isOpen());
   }
+  
+
+  // getuserId(){
+  //   this.username = this.authService.getUserId();
+  // }
+
 
   openSidebar() {
     this._isOpen.set(true);
@@ -91,6 +119,11 @@ export class SidebarComponent {
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['/testing-assistant']);
+    // this.router.navigate(['/testing-assistant']);
   }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
 }
