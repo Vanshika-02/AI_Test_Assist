@@ -3,6 +3,7 @@ import { RegisterProductComponent } from './register-product/register-product.co
 import { TestGenerationComponent } from './test-generation/test-generation.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { OnboardProductComponent } from './onboard/onboard.component';
+import { MsalGuard } from '@azure/msal-angular';
 
 export const routes: Routes = [
   { 
@@ -12,19 +13,23 @@ export const routes: Routes = [
   },
   { 
     path: 'dashboard', 
-    component: DashboardComponent
+    component: DashboardComponent,
+    canActivate: [MsalGuard],
     // Remove canActivate temporarily
   },
   { 
     path: 'onboard-product', 
-    component: OnboardProductComponent
+    component: OnboardProductComponent,
+    canActivate: [MsalGuard]
   },
   { 
     path: 'testing-assistant', 
-    component: TestGenerationComponent
+    component: TestGenerationComponent,
+    canActivate: [MsalGuard]
   },
   { 
     path: 'register-product', 
-    component: RegisterProductComponent
+    component: RegisterProductComponent,
+    canActivate: [MsalGuard],
   }
 ];

@@ -5,6 +5,7 @@ import { ApiService, TestSummary, TicketDetail } from '../services/api.service';
 import { interval, Subscription } from 'rxjs';
 import { switchMap, takeWhile } from 'rxjs/operators';
 import { MatIconModule } from '@angular/material/icon';
+import { MsalService } from '@azure/msal-angular';
 
 interface ChatMessage {
   type: 'user' | 'bot';
@@ -51,7 +52,7 @@ interface ChatSession {
 })
 export class TestGenerationComponent implements OnInit, OnDestroy {
   private readonly MAX_HISTORY_COUNT = 10;
-  
+   username: string = '';
   activeTab: string = 'tab1';
   userMessage: string = '';
   currentMessage: string = '';
@@ -74,10 +75,15 @@ export class TestGenerationComponent implements OnInit, OnDestroy {
   currentChatId: string | null = null;
   selectedImages: string[] = [];
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private msalService: MsalService) {}
 
   ngOnInit(): void {
     this.loadChatHistories();
+     const account = this.msalService.instance.getActiveAccount();
+
+    if (account && account.name) {
+      this.username = account.name;           
+    }
   }
 
   ngOnDestroy(): void {
