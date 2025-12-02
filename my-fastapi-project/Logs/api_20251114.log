@@ -1,0 +1,337 @@
+2025-11-14 09:16:00,192 - TestAutomationAPI - INFO - Starting Test Automation API...
+2025-11-14 09:16:00,192 - TestAutomationAPI - INFO - Verified all directories exist
+2025-11-14 09:16:00,200 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-14 09:16:00,200 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-14 09:16:00,202 - sqlalchemy.engine.Engine - INFO - [cached since 0.01917s ago] {'table_name': 'projects', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-14 09:16:00,203 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-14 09:16:00,203 - sqlalchemy.engine.Engine - INFO - [cached since 0.02177s ago] {'table_name': 'testers', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-14 09:16:00,206 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-14 09:16:00,206 - sqlalchemy.engine.Engine - INFO - [cached since 0.02376s ago] {'table_name': 'tickets', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-14 09:16:00,206 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-14 09:16:00,206 - sqlalchemy.engine.Engine - INFO - [cached since 0.02622s ago] {'table_name': 'test_executions', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-14 09:16:00,206 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-14 09:16:00,206 - sqlalchemy.engine.Engine - INFO - [cached since 0.0284s ago] {'table_name': 'execution_steps', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-14 09:16:00,206 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-14 09:16:00,206 - sqlalchemy.engine.Engine - INFO - [cached since 0.02998s ago] {'table_name': 'project_configs', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-14 09:16:00,206 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-11-14 09:16:00,206 - TestAutomationAPI - INFO - Database tables verified
+2025-11-14 09:16:00,232 - TestAutomationAPI - INFO - ======================================================================
+2025-11-14 09:16:00,232 - TestAutomationAPI - INFO - Test Automation API Started Successfully
+2025-11-14 09:16:00,232 - TestAutomationAPI - INFO - Host: 0.0.0.0:8000
+2025-11-14 09:16:00,235 - TestAutomationAPI - INFO - Docs: http://0.0.0.0:8000/docs
+2025-11-14 09:16:00,235 - TestAutomationAPI - INFO - ======================================================================
+2025-11-14 09:17:56,277 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-14 09:17:56,283 - sqlalchemy.engine.Engine - INFO - SELECT tickets.id AS tickets_id, tickets.ticket_id AS tickets_ticket_id, tickets.project_id AS tickets_project_id, tickets.title AS tickets_title, tickets.module AS tickets_module, tickets.description AS tickets_description, tickets.acceptance_criteria AS tickets_acceptance_criteria, tickets.file_path AS tickets_file_path, tickets.created_at AS tickets_created_at 
+FROM tickets 
+WHERE tickets.ticket_id = %(ticket_id_1)s 
+ LIMIT %(param_1)s
+2025-11-14 09:17:56,283 - sqlalchemy.engine.Engine - INFO - [generated in 0.00197s] {'ticket_id_1': 'RBPLCD-8889', 'param_1': 1}
+2025-11-14 09:17:56,325 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-14 09:17:59,586 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-14 09:17:59,586 - sqlalchemy.engine.Engine - INFO - SELECT tickets.id AS tickets_id, tickets.ticket_id AS tickets_ticket_id, tickets.project_id AS tickets_project_id, tickets.title AS tickets_title, tickets.module AS tickets_module, tickets.description AS tickets_description, tickets.acceptance_criteria AS tickets_acceptance_criteria, tickets.file_path AS tickets_file_path, tickets.created_at AS tickets_created_at 
+FROM tickets 
+WHERE tickets.ticket_id = %(ticket_id_1)s 
+ LIMIT %(param_1)s
+2025-11-14 09:17:59,586 - sqlalchemy.engine.Engine - INFO - [cached since 3.305s ago] {'ticket_id_1': 'RBPLCD-8889', 'param_1': 1}
+2025-11-14 09:17:59,598 - sqlalchemy.engine.Engine - INFO - INSERT INTO test_executions (execution_id, ticket_id, project_id, status, overall_status, started_at, completed_at, total_execution_time, report_path, script_path, video_path, error_message) VALUES (%(execution_id)s, %(ticket_id)s, %(project_id)s, %(status)s, %(overall_status)s, %(started_at)s, %(completed_at)s, %(total_execution_time)s, %(report_path)s, %(script_path)s, %(video_path)s, %(error_message)s) RETURNING test_executions.id
+2025-11-14 09:17:59,598 - sqlalchemy.engine.Engine - INFO - [generated in 0.00146s] {'execution_id': 'exec_RBPLCD-8889_20251114_091759', 'ticket_id': 'RBPLCD-8889', 'project_id': 1, 'status': 'running', 'overall_status': None, 'started_at': datetime.datetime(2025, 11, 14, 9, 17, 59, 592526), 'completed_at': None, 'total_execution_time': None, 'report_path': None, 'script_path': None, 'video_path': None, 'error_message': None}
+2025-11-14 09:17:59,614 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-11-14 09:17:59,614 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-14 09:17:59,630 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id, test_executions.execution_id, test_executions.ticket_id, test_executions.project_id, test_executions.status, test_executions.overall_status, test_executions.started_at, test_executions.completed_at, test_executions.total_execution_time, test_executions.report_path, test_executions.script_path, test_executions.video_path, test_executions.error_message 
+FROM test_executions 
+WHERE test_executions.id = %(pk_1)s
+2025-11-14 09:17:59,631 - sqlalchemy.engine.Engine - INFO - [generated in 0.00201s] {'pk_1': 11}
+2025-11-14 09:17:59,631 - TestExecutionService - INFO - Created execution record: exec_RBPLCD-8889_20251114_091759
+2025-11-14 09:17:59,631 - sqlalchemy.engine.Engine - INFO - SELECT tickets.id AS tickets_id, tickets.ticket_id AS tickets_ticket_id, tickets.project_id AS tickets_project_id, tickets.title AS tickets_title, tickets.module AS tickets_module, tickets.description AS tickets_description, tickets.acceptance_criteria AS tickets_acceptance_criteria, tickets.file_path AS tickets_file_path, tickets.created_at AS tickets_created_at 
+FROM tickets 
+WHERE tickets.id = %(pk_1)s
+2025-11-14 09:17:59,631 - sqlalchemy.engine.Engine - INFO - [generated in 0.00153s] {'pk_1': 1}
+2025-11-14 09:17:59,631 - TestAutomationAPI - INFO - ======================================================================
+2025-11-14 09:17:59,631 - TestAutomationAPI - INFO - BACKGROUND TASK STARTED
+2025-11-14 09:17:59,631 - TestAutomationAPI - INFO - Execution ID: exec_RBPLCD-8889_20251114_091759
+2025-11-14 09:17:59,631 - TestAutomationAPI - INFO - Ticket ID: RBPLCD-8889
+2025-11-14 09:17:59,631 - TestAutomationAPI - INFO - Project ID: 1
+2025-11-14 09:17:59,646 - TestAutomationAPI - INFO - ======================================================================
+2025-11-14 09:17:59,647 - TestAutomationAPI - INFO - External project path: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project
+2025-11-14 09:17:59,648 - TestAutomationAPI - INFO - Calling run_test_workflow...
+2025-11-14 09:17:59,648 - TestExecutionService - INFO - Starting test workflow for RBPLCD-8889
+2025-11-14 09:17:59,648 - TestExecutionService - INFO - External project path: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project
+2025-11-14 09:17:59,648 - TestExecutionService - INFO - Python executable: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project\venv\Scripts\python.exe
+2025-11-14 09:17:59,648 - TestExecutionService - INFO - Script: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project\run_test.py
+2025-11-14 09:17:59,648 - TestExecutionService - INFO - Ticket ID: RBPLCD-8889
+2025-11-14 09:17:59,648 - TestExecutionService - INFO - Executing: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project\venv\Scripts\python.exe C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project\run_test.py RBPLCD-8889
+2025-11-14 09:17:59,702 - TestExecutionService - INFO - ======================================================================
+2025-11-14 09:17:59,709 - TestExecutionService - INFO - SCRIPT OUTPUT:
+2025-11-14 09:17:59,709 - TestExecutionService - INFO - ======================================================================
+2025-11-14 09:17:59,709 - TestExecutionService - INFO - 
+2025-11-14 09:17:59,709 - TestExecutionService - WARNING - SCRIPT ERRORS:
+2025-11-14 09:17:59,709 - TestExecutionService - WARNING - No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+
+2025-11-14 09:17:59,709 - TestExecutionService - INFO - ======================================================================
+2025-11-14 09:17:59,714 - TestExecutionService - ERROR - Script failed with return code 103
+2025-11-14 09:17:59,714 - TestExecutionService - ERROR - Test workflow failed: Script failed: No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+Traceback (most recent call last):
+  File "C:\Users\ENZ1KOR\my-fastapi-project\services.py", line 166, in run_test_workflow
+    raise Exception(f"Script failed: {result.stderr}")
+Exception: Script failed: No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+
+2025-11-14 09:17:59,749 - TestAutomationAPI - ERROR - ======================================================================
+2025-11-14 09:17:59,964 - TestAutomationAPI - ERROR - Execution ID: exec_RBPLCD-8889_20251114_091759
+2025-11-14 09:17:59,964 - TestAutomationAPI - ERROR - Error: Script failed: No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+
+2025-11-14 09:17:59,964 - TestAutomationAPI - ERROR - ======================================================================
+2025-11-14 09:18:00,060 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-14 09:18:00,064 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id AS test_executions_id, test_executions.execution_id AS test_executions_execution_id, test_executions.ticket_id AS test_executions_ticket_id, test_executions.project_id AS test_executions_project_id, test_executions.status AS test_executions_status, test_executions.overall_status AS test_executions_overall_status, test_executions.started_at AS test_executions_started_at, test_executions.completed_at AS test_executions_completed_at, test_executions.total_execution_time AS test_executions_total_execution_time, test_executions.report_path AS test_executions_report_path, test_executions.script_path AS test_executions_script_path, test_executions.video_path AS test_executions_video_path, test_executions.error_message AS test_executions_error_message 
+FROM test_executions 
+WHERE test_executions.execution_id = %(execution_id_1)s 
+ LIMIT %(param_1)s
+2025-11-14 09:18:00,064 - sqlalchemy.engine.Engine - INFO - [generated in 0.00213s] {'execution_id_1': 'exec_RBPLCD-8889_20251114_091759', 'param_1': 1}
+2025-11-14 09:18:00,076 - sqlalchemy.engine.Engine - INFO - UPDATE test_executions SET status=%(status)s, overall_status=%(overall_status)s, completed_at=%(completed_at)s, total_execution_time=%(total_execution_time)s, error_message=%(error_message)s WHERE test_executions.id = %(test_executions_id)s
+2025-11-14 09:18:00,076 - sqlalchemy.engine.Engine - INFO - [generated in 0.00193s] {'status': 'failed', 'overall_status': 'FAILED', 'completed_at': datetime.datetime(2025, 11, 14, 9, 18, 0, 64237), 'total_execution_time': 0.471711, 'error_message': 'Script failed: No Python at \'"C:\\Users\\lfo2kor\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\'\n', 'test_executions_id': 11}
+2025-11-14 09:18:00,081 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-11-14 09:18:00,081 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-14 09:18:00,081 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id, test_executions.execution_id, test_executions.ticket_id, test_executions.project_id, test_executions.status, test_executions.overall_status, test_executions.started_at, test_executions.completed_at, test_executions.total_execution_time, test_executions.report_path, test_executions.script_path, test_executions.video_path, test_executions.error_message 
+FROM test_executions 
+WHERE test_executions.id = %(pk_1)s
+2025-11-14 09:18:00,081 - sqlalchemy.engine.Engine - INFO - [cached since 0.4607s ago] {'pk_1': 11}
+2025-11-14 09:18:00,092 - TestExecutionService - INFO - Updated execution exec_RBPLCD-8889_20251114_091759: status=failed
+2025-11-14 09:18:00,092 - TestAutomationAPI - ERROR - Traceback (most recent call last):
+  File "C:\Users\ENZ1KOR\my-fastapi-project\main.py", line 585, in execute_test_in_background
+    state = service.run_test_workflow(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ENZ1KOR\my-fastapi-project\services.py", line 166, in run_test_workflow
+    raise Exception(f"Script failed: {result.stderr}")
+Exception: Script failed: No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+
+
+2025-11-14 09:18:00,092 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-14 09:18:00,092 - TestAutomationAPI - INFO - Background task ended for exec_RBPLCD-8889_20251114_091759
+2025-11-14 09:18:00,098 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-14 09:18:01,646 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-14 09:18:01,646 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id AS test_executions_id, test_executions.execution_id AS test_executions_execution_id, test_executions.ticket_id AS test_executions_ticket_id, test_executions.project_id AS test_executions_project_id, test_executions.status AS test_executions_status, test_executions.overall_status AS test_executions_overall_status, test_executions.started_at AS test_executions_started_at, test_executions.completed_at AS test_executions_completed_at, test_executions.total_execution_time AS test_executions_total_execution_time, test_executions.report_path AS test_executions_report_path, test_executions.script_path AS test_executions_script_path, test_executions.video_path AS test_executions_video_path, test_executions.error_message AS test_executions_error_message 
+FROM test_executions 
+WHERE test_executions.execution_id = %(execution_id_1)s 
+ LIMIT %(param_1)s
+2025-11-14 09:18:01,646 - sqlalchemy.engine.Engine - INFO - [cached since 1.591s ago] {'execution_id_1': 'exec_RBPLCD-8889_20251114_091759', 'param_1': 1}
+2025-11-14 09:18:01,662 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-14 09:20:52,751 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-14 09:20:52,753 - sqlalchemy.engine.Engine - INFO - SELECT tickets.id AS tickets_id, tickets.ticket_id AS tickets_ticket_id, tickets.project_id AS tickets_project_id, tickets.title AS tickets_title, tickets.module AS tickets_module, tickets.description AS tickets_description, tickets.acceptance_criteria AS tickets_acceptance_criteria, tickets.file_path AS tickets_file_path, tickets.created_at AS tickets_created_at 
+FROM tickets 
+WHERE tickets.ticket_id = %(ticket_id_1)s 
+ LIMIT %(param_1)s
+2025-11-14 09:20:52,755 - sqlalchemy.engine.Engine - INFO - [cached since 176.2s ago] {'ticket_id_1': 'RBPLCD-8889', 'param_1': 1}
+2025-11-14 09:20:52,796 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-14 09:20:56,580 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-14 09:20:56,588 - sqlalchemy.engine.Engine - INFO - SELECT tickets.id AS tickets_id, tickets.ticket_id AS tickets_ticket_id, tickets.project_id AS tickets_project_id, tickets.title AS tickets_title, tickets.module AS tickets_module, tickets.description AS tickets_description, tickets.acceptance_criteria AS tickets_acceptance_criteria, tickets.file_path AS tickets_file_path, tickets.created_at AS tickets_created_at 
+FROM tickets 
+WHERE tickets.ticket_id = %(ticket_id_1)s 
+ LIMIT %(param_1)s
+2025-11-14 09:20:56,589 - sqlalchemy.engine.Engine - INFO - [cached since 180s ago] {'ticket_id_1': 'RBPLCD-8889', 'param_1': 1}
+2025-11-14 09:20:56,596 - sqlalchemy.engine.Engine - INFO - INSERT INTO test_executions (execution_id, ticket_id, project_id, status, overall_status, started_at, completed_at, total_execution_time, report_path, script_path, video_path, error_message) VALUES (%(execution_id)s, %(ticket_id)s, %(project_id)s, %(status)s, %(overall_status)s, %(started_at)s, %(completed_at)s, %(total_execution_time)s, %(report_path)s, %(script_path)s, %(video_path)s, %(error_message)s) RETURNING test_executions.id
+2025-11-14 09:20:56,599 - sqlalchemy.engine.Engine - INFO - [cached since 176.7s ago] {'execution_id': 'exec_RBPLCD-8889_20251114_092056', 'ticket_id': 'RBPLCD-8889', 'project_id': 1, 'status': 'running', 'overall_status': None, 'started_at': datetime.datetime(2025, 11, 14, 9, 20, 56, 594603), 'completed_at': None, 'total_execution_time': None, 'report_path': None, 'script_path': None, 'video_path': None, 'error_message': None}
+2025-11-14 09:20:56,604 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-11-14 09:20:56,614 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-14 09:20:56,614 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id, test_executions.execution_id, test_executions.ticket_id, test_executions.project_id, test_executions.status, test_executions.overall_status, test_executions.started_at, test_executions.completed_at, test_executions.total_execution_time, test_executions.report_path, test_executions.script_path, test_executions.video_path, test_executions.error_message 
+FROM test_executions 
+WHERE test_executions.id = %(pk_1)s
+2025-11-14 09:20:56,614 - sqlalchemy.engine.Engine - INFO - [cached since 176.7s ago] {'pk_1': 12}
+2025-11-14 09:20:56,614 - TestExecutionService - INFO - Created execution record: exec_RBPLCD-8889_20251114_092056
+2025-11-14 09:20:56,614 - sqlalchemy.engine.Engine - INFO - SELECT tickets.id AS tickets_id, tickets.ticket_id AS tickets_ticket_id, tickets.project_id AS tickets_project_id, tickets.title AS tickets_title, tickets.module AS tickets_module, tickets.description AS tickets_description, tickets.acceptance_criteria AS tickets_acceptance_criteria, tickets.file_path AS tickets_file_path, tickets.created_at AS tickets_created_at 
+FROM tickets 
+WHERE tickets.id = %(pk_1)s
+2025-11-14 09:20:56,625 - sqlalchemy.engine.Engine - INFO - [cached since 176.7s ago] {'pk_1': 1}
+2025-11-14 09:20:56,627 - TestAutomationAPI - INFO - ======================================================================
+2025-11-14 09:20:56,627 - TestAutomationAPI - INFO - BACKGROUND TASK STARTED
+2025-11-14 09:20:56,627 - TestAutomationAPI - INFO - Execution ID: exec_RBPLCD-8889_20251114_092056
+2025-11-14 09:20:56,627 - TestAutomationAPI - INFO - Ticket ID: RBPLCD-8889
+2025-11-14 09:20:56,627 - TestAutomationAPI - INFO - Project ID: 1
+2025-11-14 09:20:56,627 - TestAutomationAPI - INFO - ======================================================================
+2025-11-14 09:20:56,627 - TestAutomationAPI - INFO - External project path: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project
+2025-11-14 09:20:56,627 - TestAutomationAPI - INFO - Calling run_test_workflow...
+2025-11-14 09:20:56,627 - TestExecutionService - INFO - Starting test workflow for RBPLCD-8889
+2025-11-14 09:20:56,627 - TestExecutionService - INFO - External project path: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project
+2025-11-14 09:20:56,627 - TestExecutionService - INFO - Python executable: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project\venv\Scripts\python.exe
+2025-11-14 09:20:56,627 - TestExecutionService - INFO - Script: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project\run_test.py
+2025-11-14 09:20:56,627 - TestExecutionService - INFO - Ticket ID: RBPLCD-8889
+2025-11-14 09:20:56,627 - TestExecutionService - INFO - Executing: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project\venv\Scripts\python.exe C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project\run_test.py RBPLCD-8889
+2025-11-14 09:20:56,673 - TestExecutionService - INFO - ======================================================================
+2025-11-14 09:20:56,673 - TestExecutionService - INFO - SCRIPT OUTPUT:
+2025-11-14 09:20:56,673 - TestExecutionService - INFO - ======================================================================
+2025-11-14 09:20:56,675 - TestExecutionService - INFO - 
+2025-11-14 09:20:56,675 - TestExecutionService - WARNING - SCRIPT ERRORS:
+2025-11-14 09:20:56,675 - TestExecutionService - WARNING - No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+
+2025-11-14 09:20:56,675 - TestExecutionService - INFO - ======================================================================
+2025-11-14 09:20:56,675 - TestExecutionService - ERROR - Script failed with return code 103
+2025-11-14 09:20:56,676 - TestExecutionService - ERROR - Test workflow failed: Script failed: No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+Traceback (most recent call last):
+  File "C:\Users\ENZ1KOR\my-fastapi-project\services.py", line 166, in run_test_workflow
+    raise Exception(f"Script failed: {result.stderr}")
+Exception: Script failed: No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+
+2025-11-14 09:20:56,677 - TestAutomationAPI - ERROR - ======================================================================
+2025-11-14 09:20:56,684 - TestAutomationAPI - ERROR - Execution ID: exec_RBPLCD-8889_20251114_092056
+2025-11-14 09:20:56,686 - TestAutomationAPI - ERROR - Error: Script failed: No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+
+2025-11-14 09:20:56,686 - TestAutomationAPI - ERROR - ======================================================================
+2025-11-14 09:20:56,689 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-14 09:20:56,690 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id AS test_executions_id, test_executions.execution_id AS test_executions_execution_id, test_executions.ticket_id AS test_executions_ticket_id, test_executions.project_id AS test_executions_project_id, test_executions.status AS test_executions_status, test_executions.overall_status AS test_executions_overall_status, test_executions.started_at AS test_executions_started_at, test_executions.completed_at AS test_executions_completed_at, test_executions.total_execution_time AS test_executions_total_execution_time, test_executions.report_path AS test_executions_report_path, test_executions.script_path AS test_executions_script_path, test_executions.video_path AS test_executions_video_path, test_executions.error_message AS test_executions_error_message 
+FROM test_executions 
+WHERE test_executions.execution_id = %(execution_id_1)s 
+ LIMIT %(param_1)s
+2025-11-14 09:20:56,692 - sqlalchemy.engine.Engine - INFO - [cached since 176.3s ago] {'execution_id_1': 'exec_RBPLCD-8889_20251114_092056', 'param_1': 1}
+2025-11-14 09:20:56,694 - sqlalchemy.engine.Engine - INFO - UPDATE test_executions SET status=%(status)s, overall_status=%(overall_status)s, completed_at=%(completed_at)s, total_execution_time=%(total_execution_time)s, error_message=%(error_message)s WHERE test_executions.id = %(test_executions_id)s
+2025-11-14 09:20:56,695 - sqlalchemy.engine.Engine - INFO - [cached since 176.3s ago] {'status': 'failed', 'overall_status': 'FAILED', 'completed_at': datetime.datetime(2025, 11, 14, 9, 20, 56, 694089), 'total_execution_time': 0.099486, 'error_message': 'Script failed: No Python at \'"C:\\Users\\lfo2kor\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\'\n', 'test_executions_id': 12}
+2025-11-14 09:20:56,699 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-11-14 09:20:56,699 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-14 09:20:56,704 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id, test_executions.execution_id, test_executions.ticket_id, test_executions.project_id, test_executions.status, test_executions.overall_status, test_executions.started_at, test_executions.completed_at, test_executions.total_execution_time, test_executions.report_path, test_executions.script_path, test_executions.video_path, test_executions.error_message 
+FROM test_executions 
+WHERE test_executions.id = %(pk_1)s
+2025-11-14 09:20:56,705 - sqlalchemy.engine.Engine - INFO - [cached since 176.8s ago] {'pk_1': 12}
+2025-11-14 09:20:56,706 - TestExecutionService - INFO - Updated execution exec_RBPLCD-8889_20251114_092056: status=failed
+2025-11-14 09:20:56,709 - TestAutomationAPI - ERROR - Traceback (most recent call last):
+  File "C:\Users\ENZ1KOR\my-fastapi-project\main.py", line 585, in execute_test_in_background
+    state = service.run_test_workflow(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ENZ1KOR\my-fastapi-project\services.py", line 166, in run_test_workflow
+    raise Exception(f"Script failed: {result.stderr}")
+Exception: Script failed: No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+
+
+2025-11-14 09:20:56,709 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-14 09:20:56,711 - TestAutomationAPI - INFO - Background task ended for exec_RBPLCD-8889_20251114_092056
+2025-11-14 09:20:56,712 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-14 09:20:58,638 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-14 09:20:58,646 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id AS test_executions_id, test_executions.execution_id AS test_executions_execution_id, test_executions.ticket_id AS test_executions_ticket_id, test_executions.project_id AS test_executions_project_id, test_executions.status AS test_executions_status, test_executions.overall_status AS test_executions_overall_status, test_executions.started_at AS test_executions_started_at, test_executions.completed_at AS test_executions_completed_at, test_executions.total_execution_time AS test_executions_total_execution_time, test_executions.report_path AS test_executions_report_path, test_executions.script_path AS test_executions_script_path, test_executions.video_path AS test_executions_video_path, test_executions.error_message AS test_executions_error_message 
+FROM test_executions 
+WHERE test_executions.execution_id = %(execution_id_1)s 
+ LIMIT %(param_1)s
+2025-11-14 09:20:58,646 - sqlalchemy.engine.Engine - INFO - [cached since 178.3s ago] {'execution_id_1': 'exec_RBPLCD-8889_20251114_092056', 'param_1': 1}
+2025-11-14 09:20:58,646 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-14 09:44:05,427 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-14 09:44:05,431 - sqlalchemy.engine.Engine - INFO - SELECT tickets.id AS tickets_id, tickets.ticket_id AS tickets_ticket_id, tickets.project_id AS tickets_project_id, tickets.title AS tickets_title, tickets.module AS tickets_module, tickets.description AS tickets_description, tickets.acceptance_criteria AS tickets_acceptance_criteria, tickets.file_path AS tickets_file_path, tickets.created_at AS tickets_created_at 
+FROM tickets 
+WHERE tickets.ticket_id = %(ticket_id_1)s 
+ LIMIT %(param_1)s
+2025-11-14 09:44:05,432 - sqlalchemy.engine.Engine - INFO - [cached since 1568s ago] {'ticket_id_1': 'RBPLCD-8889', 'param_1': 1}
+2025-11-14 09:44:05,442 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-14 09:44:13,528 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-14 09:44:13,529 - sqlalchemy.engine.Engine - INFO - SELECT tickets.id AS tickets_id, tickets.ticket_id AS tickets_ticket_id, tickets.project_id AS tickets_project_id, tickets.title AS tickets_title, tickets.module AS tickets_module, tickets.description AS tickets_description, tickets.acceptance_criteria AS tickets_acceptance_criteria, tickets.file_path AS tickets_file_path, tickets.created_at AS tickets_created_at 
+FROM tickets 
+WHERE tickets.ticket_id = %(ticket_id_1)s 
+ LIMIT %(param_1)s
+2025-11-14 09:44:13,537 - sqlalchemy.engine.Engine - INFO - [cached since 1576s ago] {'ticket_id_1': 'RBPLCD-8889', 'param_1': 1}
+2025-11-14 09:44:13,542 - sqlalchemy.engine.Engine - INFO - INSERT INTO test_executions (execution_id, ticket_id, project_id, status, overall_status, started_at, completed_at, total_execution_time, report_path, script_path, video_path, error_message) VALUES (%(execution_id)s, %(ticket_id)s, %(project_id)s, %(status)s, %(overall_status)s, %(started_at)s, %(completed_at)s, %(total_execution_time)s, %(report_path)s, %(script_path)s, %(video_path)s, %(error_message)s) RETURNING test_executions.id
+2025-11-14 09:44:13,543 - sqlalchemy.engine.Engine - INFO - [cached since 1573s ago] {'execution_id': 'exec_RBPLCD-8889_20251114_094413', 'ticket_id': 'RBPLCD-8889', 'project_id': 1, 'status': 'running', 'overall_status': None, 'started_at': datetime.datetime(2025, 11, 14, 9, 44, 13, 539728), 'completed_at': None, 'total_execution_time': None, 'report_path': None, 'script_path': None, 'video_path': None, 'error_message': None}
+2025-11-14 09:44:13,548 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-11-14 09:44:13,552 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-14 09:44:13,554 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id, test_executions.execution_id, test_executions.ticket_id, test_executions.project_id, test_executions.status, test_executions.overall_status, test_executions.started_at, test_executions.completed_at, test_executions.total_execution_time, test_executions.report_path, test_executions.script_path, test_executions.video_path, test_executions.error_message 
+FROM test_executions 
+WHERE test_executions.id = %(pk_1)s
+2025-11-14 09:44:13,554 - sqlalchemy.engine.Engine - INFO - [cached since 1573s ago] {'pk_1': 13}
+2025-11-14 09:44:13,556 - TestExecutionService - INFO - Created execution record: exec_RBPLCD-8889_20251114_094413
+2025-11-14 09:44:13,556 - sqlalchemy.engine.Engine - INFO - SELECT tickets.id AS tickets_id, tickets.ticket_id AS tickets_ticket_id, tickets.project_id AS tickets_project_id, tickets.title AS tickets_title, tickets.module AS tickets_module, tickets.description AS tickets_description, tickets.acceptance_criteria AS tickets_acceptance_criteria, tickets.file_path AS tickets_file_path, tickets.created_at AS tickets_created_at 
+FROM tickets 
+WHERE tickets.id = %(pk_1)s
+2025-11-14 09:44:13,557 - sqlalchemy.engine.Engine - INFO - [cached since 1573s ago] {'pk_1': 1}
+2025-11-14 09:44:13,560 - TestAutomationAPI - INFO - ======================================================================
+2025-11-14 09:44:13,560 - TestAutomationAPI - INFO - BACKGROUND TASK STARTED
+2025-11-14 09:44:13,561 - TestAutomationAPI - INFO - Execution ID: exec_RBPLCD-8889_20251114_094413
+2025-11-14 09:44:13,561 - TestAutomationAPI - INFO - Ticket ID: RBPLCD-8889
+2025-11-14 09:44:13,561 - TestAutomationAPI - INFO - Project ID: 1
+2025-11-14 09:44:13,562 - TestAutomationAPI - INFO - ======================================================================
+2025-11-14 09:44:13,562 - TestAutomationAPI - INFO - External project path: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project
+2025-11-14 09:44:13,563 - TestAutomationAPI - INFO - Calling run_test_workflow...
+2025-11-14 09:44:13,563 - TestExecutionService - INFO - Starting test workflow for RBPLCD-8889
+2025-11-14 09:44:13,563 - TestExecutionService - INFO - External project path: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project
+2025-11-14 09:44:13,565 - TestExecutionService - INFO - Python executable: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project\venv\Scripts\python.exe
+2025-11-14 09:44:13,565 - TestExecutionService - INFO - Script: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project\run_test.py
+2025-11-14 09:44:13,567 - TestExecutionService - INFO - Ticket ID: RBPLCD-8889
+2025-11-14 09:44:13,567 - TestExecutionService - INFO - Executing: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project\venv\Scripts\python.exe C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project\run_test.py RBPLCD-8889
+2025-11-14 09:44:13,589 - TestExecutionService - INFO - ======================================================================
+2025-11-14 09:44:13,589 - TestExecutionService - INFO - SCRIPT OUTPUT:
+2025-11-14 09:44:13,589 - TestExecutionService - INFO - ======================================================================
+2025-11-14 09:44:13,589 - TestExecutionService - INFO - 
+2025-11-14 09:44:13,589 - TestExecutionService - WARNING - SCRIPT ERRORS:
+2025-11-14 09:44:13,590 - TestExecutionService - WARNING - No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+
+2025-11-14 09:44:13,590 - TestExecutionService - INFO - ======================================================================
+2025-11-14 09:44:13,590 - TestExecutionService - ERROR - Script failed with return code 103
+2025-11-14 09:44:13,590 - TestExecutionService - ERROR - Test workflow failed: Script failed: No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+Traceback (most recent call last):
+  File "C:\Users\ENZ1KOR\my-fastapi-project\services.py", line 166, in run_test_workflow
+    raise Exception(f"Script failed: {result.stderr}")
+Exception: Script failed: No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+
+2025-11-14 09:44:13,592 - TestAutomationAPI - ERROR - ======================================================================
+2025-11-14 09:44:13,595 - TestAutomationAPI - ERROR - Execution ID: exec_RBPLCD-8889_20251114_094413
+2025-11-14 09:44:13,595 - TestAutomationAPI - ERROR - Error: Script failed: No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+
+2025-11-14 09:44:13,595 - TestAutomationAPI - ERROR - ======================================================================
+2025-11-14 09:44:13,597 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-14 09:44:13,598 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id AS test_executions_id, test_executions.execution_id AS test_executions_execution_id, test_executions.ticket_id AS test_executions_ticket_id, test_executions.project_id AS test_executions_project_id, test_executions.status AS test_executions_status, test_executions.overall_status AS test_executions_overall_status, test_executions.started_at AS test_executions_started_at, test_executions.completed_at AS test_executions_completed_at, test_executions.total_execution_time AS test_executions_total_execution_time, test_executions.report_path AS test_executions_report_path, test_executions.script_path AS test_executions_script_path, test_executions.video_path AS test_executions_video_path, test_executions.error_message AS test_executions_error_message 
+FROM test_executions 
+WHERE test_executions.execution_id = %(execution_id_1)s 
+ LIMIT %(param_1)s
+2025-11-14 09:44:13,599 - sqlalchemy.engine.Engine - INFO - [cached since 1573s ago] {'execution_id_1': 'exec_RBPLCD-8889_20251114_094413', 'param_1': 1}
+2025-11-14 09:44:13,603 - sqlalchemy.engine.Engine - INFO - UPDATE test_executions SET status=%(status)s, overall_status=%(overall_status)s, completed_at=%(completed_at)s, total_execution_time=%(total_execution_time)s, error_message=%(error_message)s WHERE test_executions.id = %(test_executions_id)s
+2025-11-14 09:44:13,603 - sqlalchemy.engine.Engine - INFO - [cached since 1573s ago] {'status': 'failed', 'overall_status': 'FAILED', 'completed_at': datetime.datetime(2025, 11, 14, 9, 44, 13, 602172), 'total_execution_time': 0.062444, 'error_message': 'Script failed: No Python at \'"C:\\Users\\lfo2kor\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\'\n', 'test_executions_id': 13}
+2025-11-14 09:44:13,605 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-11-14 09:44:13,607 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-14 09:44:13,608 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id, test_executions.execution_id, test_executions.ticket_id, test_executions.project_id, test_executions.status, test_executions.overall_status, test_executions.started_at, test_executions.completed_at, test_executions.total_execution_time, test_executions.report_path, test_executions.script_path, test_executions.video_path, test_executions.error_message 
+FROM test_executions 
+WHERE test_executions.id = %(pk_1)s
+2025-11-14 09:44:13,609 - sqlalchemy.engine.Engine - INFO - [cached since 1573s ago] {'pk_1': 13}
+2025-11-14 09:44:13,610 - TestExecutionService - INFO - Updated execution exec_RBPLCD-8889_20251114_094413: status=failed
+2025-11-14 09:44:13,610 - TestAutomationAPI - ERROR - Traceback (most recent call last):
+  File "C:\Users\ENZ1KOR\my-fastapi-project\main.py", line 585, in execute_test_in_background
+    state = service.run_test_workflow(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ENZ1KOR\my-fastapi-project\services.py", line 166, in run_test_workflow
+    raise Exception(f"Script failed: {result.stderr}")
+Exception: Script failed: No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+
+
+2025-11-14 09:44:13,611 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-14 09:44:13,611 - TestAutomationAPI - INFO - Background task ended for exec_RBPLCD-8889_20251114_094413
+2025-11-14 09:44:13,612 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-14 09:44:15,567 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-14 09:44:15,567 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id AS test_executions_id, test_executions.execution_id AS test_executions_execution_id, test_executions.ticket_id AS test_executions_ticket_id, test_executions.project_id AS test_executions_project_id, test_executions.status AS test_executions_status, test_executions.overall_status AS test_executions_overall_status, test_executions.started_at AS test_executions_started_at, test_executions.completed_at AS test_executions_completed_at, test_executions.total_execution_time AS test_executions_total_execution_time, test_executions.report_path AS test_executions_report_path, test_executions.script_path AS test_executions_script_path, test_executions.video_path AS test_executions_video_path, test_executions.error_message AS test_executions_error_message 
+FROM test_executions 
+WHERE test_executions.execution_id = %(execution_id_1)s 
+ LIMIT %(param_1)s
+2025-11-14 09:44:15,568 - sqlalchemy.engine.Engine - INFO - [cached since 1575s ago] {'execution_id_1': 'exec_RBPLCD-8889_20251114_094413', 'param_1': 1}
+2025-11-14 09:44:15,571 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-17 10:02:05,620 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-17 10:02:05,633 - sqlalchemy.engine.Engine - INFO - SELECT tickets.id AS tickets_id, tickets.ticket_id AS tickets_ticket_id, tickets.project_id AS tickets_project_id, tickets.title AS tickets_title, tickets.module AS tickets_module, tickets.description AS tickets_description, tickets.acceptance_criteria AS tickets_acceptance_criteria, tickets.file_path AS tickets_file_path, tickets.created_at AS tickets_created_at 
+FROM tickets 
+WHERE tickets.ticket_id = %(ticket_id_1)s 
+ LIMIT %(param_1)s
+2025-11-17 10:02:05,633 - sqlalchemy.engine.Engine - INFO - [cached since 2.619e+05s ago] {'ticket_id_1': 'RBPLCD-8889', 'param_1': 1}
+2025-11-17 10:02:05,699 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-17 10:34:30,296 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-17 10:34:30,297 - sqlalchemy.engine.Engine - INFO - SELECT tickets.id AS tickets_id, tickets.ticket_id AS tickets_ticket_id, tickets.project_id AS tickets_project_id, tickets.title AS tickets_title, tickets.module AS tickets_module, tickets.description AS tickets_description, tickets.acceptance_criteria AS tickets_acceptance_criteria, tickets.file_path AS tickets_file_path, tickets.created_at AS tickets_created_at 
+FROM tickets 
+WHERE tickets.ticket_id = %(ticket_id_1)s 
+ LIMIT %(param_1)s
+2025-11-17 10:34:30,298 - sqlalchemy.engine.Engine - INFO - [cached since 2.638e+05s ago] {'ticket_id_1': 'RBPLCD-8889', 'param_1': 1}
+2025-11-17 10:34:30,330 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-17 10:35:21,399 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-17 10:35:21,399 - sqlalchemy.engine.Engine - INFO - SELECT tickets.id AS tickets_id, tickets.ticket_id AS tickets_ticket_id, tickets.project_id AS tickets_project_id, tickets.title AS tickets_title, tickets.module AS tickets_module, tickets.description AS tickets_description, tickets.acceptance_criteria AS tickets_acceptance_criteria, tickets.file_path AS tickets_file_path, tickets.created_at AS tickets_created_at 
+FROM tickets 
+WHERE tickets.ticket_id = %(ticket_id_1)s 
+ LIMIT %(param_1)s
+2025-11-17 10:35:21,408 - sqlalchemy.engine.Engine - INFO - [cached since 2.639e+05s ago] {'ticket_id_1': 'RBPLCD-8889', 'param_1': 1}
+2025-11-17 10:35:21,412 - sqlalchemy.engine.Engine - INFO - ROLLBACK
