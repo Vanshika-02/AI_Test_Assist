@@ -82,10 +82,18 @@ export class TestGenerationComponent implements OnInit, OnDestroy {
      const account = this.msalService.instance.getActiveAccount();
 
     if (account && account.name) {
-      this.username = account.name;           
+      this.username = this.extractFirstName(account.name);           
     }
   }
 
+  private extractFirstName(fullName: string): string {
+    fullName = fullName.split('–')[0]; 
+    fullName = fullName.split('-')[0];
+    fullName = fullName.split('(')[0]; 
+    fullName = fullName.split('@')[0];
+    return fullName.trim().split(' ')[0];
+  }
+  
   ngOnDestroy(): void {
     if (this.pollingSubscription) {
       this.pollingSubscription.unsubscribe();
