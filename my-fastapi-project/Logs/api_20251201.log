@@ -2954,7 +2954,7 @@ WHERE tickets.id = %(pk_1)s
 2025-12-01 17:48:32,500 - TestAutomationAPI - INFO - ======================================================================
 2025-12-01 17:48:32,508 - TestAutomationAPI - INFO -    Execution ID: rerun_RBPLCD-8004_20251201_174832
 2025-12-01 17:48:32,508 - TestAutomationAPI - INFO -    Ticket ID: RBPLCD-8004
-2025-12-01 17:48:32,508 - TestAutomationAPI - INFO -    Script: C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Generated_Scripts\RBPLCD-8004_20251201_171155_test.py
+2025-12-01 17:48:32,508 - TestAutomationAPI - INFO -    Script: C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Generated_Scripts\RBPLCD-8004_20251201_171155_test.py
 2025-12-01 17:48:32,508 - TestAutomationAPI - INFO -    Started at: 2025-12-01T17:48:32.508158
 2025-12-01 17:48:32,508 - TestAutomationAPI - INFO - ======================================================================
 2025-12-01 17:48:32,561 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
@@ -2968,7 +2968,7 @@ WHERE test_executions.execution_id = %(execution_id_1)s
 2025-12-01 17:48:32,579 - sqlalchemy.engine.Engine - INFO - COMMIT
 2025-12-01 17:48:32,770 - TestAutomationAPI - WARNING - STDERR:
 Traceback (most recent call last):
-  File "C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Generated_Scripts\RBPLCD-8004_20251201_171155_test.py", line 8, in <module>
+  File "C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Generated_Scripts\RBPLCD-8004_20251201_171155_test.py", line 8, in <module>
     import pytest
 ModuleNotFoundError: No module named 'pytest'
 
@@ -3074,7 +3074,7 @@ WHERE tickets.id = %(pk_1)s
 2025-12-01 21:49:28,372 - TestAutomationAPI - INFO - ======================================================================
 2025-12-01 21:49:28,511 - TestAutomationAPI - INFO -    Execution ID: rerun_RBPLCD-8004_20251201_214928
 2025-12-01 21:49:28,511 - TestAutomationAPI - INFO -    Ticket ID: RBPLCD-8004
-2025-12-01 21:49:28,511 - TestAutomationAPI - INFO -    Script: C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Generated_Scripts\RBPLCD-8004_20251201_171155_test.py
+2025-12-01 21:49:28,511 - TestAutomationAPI - INFO -    Script: C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Generated_Scripts\RBPLCD-8004_20251201_171155_test.py
 2025-12-01 21:49:28,511 - TestAutomationAPI - INFO -    Started at: 2025-12-01T21:49:28.511017
 2025-12-01 21:49:28,511 - TestAutomationAPI - INFO - ======================================================================
 2025-12-01 21:49:28,570 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
@@ -3088,7 +3088,7 @@ WHERE test_executions.execution_id = %(execution_id_1)s
 2025-12-01 21:49:28,585 - sqlalchemy.engine.Engine - INFO - COMMIT
 2025-12-01 21:49:28,719 - TestAutomationAPI - WARNING - STDERR:
 Traceback (most recent call last):
-  File "C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Generated_Scripts\RBPLCD-8004_20251201_171155_test.py", line 8, in <module>
+  File "C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Generated_Scripts\RBPLCD-8004_20251201_171155_test.py", line 8, in <module>
     import pytest
 ModuleNotFoundError: No module named 'pytest'
 
@@ -3153,7 +3153,7 @@ WHERE tickets.id = %(pk_1)s
 2025-12-01 21:55:12,620 - TestAutomationAPI - INFO - ======================================================================
 2025-12-01 21:55:12,625 - TestAutomationAPI - INFO -    Execution ID: rerun_RBPLCD-8004_20251201_215512
 2025-12-01 21:55:12,625 - TestAutomationAPI - INFO -    Ticket ID: RBPLCD-8004
-2025-12-01 21:55:12,625 - TestAutomationAPI - INFO -    Script: C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Generated_Scripts\RBPLCD-8004_20251201_171155_test.py
+2025-12-01 21:55:12,625 - TestAutomationAPI - INFO -    Script: C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Generated_Scripts\RBPLCD-8004_20251201_171155_test.py
 2025-12-01 21:55:12,625 - TestAutomationAPI - INFO -    Started at: 2025-12-01T21:55:12.625204
 2025-12-01 21:55:12,627 - TestAutomationAPI - INFO - ======================================================================
 2025-12-01 21:55:12,627 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
@@ -3167,7 +3167,7 @@ WHERE test_executions.execution_id = %(execution_id_1)s
 2025-12-01 21:55:12,635 - sqlalchemy.engine.Engine - INFO - COMMIT
 2025-12-01 21:55:12,751 - TestAutomationAPI - WARNING - STDERR:
 Traceback (most recent call last):
-  File "C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Generated_Scripts\RBPLCD-8004_20251201_171155_test.py", line 8, in <module>
+  File "C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Generated_Scripts\RBPLCD-8004_20251201_171155_test.py", line 8, in <module>
     import pytest
 ModuleNotFoundError: No module named 'pytest'
 
@@ -5144,7 +5144,7 @@ WHERE tickets.id = %(pk_1)s
 2025-12-01 23:26:02,690 - TestAutomationAPI - INFO - ======================================================================
 2025-12-01 23:26:02,693 - TestAutomationAPI - INFO -    Execution ID: rerun_RBPLCD-8002_20251201_232602
 2025-12-01 23:26:02,694 - TestAutomationAPI - INFO -    Ticket ID: RBPLCD-8002
-2025-12-01 23:26:02,694 - TestAutomationAPI - INFO -    Script: C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Generated_Scripts\RBPLCD-8002_20251201_223935_test.py
+2025-12-01 23:26:02,694 - TestAutomationAPI - INFO -    Script: C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Generated_Scripts\RBPLCD-8002_20251201_223935_test.py
 2025-12-01 23:26:02,694 - TestAutomationAPI - INFO -    Started at: 2025-12-01T23:26:02.694577
 2025-12-01 23:26:02,695 - TestAutomationAPI - INFO - ======================================================================
 2025-12-01 23:26:02,696 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
@@ -5158,7 +5158,7 @@ WHERE test_executions.execution_id = %(execution_id_1)s
 2025-12-01 23:26:02,702 - sqlalchemy.engine.Engine - INFO - COMMIT
 2025-12-01 23:26:02,870 - TestAutomationAPI - WARNING - STDERR:
 Traceback (most recent call last):
-  File "C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Generated_Scripts\RBPLCD-8002_20251201_223935_test.py", line 8, in <module>
+  File "C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Generated_Scripts\RBPLCD-8002_20251201_223935_test.py", line 8, in <module>
     import pytest
 ModuleNotFoundError: No module named 'pytest'
 
@@ -5231,7 +5231,7 @@ WHERE tickets.id = %(pk_1)s
 2025-12-02 10:10:51,163 - TestAutomationAPI - INFO - ======================================================================
 2025-12-02 10:10:51,177 - TestAutomationAPI - INFO -    Execution ID: rerun_RBPLCD-8004_20251202_101051
 2025-12-02 10:10:51,178 - TestAutomationAPI - INFO -    Ticket ID: RBPLCD-8004
-2025-12-02 10:10:51,178 - TestAutomationAPI - INFO -    Script: C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Generated_Scripts\RBPLCD-8004_20251201_171155_test.py
+2025-12-02 10:10:51,178 - TestAutomationAPI - INFO -    Script: C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Generated_Scripts\RBPLCD-8004_20251201_171155_test.py
 2025-12-02 10:10:51,178 - TestAutomationAPI - INFO -    Started at: 2025-12-02T10:10:51.178579
 2025-12-02 10:10:51,178 - TestAutomationAPI - INFO - ======================================================================
 2025-12-02 10:10:51,183 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
@@ -5245,7 +5245,7 @@ WHERE test_executions.execution_id = %(execution_id_1)s
 2025-12-02 10:10:51,192 - sqlalchemy.engine.Engine - INFO - COMMIT
 2025-12-02 10:10:51,425 - TestAutomationAPI - WARNING - STDERR:
 Traceback (most recent call last):
-  File "C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Generated_Scripts\RBPLCD-8004_20251201_171155_test.py", line 8, in <module>
+  File "C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Generated_Scripts\RBPLCD-8004_20251201_171155_test.py", line 8, in <module>
     import pytest
 ModuleNotFoundError: No module named 'pytest'
 
@@ -5310,7 +5310,7 @@ WHERE tickets.id = %(pk_1)s
 2025-12-02 10:29:24,152 - TestAutomationAPI - INFO - ======================================================================
 2025-12-02 10:29:24,167 - TestAutomationAPI - INFO -    Execution ID: rerun_RBPLCD-8004_20251202_102924
 2025-12-02 10:29:24,167 - TestAutomationAPI - INFO -    Ticket ID: RBPLCD-8004
-2025-12-02 10:29:24,169 - TestAutomationAPI - INFO -    Script: C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Generated_Scripts\RBPLCD-8004_20251201_171155_test.py
+2025-12-02 10:29:24,169 - TestAutomationAPI - INFO -    Script: C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Generated_Scripts\RBPLCD-8004_20251201_171155_test.py
 2025-12-02 10:29:24,169 - TestAutomationAPI - INFO -    Started at: 2025-12-02T10:29:24.169459
 2025-12-02 10:29:24,169 - TestAutomationAPI - INFO - ======================================================================
 2025-12-02 10:29:24,169 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
@@ -5324,7 +5324,7 @@ WHERE test_executions.execution_id = %(execution_id_1)s
 2025-12-02 10:29:24,180 - sqlalchemy.engine.Engine - INFO - COMMIT
 2025-12-02 10:29:24,384 - TestAutomationAPI - WARNING - STDERR:
 Traceback (most recent call last):
-  File "C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Generated_Scripts\RBPLCD-8004_20251201_171155_test.py", line 8, in <module>
+  File "C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Generated_Scripts\RBPLCD-8004_20251201_171155_test.py", line 8, in <module>
     import pytest
 ModuleNotFoundError: No module named 'pytest'
 

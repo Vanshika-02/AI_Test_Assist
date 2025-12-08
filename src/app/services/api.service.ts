@@ -3,13 +3,15 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface TicketDetail {
-  id: number;
+  id?: number;
   ticket_id: string;
   title: string;
   module?: string;
-  project_id: number;
+  // project_id: number;
+  project_id?: number;  // Make optional with ?
   file_path?: string;
-  steps?: { num: number; text: string }[];
+  // steps?: { num: number; text: string }[];
+  steps?: any[];
   created_at?: string;
 }
 
@@ -162,6 +164,15 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
+  /**
+ * Fetch Jira ticket details directly from backend Jira endpoint
+ */
+getJiraTicket(ticketId: string): Observable<any> {
+  // This should match your FastAPI endpoint for Jira tickets
+  // return this.http.get<any>(`http://localhost:8000/jira/${ticketId}`);
+  return this.http.get(`http://localhost:8000/jira/${ticketId}`);
+  
+}
   /**
    * Get ticket details by ticket ID
    */

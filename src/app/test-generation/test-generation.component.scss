@@ -1921,6 +1921,90 @@
   text-align: center;
 }
 
+.jira-ticket-details {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.ticket-header {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.ticket-header > div {
+  margin: 8px 0;
+}
+
+.module-badge {
+  background: #007bff;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.ticket-description {
+  margin: 15px 0;
+  padding: 15px;
+  background: white;
+  border-radius: 4px;
+}
+
+.description-content {
+  margin-top: 10px;
+  white-space: pre-wrap;
+  font-family: monospace;
+  font-size: 0.95em;
+  line-height: 1.6;
+}
+
+.ticket-steps {
+  margin-top: 20px;
+}
+
+.steps-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.step-item {
+  background: white;
+  border-left: 4px solid #28a745;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 4px;
+}
+
+.step-number {
+  font-weight: bold;
+  color: #28a745;
+  margin-right: 10px;
+}
+
+.step-text {
+  color: #333;
+}
+
+.step-expected {
+  display: block;
+  margin-top: 8px;
+  padding: 8px;
+  background: #fff3cd;
+  border-left: 3px solid #ffc107;
+  font-size: 0.9em;
+}
+
+.loading-indicator {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
 /* Frontend kit modal dialog container */
 .frontend-kit-example_modal-dialog {
   display: inline-block;

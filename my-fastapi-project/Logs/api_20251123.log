@@ -3483,8 +3483,8 @@ WHERE test_executions.execution_id = %(execution_id_1)s
 2025-11-23 18:36:06,998 - sqlalchemy.engine.Engine - INFO - UPDATE test_executions SET status=%(status)s WHERE test_executions.id = %(test_executions_id)s
 2025-11-23 18:36:06,999 - sqlalchemy.engine.Engine - INFO - [generated in 0.00066s] {'status': 'running', 'test_executions_id': 75}
 2025-11-23 18:36:07,000 - sqlalchemy.engine.Engine - INFO - COMMIT
-2025-11-23 18:36:07,014 - services - INFO -    External path: C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist
-2025-11-23 18:36:07,015 - services - INFO -    Command: C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\venv\Scripts\python.exe C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\plcd_taseq.py RBPLCD-8005
+2025-11-23 18:36:07,014 - services - INFO -    External path: C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team
+2025-11-23 18:36:07,015 - services - INFO -    Command: C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\venv\Scripts\python.exe C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\plcd_taseq.py RBPLCD-8005
 2025-11-23 18:36:09,955 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
 2025-11-23 18:36:09,956 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id AS test_executions_id, test_executions.execution_id AS test_executions_execution_id, test_executions.ticket_id AS test_executions_ticket_id, test_executions.project_id AS test_executions_project_id, test_executions.status AS test_executions_status, test_executions.overall_status AS test_executions_overall_status, test_executions.started_at AS test_executions_started_at, test_executions.completed_at AS test_executions_completed_at, test_executions.total_execution_time AS test_executions_total_execution_time, test_executions.report_path AS test_executions_report_path, test_executions.script_path AS test_executions_script_path, test_executions.video_path AS test_executions_video_path, test_executions.error_message AS test_executions_error_message 
 FROM test_executions 
@@ -3867,16 +3867,16 @@ WHERE execution_steps.execution_id = %(execution_id_1)s AND execution_steps.stat
 2025-11-23 18:37:05,338 - services - WARNING -      2025-11-23 18:36:47,766 - INFO - Detected login step. logged_in flag: True
 2025-11-23 18:37:05,338 - services - WARNING -      2025-11-23 18:36:47,766 - INFO - Still on login page, navigating to dashboard
 2025-11-23 18:37:05,343 - services - INFO -    Overall Status: FAILED
-2025-11-23 18:37:05,343 - services - INFO -    Report: C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Reports\RBPLCD-8005_20251123_183704_report.html
+2025-11-23 18:37:05,343 - services - INFO -    Report: C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Reports\RBPLCD-8005_20251123_183704_report.html
 2025-11-23 18:37:05,343 - services - INFO -    Script: NOT FOUND
-2025-11-23 18:37:05,343 - services - INFO -    Video: C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Videos\2588dfbcf29347049a9b999ce5ece62f.webm
+2025-11-23 18:37:05,343 - services - INFO -    Video: C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Videos\2588dfbcf29347049a9b999ce5ece62f.webm
 2025-11-23 18:37:05,362 - TestAutomationAPI - INFO -    State keys: ['ticket_id', 'overall_status', 'step_results', 'report_path', 'script_path', 'video_path', 'error_message']
 2025-11-23 18:37:05,362 - TestAutomationAPI - INFO -    Overall status: FAILED
-2025-11-23 18:37:05,362 - TestAutomationAPI - INFO -    Report path: C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Reports\RBPLCD-8005_20251123_183704_report.html
+2025-11-23 18:37:05,362 - TestAutomationAPI - INFO -    Report path: C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Reports\RBPLCD-8005_20251123_183704_report.html
 2025-11-23 18:37:05,362 - services - INFO -    Overall Status: FAILED
-2025-11-23 18:37:05,362 - services - INFO -    Report: C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Reports\RBPLCD-8005_20251123_183704_report.html
+2025-11-23 18:37:05,362 - services - INFO -    Report: C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Reports\RBPLCD-8005_20251123_183704_report.html
 2025-11-23 18:37:05,362 - services - INFO -    Script: None
-2025-11-23 18:37:05,362 - services - INFO -    Video: C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Videos\2588dfbcf29347049a9b999ce5ece62f.webm
+2025-11-23 18:37:05,362 - services - INFO -    Video: C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Videos\2588dfbcf29347049a9b999ce5ece62f.webm
 2025-11-23 18:37:05,362 - TestAutomationAPI - ERROR - ======================================================================
 2025-11-23 18:37:05,371 - TestAutomationAPI - ERROR -    Execution ID: exec_RBPLCD-8005_20251123_183606
 2025-11-23 18:37:05,371 - TestAutomationAPI - ERROR -    Error Type: AttributeError
@@ -4877,9 +4877,9 @@ WHERE execution_steps.execution_id = %(execution_id_1)s AND execution_steps.stat
 2025-11-23 18:47:10,107 - TestExecutionService - INFO -    Ticket: RBPLCD-8005
 2025-11-23 18:47:10,107 - TestExecutionService - INFO -    Status: FAILED
 2025-11-23 18:47:10,108 - TestExecutionService - INFO -    Steps: 0
-2025-11-23 18:47:10,108 - TestExecutionService - INFO -    Report: C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Reports\RBPLCD-8005_20251123_184709_report.html
+2025-11-23 18:47:10,108 - TestExecutionService - INFO -    Report: C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Reports\RBPLCD-8005_20251123_184709_report.html
 2025-11-23 18:47:10,108 - TestExecutionService - INFO -    Script: None
-2025-11-23 18:47:10,108 - TestExecutionService - INFO -    Video: C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Videos\d25260ddd153acf066008d9f59399c5c.webm
+2025-11-23 18:47:10,108 - TestExecutionService - INFO -    Video: C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Videos\d25260ddd153acf066008d9f59399c5c.webm
 2025-11-23 18:47:10,108 - TestExecutionService - INFO - ======================================================================
 2025-11-23 18:47:10,113 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
 2025-11-23 18:47:10,114 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id AS test_executions_id, test_executions.execution_id AS test_executions_execution_id, test_executions.ticket_id AS test_executions_ticket_id, test_executions.project_id AS test_executions_project_id, test_executions.status AS test_executions_status, test_executions.overall_status AS test_executions_overall_status, test_executions.started_at AS test_executions_started_at, test_executions.completed_at AS test_executions_completed_at, test_executions.total_execution_time AS test_executions_total_execution_time, test_executions.report_path AS test_executions_report_path, test_executions.script_path AS test_executions_script_path, test_executions.video_path AS test_executions_video_path, test_executions.error_message AS test_executions_error_message 
@@ -4988,9 +4988,9 @@ WHERE execution_steps.execution_id = %(execution_id_1)s AND execution_steps.stat
 2025-11-23 18:48:17,235 - TestExecutionService - INFO -    Ticket: RBPLCD-8835
 2025-11-23 18:48:17,235 - TestExecutionService - INFO -    Status: FAILED
 2025-11-23 18:48:17,235 - TestExecutionService - INFO -    Steps: 0
-2025-11-23 18:48:17,235 - TestExecutionService - INFO -    Report: C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Reports\RBPLCD-8835_20251123_184816_report.html
+2025-11-23 18:48:17,235 - TestExecutionService - INFO -    Report: C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Reports\RBPLCD-8835_20251123_184816_report.html
 2025-11-23 18:48:17,235 - TestExecutionService - INFO -    Script: None
-2025-11-23 18:48:17,235 - TestExecutionService - INFO -    Video: C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist\Videos\d25260ddd153acf066008d9f59399c5c.webm
+2025-11-23 18:48:17,235 - TestExecutionService - INFO -    Video: C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team\Videos\d25260ddd153acf066008d9f59399c5c.webm
 2025-11-23 18:48:17,235 - TestExecutionService - INFO - ======================================================================
 2025-11-23 18:48:17,235 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
 2025-11-23 18:48:17,235 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id AS test_executions_id, test_executions.execution_id AS test_executions_execution_id, test_executions.ticket_id AS test_executions_ticket_id, test_executions.project_id AS test_executions_project_id, test_executions.status AS test_executions_status, test_executions.overall_status AS test_executions_overall_status, test_executions.started_at AS test_executions_started_at, test_executions.completed_at AS test_executions_completed_at, test_executions.total_execution_time AS test_executions_total_execution_time, test_executions.report_path AS test_executions_report_path, test_executions.script_path AS test_executions_script_path, test_executions.video_path AS test_executions_video_path, test_executions.error_message AS test_executions_error_message 
