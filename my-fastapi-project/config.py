@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     """
     Application settings loaded from environment variables
     """
-    external_project_path: str = r"C:\Users\ENZ1KOR\PLCD_TA_Team\PLCD_TA_Team"
+    external_project_path: str = r"C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist"
     # Database
     database_url: str = "postgresql://postgres:postgres123@localhost:5432/test_automation"
     
@@ -39,6 +39,15 @@ class Settings(BaseSettings):
     scripts_folder: str = "Generated_Scripts"
     logs_folder: str = "Logs"
     
+# Add these fields for Azure OpenAI and Jira
+    azure_openai_api_key: str = ""
+    azure_openai_endpoint: str = ""
+    azure_openai_deployment: str = ""
+    azure_openai_api_version: str = ""
+    jira_base_url: str = ""
+    jira_email: str = ""
+    jira_api_token: str = ""
+
     class Config:
         env_file = ".env"
         case_sensitive = False
