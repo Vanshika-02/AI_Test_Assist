@@ -11,6 +11,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import Dict, Optional
 from sqlalchemy.orm import Session
+from typing import Optional
 
 from models import TestExecution, ExecutionStep
 
@@ -90,15 +91,19 @@ class TestExecutionService:
     def run_test_workflow(
         self,
         ticket_id: str,
-        project_id: int,
+        # project_id: int,
+        project_id: Optional[int],  # 🟢 Make this Optional
         execution_id: str,
-        external_project_path: str
+        # external_project_path: str
+        external_project_path: Optional[Path] = None
     ) -> Dict:
         """
         Run test workflow - ROBUST VERSION
         Always returns state with available artifacts, even on failure
         """
         self.logger.info(f"🚀 Starting test workflow for {ticket_id}")
+        logger.info(f"📋 Running test workflow for ticket: {ticket_id}")
+        logger.info(f"   Project ID: {project_id if project_id else 'None (fetched from Jira)'}")
         
         ext_path = Path(external_project_path).resolve()
         

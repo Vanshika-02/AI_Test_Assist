@@ -1566,6 +1566,15 @@ from database import engine, get_db, Base, SessionLocal
 from models import Ticket, TestExecution, ExecutionStep
 from services import TestExecutionService
 from jira_api import router as jira_router  # 🟢 ADD THIS LINE
+from typing import Optional
+import os
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+JIRA_BASE_URL = os.getenv("JIRA_BASE_URL")
+JIRA_API_TOKEN = os.getenv("JIRA_API_TOKEN")
+JIRA_EMAIL = os.getenv("JIRA_EMAIL")
 
 # Setup logging
 logger = setup_logging(settings.log_level)
@@ -1626,9 +1635,159 @@ def health_check():
     }
 
 
+
+
 # ============================================================================
 # CORE TEST EXECUTION ENDPOINTS
 # ============================================================================
+
+# @app.post("/api/execute-test")
+# async def execute_test(
+#     ticket_id: str,
+#     background_tasks: BackgroundTasks,
+#     db: Session = Depends(get_db)
+# ):
+#     """
+#     Execute test for a ticket
+    
+#     Query Params: 
+#         - ticket_id: JIRA ticket ID (e.g., RBPLCD-8835)
+    
+#     Returns: 
+#         {
+#             "execution_id": "exec_RBPLCD-8835_20251120_120000",
+#             "ticket_id": "RBPLCD-8835",
+#             "status": "pending",
+#             "message": "Test execution started"
+#         }
+#     """
+#     try:
+#         logger.info(f"📥 Received test execution request for ticket: {ticket_id}")
+
+#         # Validate ticket exists
+#         ticket = db.query(Ticket).filter(Ticket.ticket_id == ticket_id).first()
+#         if not ticket:
+#             raise HTTPException(
+#                 status_code=404, 
+#                 detail=f"Ticket '{ticket_id}' not found. Please upload the ticket first."
+#             )
+
+#         # Create execution record
+#         service = TestExecutionService(db)
+#         execution = service.create_execution_record(
+#             ticket_id=ticket_id,
+#             project_id=ticket.project_id
+#         )
+
+#         logger.info(f"✅ Created execution: {execution.execution_id}")
+
+#         # Start background task
+#         background_tasks.add_task(
+#             execute_test_in_background,
+#             execution_id=execution.execution_id,
+#             ticket_id=ticket_id,
+#             project_id=ticket.project_id
+#         )
+
+#         return {
+#             "execution_id": execution.execution_id,
+#             "ticket_id": ticket_id,
+#             "status": "pending",
+#             "message": "Test execution started"
+#         }
+
+#     except HTTPException:
+#         raise
+#     except Exception as e:
+#         logger.error(f"❌ Error starting execution: {e}", exc_info=True)
+#         raise HTTPException(status_code=500, detail=str(e))
+
+
+
+
+
+
+
+# @app.post("/api/execute-test")
+# async def execute_test(
+#     ticket_id: str,
+#     background_tasks: BackgroundTasks,
+#     db: Session = Depends(get_db)
+# ):
+#     """
+#     Fetch ticket from Jira and run Playwright test.
+#     """
+#     try:
+#         logger.info(f"📥 Received test execution request for ticket: {ticket_id}")
+
+#         # Fetch ticket from Jira
+#         url = f"{JIRA_BASE_URL}/rest/api/2/issue/{ticket_id}"
+#         headers = {
+#             "Authorization": f"Bearer {JIRA_API_TOKEN}",
+#             "Accept": "application/json"
+#         }
+#         response = requests.get(url, headers=headers, timeout=10)
+#         if response.status_code != 200:
+#             raise HTTPException(status_code=404, detail=f"Failed to fetch Jira ticket: {response.text}")
+
+#         jira_data = response.json()
+#         fields = jira_data.get("fields", {})
+#         summary = fields.get("summary", "")
+#         description = fields.get("description", "")
+#         project_id = None
+
+#         # Start Playwright test as a background task
+#         # background_tasks.add_task(run_playwright_test, ticket_id, summary, description)
+
+#         # return {
+#         #     "ticket_id": ticket_id,
+#         #     "status": "pending",
+#         #     "message": "Playwright test execution started"
+#         # }
+
+# # Create execution record
+#         service = TestExecutionService(db)
+#         execution = service.create_execution_record(
+#             ticket_id=ticket_id,
+#             # project_id=ticket.project_id
+#             project_id=None # Since we don't have a local ticket record
+#         )
+
+#         logger.info(f"✅ Created execution: {execution.execution_id}")
+
+#          # Start background task
+#         # background_tasks.add_task(
+#         #     execute_test_in_background,
+#         #     execution_id=execution.execution_id,
+#         #     ticket_id=ticket_id,
+#         #     project_id=ticket.project_id
+#         # )
+#         background_tasks.add_task(
+#             execute_test_in_background,
+#             execution.execution_id,
+#             ticket_id,
+#             project_id
+#         )
+
+#         return {
+#             "execution_id": execution.execution_id,
+#             "ticket_id": ticket_id,
+#             "status": "pending",
+#             "message": "Test execution started"
+#         }
+
+
+#     except HTTPException:
+#         raise
+#     except Exception as e:
+#         logger.error(f"❌ Error starting execution: {e}", exc_info=True)
+#         raise HTTPException(status_code=500, detail=str(e))
+
+
+
+
+
+
 
 @app.post("/api/execute-test")
 async def execute_test(
@@ -1637,52 +1796,71 @@ async def execute_test(
     db: Session = Depends(get_db)
 ):
     """
-    Execute test for a ticket
-    
-    Query Params: 
-        - ticket_id: JIRA ticket ID (e.g., RBPLCD-8835)
-    
-    Returns: 
-        {
-            "execution_id": "exec_RBPLCD-8835_20251120_120000",
-            "ticket_id": "RBPLCD-8835",
-            "status": "pending",
-            "message": "Test execution started"
-        }
+    Fetch ticket from Jira (not from local DB) and run the same Playwright test.
     """
-    try:
-        logger.info(f"📥 Received test execution request for ticket: {ticket_id}")
 
-        # Validate ticket exists
-        ticket = db.query(Ticket).filter(Ticket.ticket_id == ticket_id).first()
-        if not ticket:
+     # 🔥 ADD THIS AT THE VERY TOP
+    print(f"🔥🔥🔥 ENDPOINT CALLED: /api/execute-test with ticket_id={ticket_id}")
+    logger.info(f"🔥🔥🔥 ENDPOINT CALLED: /api/execute-test with ticket_id={ticket_id}")
+
+    try:
+        logger.info(f"📥 Fetching ticket from Jira: {ticket_id}")
+
+        # Fetch ticket from Jira instead of local database
+        url = f"{JIRA_BASE_URL}/rest/api/2/issue/{ticket_id}"
+        headers = {
+            "Authorization": f"Bearer {JIRA_API_TOKEN}",
+            "Accept": "application/json"
+        }
+        
+        response = requests.get(url, headers=headers, timeout=10)
+        
+        if response.status_code != 200:
             raise HTTPException(
                 status_code=404, 
-                detail=f"Ticket '{ticket_id}' not found. Please upload the ticket first."
+                detail=f"Failed to fetch Jira ticket '{ticket_id}': {response.text}"
             )
 
-        # Create execution record
+        jira_data = response.json()
+        fields = jira_data.get("fields", {})
+        summary = fields.get("summary", "")
+        description = fields.get("description", "")
+
+        logger.info(f"✅ Fetched from Jira: {summary}")
+
+        # Create execution record (optional - can be removed if you don't want ANY database)
         service = TestExecutionService(db)
-        execution = service.create_execution_record(
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        execution_id = f"exec_{ticket_id}_{timestamp}"
+        
+        # If you removed the foreign key constraint, this will work:
+        execution = TestExecution(
+            execution_id=execution_id,
             ticket_id=ticket_id,
-            project_id=ticket.project_id
+            project_id=None,  # No local project
+            status="pending",
+            overall_status="UNKNOWN",
+            started_at=datetime.now()
         )
+        db.add(execution)
+        db.commit()
+        db.refresh(execution)
 
         logger.info(f"✅ Created execution: {execution.execution_id}")
 
-        # Start background task
+        # Use your EXISTING background task (same Playwright execution)
         background_tasks.add_task(
             execute_test_in_background,
             execution_id=execution.execution_id,
             ticket_id=ticket_id,
-            project_id=ticket.project_id
+            project_id=None  # Pass None since no local project
         )
 
         return {
             "execution_id": execution.execution_id,
             "ticket_id": ticket_id,
             "status": "pending",
-            "message": "Test execution started"
+            "message": f"Test execution started for: {summary}"
         }
 
     except HTTPException:
@@ -1690,6 +1868,11 @@ async def execute_test(
     except Exception as e:
         logger.error(f"❌ Error starting execution: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
+
+
+
+
+
 
 # Add this to your main.py after the execute_test endpoint
 
@@ -2931,7 +3114,9 @@ This ensures proper completion and error handling
 def execute_test_in_background(
     execution_id: str,
     ticket_id: str,
-    project_id: int
+    # project_id: int
+    project_id: Optional[int]  # 🟢 CHANGE THIS - Allow None
+
 ):
     """
     Background task to execute test workflow using external run_test.py
@@ -2944,6 +3129,7 @@ def execute_test_in_background(
     logger.info(f"🚀 BACKGROUND TASK STARTED")
     logger.info(f"   Execution ID: {execution_id}")
     logger.info(f"   Ticket ID: {ticket_id}")
+    logger.info(f"   Project ID: {project_id}")  # 🟢 ADD THIS LINE
     logger.info(f"   Started at: {datetime.now().isoformat()}")
     logger.info("="*70)
 
