@@ -3191,6 +3191,7 @@ def execute_test_in_background(
         has_report = bool(state.get('report_path'))
         overall_status = state.get('overall_status', 'UNKNOWN')
         
+        
         if has_report:
             # Mark as completed - user can download report
             final_status = "completed"

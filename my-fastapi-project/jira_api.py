@@ -8,6 +8,7 @@ from openai import AzureOpenAI
 import logging
 from config import settings
 
+
 load_dotenv()
 router = APIRouter()
 

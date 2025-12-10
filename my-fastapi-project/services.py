@@ -102,8 +102,8 @@ class TestExecutionService:
         Always returns state with available artifacts, even on failure
         """
         self.logger.info(f"🚀 Starting test workflow for {ticket_id}")
-        logger.info(f"📋 Running test workflow for ticket: {ticket_id}")
-        logger.info(f"   Project ID: {project_id if project_id else 'None (fetched from Jira)'}")
+        self.logger.info(f"📋 Running test workflow for ticket: {ticket_id}")
+        self.logger.info(f"   Project ID: {project_id if project_id else 'None (fetched from Jira)'}")
         
         ext_path = Path(external_project_path).resolve()
         
