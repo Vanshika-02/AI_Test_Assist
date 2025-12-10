@@ -3130,6 +3130,7 @@ def execute_test_in_background(
     logger.info(f"   Execution ID: {execution_id}")
     logger.info(f"   Ticket ID: {ticket_id}")
     logger.info(f"   Project ID: {project_id}")  # 🟢 ADD THIS LINE
+    logger.info(f"   External Path: {settings.external_project_path}")
     logger.info(f"   Started at: {datetime.now().isoformat()}")
     logger.info("="*70)
 
@@ -3149,8 +3150,18 @@ def execute_test_in_background(
         # Verify path exists
         if not Path(external_project_path).exists():
             raise FileNotFoundError(f"External project not found: {external_project_path}")
+            logger.info("✅ External project path exists")
+
+       # Check if plcd_taseq.py exists
+        plcd_script = Path(external_project_path) / "plcd_taseq.py"
+        if not plcd_script.exists():
+            raise FileNotFoundError(f"plcd_taseq.py not found at: {plcd_script}")
+        logger.info(f"✅ Found plcd_taseq.py at: {plcd_script}")
+
 
         logger.info("🏃 Starting test workflow execution...")
+        # CRITICAL: Add logging around this call
+        logger.info("📞 Calling service.run_test_workflow()...")
         
         # Run test workflow (this will now wait for completion)
         state = service.run_test_workflow(
@@ -3159,6 +3170,17 @@ def execute_test_in_background(
             execution_id=execution_id,
             external_project_path=external_project_path
         )
+        logger.info(f"📋 Workflow returned state: {state}")
+
+
+# Log what we got back
+        if state:
+            logger.info(f"📄 Report path: {state.get('report_path')}")
+            logger.info(f"📜 Script path: {state.get('script_path')}")
+            logger.info(f"🎥 Video path: {state.get('video_path')}")
+            logger.info(f"📊 Overall status: {state.get('overall_status')}")
+        else:
+            logger.warning("⚠️  Workflow returned None or empty state!")
 
         logger.info("✅ Test workflow completed, saving results to database...")
 
@@ -3207,6 +3229,11 @@ def execute_test_in_background(
         logger.error(f"   Error: {e}")
         logger.error(f"   Failed at: {datetime.now().isoformat()}")
         logger.error("="*70)
+
+ # Log full traceback
+        import traceback
+        logger.error("Full traceback:")
+        logger.error(traceback.format_exc())
 
         # Get detailed error message
         error_str = str(e)
