@@ -1,5 +1,78 @@
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
+# ============================================
+# PYTHON SPECIFIC (ADDED FOR BACKEND)
+# ============================================
+
+# Environment variables - NEVER COMMIT!
+.env
+.env.local
+.env.*.local
+**/.env
+my-fastapi-project/.env
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+*.so
+.Python
+
+# Virtual Environment - NEVER COMMIT!
+venv/
+env/
+ENV/
+.venv/
+my-fastapi-project/venv/
+
+# Logs
+*.log
+Logs/
+my-fastapi-project/Logs/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# ChromaDB
+chromadb_data/
+my-fastapi-project/chromadb_data/
+
+# Generated files
+Generated_Scripts/
+my-fastapi-project/Generated_Scripts/
+
+# Data files
+data/
+my-fastapi-project/data/
+
+# JSON runtime files
+*_runtime_fixed.json
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# ============================================
+# ANGULAR/NODE.JS (ORIGINAL)
+# ============================================
+
 # Compiled output
 /dist
 /tmp
@@ -11,7 +84,10 @@
 npm-debug.log
 yarn-error.log
 
-# IDEs and editors
+# ============================================
+# IDEs AND EDITORS
+# ============================================
+
 .idea/
 .project
 .classpath
@@ -28,7 +104,10 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
-# Miscellaneous
+# ============================================
+# MISCELLANEOUS
+# ============================================
+
 /.angular/cache
 .sass-cache/
 /connect.lock
@@ -37,7 +116,9 @@ yarn-error.log
 testem.log
 /typings
 
-# System files
+# ============================================
+# SYSTEM FILES
+# ============================================
+
 .DS_Store
 Thumbs.db
-my-fastapi-project/.env
