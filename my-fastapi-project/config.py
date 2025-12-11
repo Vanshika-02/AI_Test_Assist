@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     """
     Application settings loaded from environment variables
     """
-    external_project_path: str = r"C:\Idea Projects\AI_TEST_17_Nov\AI_Test_Assist"
+    external_project_path: str = r"C:\Idea Projects\AI_Test_Assist"
     # Database
     database_url: str = "postgresql://postgres:postgres123@localhost:5432/test_automation"
     chromadb_path: str = "chromadb_data"   # <-- Add this line

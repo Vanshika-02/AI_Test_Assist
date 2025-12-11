@@ -1200,28 +1200,44 @@ export class TestGenerationComponent implements OnInit, OnDestroy {
     }
   }
 
+  // onRerunTestClick(message: ChatMessage) {
+  //   if (message.ticketDetails) {
+  //     if (!message.hasExistingScripts || message.scriptsCount === 0) {
+  //       const warningMessage: ChatMessage = {
+  //         type: 'bot',
+  //         text: '⚠️ No existing test scripts found for this ticket.\n\nPlease use "Generate and Run Testcase" first to create the test script.',
+  //         timestamp: new Date()
+  //       };
+  //       this.currentChatMessages.push(warningMessage);
+  //       this.saveChatToHistory();
+  //       return;
+  //     }
+  //     message.waitingForConfirmation = false;
+  //     const userConfirmMessage: ChatMessage = {
+  //       type: 'user',
+  //       text: '🔄 Rerun Testcase',
+  //       timestamp: new Date()
+  //     };
+  //     this.currentChatMessages.push(userConfirmMessage);
+  //     this.rerunTest(message.ticketDetails.ticket_id);
+  //   }
+  // }
+
   onRerunTestClick(message: ChatMessage) {
-    if (message.ticketDetails) {
-      if (!message.hasExistingScripts || message.scriptsCount === 0) {
-        const warningMessage: ChatMessage = {
-          type: 'bot',
-          text: '⚠️ No existing test scripts found for this ticket.\n\nPlease use "Generate and Run Testcase" first to create the test script.',
-          timestamp: new Date()
-        };
-        this.currentChatMessages.push(warningMessage);
-        this.saveChatToHistory();
-        return;
-      }
-      message.waitingForConfirmation = false;
-      const userConfirmMessage: ChatMessage = {
-        type: 'user',
-        text: '🔄 Rerun Testcase',
-        timestamp: new Date()
-      };
-      this.currentChatMessages.push(userConfirmMessage);
-      this.rerunTest(message.ticketDetails.ticket_id);
-    }
+  if (message.ticketDetails) {
+    message.waitingForConfirmation = false;
+
+    const userConfirmMessage: ChatMessage = {
+      type: 'user',
+      text: '🔄 Rerun Testcase',
+      timestamp: new Date()
+    };
+    this.currentChatMessages.push(userConfirmMessage);
+    
+    // Always call the API - let the backend handle script validation
+    this.rerunTest(message.ticketDetails.ticket_id);
   }
+}
 
   private runTest(ticketId: string) {
     const botMessage: ChatMessage = {
