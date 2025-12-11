@@ -99,11 +99,11 @@ def health_check():
 # ):
 #     """
 #     Execute test for a ticket
-    
-#     Query Params: 
+
+#     Query Params:
 #         - ticket_id: JIRA ticket ID (e.g., RBPLCD-8835)
-    
-#     Returns: 
+
+#     Returns:
 #         {
 #             "execution_id": "exec_RBPLCD-8835_20251120_120000",
 #             "ticket_id": "RBPLCD-8835",
@@ -118,7 +118,7 @@ def health_check():
 #         ticket = db.query(Ticket).filter(Ticket.ticket_id == ticket_id).first()
 #         if not ticket:
 #             raise HTTPException(
-#                 status_code=404, 
+#                 status_code=404,
 #                 detail=f"Ticket '{ticket_id}' not found. Please upload the ticket first."
 #             )
 
@@ -262,12 +262,12 @@ async def execute_test(
             "Authorization": f"Bearer {JIRA_API_TOKEN}",
             "Accept": "application/json"
         }
-        
+
         response = requests.get(url, headers=headers, timeout=10)
-        
+
         if response.status_code != 200:
             raise HTTPException(
-                status_code=404, 
+                status_code=404,
                 detail=f"Failed to fetch Jira ticket '{ticket_id}': {response.text}"
             )
 
@@ -282,7 +282,7 @@ async def execute_test(
         service = TestExecutionService(db)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         execution_id = f"exec_{ticket_id}_{timestamp}"
-        
+
         # If you removed the foreign key constraint, this will work:
         execution = TestExecution(
             execution_id=execution_id,
@@ -338,6 +338,18 @@ async def rerun_test(
 ):
     """
     Rerun test for a ticket using the latest generated script
+
+    Query Params:
+        - ticket_id: JIRA ticket ID (e.g., RBPLCD-8835)
+
+    Returns:
+        {
+            "execution_id": "rerun_RBPLCD-8835_20251126_120000",
+            "ticket_id": "RBPLCD-8835",
+            "status": "pending",
+            "script_path": "path/to/script.py",
+            "message": "Test rerun started"
+        }
     """
     try:
         logger.info(f"📥 Received rerun request for ticket: {ticket_id}")
@@ -346,7 +358,7 @@ async def rerun_test(
         # ticket = db.query(Ticket).filter(Ticket.ticket_id == ticket_id).first()
         # if not ticket:
         #     raise HTTPException(
-        #         status_code=404, 
+        #         status_code=404,
         #         detail=f"Ticket '{ticket_id}' not found. Please upload the ticket first."
         #     )
 
@@ -359,7 +371,7 @@ async def rerun_test(
         # Find the latest generated script for this ticket
         external_path = Path(settings.external_project_path)
         scripts_folder = external_path / "Generated_Scripts"
-        
+
         if not scripts_folder.exists():
             raise HTTPException(
                 status_code=404,
@@ -369,7 +381,7 @@ async def rerun_test(
         # Find all scripts matching the ticket_id pattern
         script_pattern = f"*{ticket_id}*.py"
         matching_scripts = list(scripts_folder.glob(script_pattern))
-        
+
         if not matching_scripts:
             raise HTTPException(
                 status_code=404,
@@ -378,14 +390,14 @@ async def rerun_test(
 
         # Get the latest script by modification time
         latest_script = max(matching_scripts, key=lambda p: p.stat().st_mtime)
-        
+
         logger.info(f"📜 Found latest script: {latest_script.name}")
 
         # Create execution record for rerun
         service = TestExecutionService(db)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         execution_id = f"rerun_{ticket_id}_{timestamp}"
-        
+
         execution = TestExecution(
             execution_id=execution_id,
             ticket_id=ticket_id,
@@ -442,7 +454,7 @@ def rerun_test_in_background(
     """
     import subprocess
     import re
-    
+
     db = SessionLocal()
     service = TestExecutionService(db)
 
@@ -465,20 +477,20 @@ def rerun_test_in_background(
 
         # Path to external project
         external_project_path = Path(settings.external_project_path)
-        
+
         # Find Python executable
         python_exe = None
         venv_paths = [
             external_project_path / "venv" / "Scripts" / "python.exe",  # Windows
             external_project_path / "venv" / "bin" / "python",  # Linux/Mac
         ]
-        
+
         for venv_path in venv_paths:
             if venv_path.exists():
                 python_exe = str(venv_path)
                 logger.info(f"✅ Found Python: {python_exe}")
                 break
-        
+
         if not python_exe:
             # Fallback to system Python
             import shutil
@@ -489,7 +501,7 @@ def rerun_test_in_background(
 
         # Execute the script
         logger.info(f"🏃 Executing script: {script_path}")
-        
+
         result = subprocess.run(
             [python_exe, script_path],
             cwd=str(external_project_path),
@@ -499,7 +511,7 @@ def rerun_test_in_background(
         )
 
         logger.info(f"📤 Script execution completed with return code: {result.returncode}")
-        
+
         # Log output
         if result.stdout:
             logger.info(f"STDOUT:\n{result.stdout[:1000]}")  # First 1000 chars
@@ -510,7 +522,7 @@ def rerun_test_in_background(
         # Look for the latest report/video files
         reports_folder = external_project_path / "Reports"
         videos_folder = external_project_path / "Videos"
-        
+
         # Find latest report for this ticket
         report_path = None
         if reports_folder.exists():
@@ -541,21 +553,21 @@ def rerun_test_in_background(
             try:
                 with open(report_path, 'r', encoding='utf-8') as f:
                     html_content = f.read()
-                    
+
                 # Try multiple patterns to find status
                 patterns = [
                     r'<h2[^>]*>\s*Overall\s+Status:\s*(PASSED|FAILED)\s*</h2>',
                     r'<div[^>]*class=["\']overall-status[^"\']*["\'][^>]*>\s*(PASSED|FAILED)',
                     r'Overall\s+Status:\s*<[^>]+>\s*(PASSED|FAILED)',
                 ]
-                
+
                 for pattern in patterns:
                     match = re.search(pattern, html_content, re.IGNORECASE)
                     if match:
                         overall_status = match.group(1).upper()
                         logger.info(f"✅ Parsed overall status: {overall_status}")
                         break
-                
+
                 # Fallback: count PASSED/FAILED in table
                 if overall_status == "UNKNOWN":
                     passed_count = len(re.findall(r'>\s*PASSED\s*<', html_content, re.IGNORECASE))
@@ -565,7 +577,7 @@ def rerun_test_in_background(
                     elif passed_count > 0:
                         overall_status = "PASSED"
                     logger.info(f"📊 Inferred status from counts: {overall_status} (P:{passed_count}, F:{failed_count})")
-                    
+
             except Exception as e:
                 logger.warning(f"Could not parse report status: {e}")
 
@@ -574,20 +586,20 @@ def rerun_test_in_background(
             try:
                 with open(report_path, 'r', encoding='utf-8') as f:
                     html_content = f.read()
-                
+
                 # Extract table rows
                 table_match = re.search(r'<table[^>]*>(.*?)</table>', html_content, re.DOTALL | re.IGNORECASE)
                 if table_match:
                     table_content = table_match.group(1)
                     rows = re.findall(r'<tr[^>]*>(.*?)</tr>', table_content, re.DOTALL | re.IGNORECASE)
-                    
+
                     step_num = 1
                     for row in rows[1:]:  # Skip header row
                         cells = re.findall(r'<td[^>]*>(.*?)</td>', row, re.DOTALL | re.IGNORECASE)
                         if len(cells) >= 3:
                             step_text = re.sub(r'<[^>]+>', '', cells[1]).strip()
                             status = re.sub(r'<[^>]+>', '', cells[2]).strip().upper()
-                            
+
                             if step_text and status in ['PASSED', 'FAILED']:
                                 step = ExecutionStep(
                                     execution_id=execution_id,
@@ -598,10 +610,10 @@ def rerun_test_in_background(
                                 )
                                 db.add(step)
                                 step_num += 1
-                    
+
                     db.commit()
                     logger.info(f"✅ Saved {step_num-1} steps to database")
-                    
+
             except Exception as e:
                 logger.warning(f"Could not parse steps from report: {e}")
 
@@ -628,7 +640,7 @@ def rerun_test_in_background(
     except subprocess.TimeoutExpired:
         error_msg = "Test execution timed out (10 minutes limit)"
         logger.error(f"❌ {error_msg}")
-        
+
         execution = db.query(TestExecution).filter(
             TestExecution.execution_id == execution_id
         ).first()
@@ -647,7 +659,7 @@ def rerun_test_in_background(
         logger.error("="*70)
 
         error_message = str(e)[:500]
-        
+
         try:
             execution = db.query(TestExecution).filter(
                 TestExecution.execution_id == execution_id
@@ -679,7 +691,7 @@ def rerun_test_in_background(
 def list_generated_scripts(ticket_id: str):
     """
     List all generated scripts for a ticket
-    
+
     Returns:
         {
             "ticket_id": "RBPLCD-8835",
@@ -696,7 +708,7 @@ def list_generated_scripts(ticket_id: str):
     try:
         external_path = Path(settings.external_project_path)
         scripts_folder = external_path / "Generated_Scripts"
-        
+
         if not scripts_folder.exists():
             raise HTTPException(
                 status_code=404,
@@ -706,7 +718,7 @@ def list_generated_scripts(ticket_id: str):
         # Find all scripts for this ticket
         script_pattern = f"*{ticket_id}*.py"
         matching_scripts = list(scripts_folder.glob(script_pattern))
-        
+
         scripts = []
         for script_path in sorted(matching_scripts, key=lambda p: p.stat().st_mtime, reverse=True):
             stat = script_path.stat()
@@ -747,7 +759,7 @@ def get_execution_status(
     total_steps = db.query(ExecutionStep).filter(
         ExecutionStep.execution_id == execution_id
     ).count()
-    
+
     completed_steps = db.query(ExecutionStep).filter(
         ExecutionStep.execution_id == execution_id,
         ExecutionStep.status.in_(["PASSED", "FAILED"])
@@ -757,18 +769,18 @@ def get_execution_status(
     progress = 0
     message = "Initializing..."
     current_step = None
-    
+
     if execution.status == "pending":
         progress = 0
         message = "Test execution queued..."
     elif execution.status == "running":
         if total_steps > 0:
             progress = int((completed_steps / total_steps) * 100)
-            
+
             last_step = db.query(ExecutionStep).filter(
                 ExecutionStep.execution_id == execution_id
             ).order_by(ExecutionStep.step_num.desc()).first()
-            
+
             if last_step:
                 current_step = last_step.step_text
                 message = f"Executing Step {completed_steps + 1}/{total_steps}..."
@@ -827,7 +839,7 @@ def download_html_report(execution_id: str, db: Session = Depends(get_db)):
 
     if not execution.report_path:
         raise HTTPException(
-            status_code=400, 
+            status_code=400,
             detail="Report not generated yet. Please wait for test completion."
         )
 
@@ -835,7 +847,7 @@ def download_html_report(execution_id: str, db: Session = Depends(get_db)):
 
     if not report_path.exists():
         raise HTTPException(
-            status_code=404, 
+            status_code=404,
             detail=f"Report file not found at: {execution.report_path}"
         )
 
@@ -858,9 +870,9 @@ def get_test_summary(ticket_id: str):
     """
     Get latest JSON summary for a ticket
     Returns lightweight summary data before downloading full report
-    
+
     Example: GET /api/summary/RBPLCD-8001
-    
+
     Returns:
         {
             "ticket_id": "RBPLCD-8001",
@@ -881,29 +893,29 @@ def get_test_summary(ticket_id: str):
         # Path to external TA_AI_Project
         external_path = Path(settings.external_project_path)
         summaries_folder = external_path / "Reports" / "summaries"
-        
+
         if not summaries_folder.exists():
             raise HTTPException(
                 status_code=404,
                 detail=f"Summaries folder not found. Please run a test first."
             )
-        
+
         # Load latest summary
         latest_summary_path = summaries_folder / f"summary_{ticket_id}_latest.json"
-        
+
         if not latest_summary_path.exists():
             raise HTTPException(
                 status_code=404,
                 detail=f"No summary found for ticket '{ticket_id}'. Please run the test first."
             )
-        
+
         with open(latest_summary_path, 'r', encoding='utf-8') as f:
             summary_data = json.load(f)
-        
+
         logger.info(f"📊 Served summary for {ticket_id}")
-        
+
         return summary_data
-        
+
     except HTTPException:
         raise
     except Exception as e:
@@ -915,26 +927,26 @@ def get_test_summary(ticket_id: str):
 def get_test_summary_by_timestamp(ticket_id: str, timestamp: str):
     """
     Get specific summary by timestamp
-    
+
     Example: GET /api/summary/RBPLCD-8001/20250115_143000
     """
     try:
         external_path = Path(settings.external_project_path)
         summaries_folder = external_path / "Reports" / "summaries"
-        
+
         summary_path = summaries_folder / f"summary_{ticket_id}_{timestamp}.json"
-        
+
         if not summary_path.exists():
             raise HTTPException(
                 status_code=404,
                 detail=f"Summary not found for {ticket_id} at {timestamp}"
             )
-        
+
         with open(summary_path, 'r', encoding='utf-8') as f:
             summary_data = json.load(f)
-        
+
         return summary_data
-        
+
     except HTTPException:
         raise
     except Exception as e:
@@ -950,42 +962,42 @@ def list_all_summaries(
 ):
     """
     List all available test summaries with filtering
-    
+
     Query params:
         - limit: Number of results (default: 50)
         - status: Filter by status (PASSED/FAILED)
         - module: Filter by module
-    
+
     Example: GET /api/summaries?limit=10&status=PASSED
     """
     try:
         external_path = Path(settings.external_project_path)
         summaries_folder = external_path / "Reports" / "summaries"
-        
+
         if not summaries_folder.exists():
             return {
                 "count": 0,
                 "summaries": []
             }
-        
+
         summaries = []
-        
+
         # Find all summary files (excluding _latest.json)
         for json_file in summaries_folder.glob("summary_*.json"):
             if '_latest.json' in str(json_file):
                 continue
-            
+
             try:
                 with open(json_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
-                
+
                 # Apply filters
                 if status and data['summary']['overall_status'] != status:
                     continue
-                
+
                 if module and data.get('module') != module:
                     continue
-                
+
                 summaries.append({
                     'ticket_id': data['ticket_id'],
                     'ticket_title': data['ticket_title'],
@@ -1000,22 +1012,22 @@ def list_all_summaries(
                     'status_emoji': data['insights']['status_emoji'],
                     'file_path': str(json_file)
                 })
-                
+
             except Exception as e:
                 logger.warning(f"Could not read summary {json_file}: {e}")
                 continue
-        
+
         # Sort by execution date (newest first)
         summaries.sort(key=lambda x: x['execution_date'], reverse=True)
-        
+
         # Apply limit
         summaries = summaries[:limit]
-        
+
         return {
             "count": len(summaries),
             "summaries": summaries
         }
-        
+
     except Exception as e:
         logger.error(f"Error listing summaries: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
@@ -1025,7 +1037,7 @@ def list_all_summaries(
 def get_summary_statistics():
     """
     Get overall statistics across all test executions
-    
+
     Returns:
         {
             "total_executions": 25,
@@ -1040,7 +1052,7 @@ def get_summary_statistics():
     try:
         external_path = Path(settings.external_project_path)
         summaries_folder = external_path / "Reports" / "summaries"
-        
+
         if not summaries_folder.exists():
             return {
                 "total_executions": 0,
@@ -1051,20 +1063,20 @@ def get_summary_statistics():
                 "avg_confidence": 0.0,
                 "recent_executions": []
             }
-        
+
         summaries = []
-        
+
         for json_file in summaries_folder.glob("summary_*.json"):
             if '_latest.json' in str(json_file):
                 continue
-            
+
             try:
                 with open(json_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
                     summaries.append(data)
             except:
                 continue
-        
+
         if not summaries:
             return {
                 "total_executions": 0,
@@ -1075,11 +1087,11 @@ def get_summary_statistics():
                 "avg_confidence": 0.0,
                 "recent_executions": []
             }
-        
+
         total_executions = len(summaries)
         total_passed = sum(1 for s in summaries if s['summary']['overall_status'] == 'PASSED')
         total_failed = sum(1 for s in summaries if s['summary']['overall_status'] == 'FAILED')
-        
+
         # Calculate averages
         total_time = 0.0
         for s in summaries:
@@ -1088,10 +1100,10 @@ def get_summary_statistics():
                 total_time += float(time_str)
             except:
                 pass
-        
+
         avg_time = total_time / total_executions if total_executions > 0 else 0.0
         avg_confidence = sum(s['summary'].get('avg_confidence', 0.0) for s in summaries) / total_executions
-        
+
         # Get recent executions
         recent = sorted(summaries, key=lambda x: x['execution_date'], reverse=True)[:10]
         recent_list = [
@@ -1102,7 +1114,7 @@ def get_summary_statistics():
             }
             for s in recent
         ]
-        
+
         return {
             "total_executions": total_executions,
             "total_passed": total_passed,
@@ -1112,7 +1124,7 @@ def get_summary_statistics():
             "avg_confidence": round(avg_confidence, 2),
             "recent_executions": recent_list
         }
-        
+
     except Exception as e:
         logger.error(f"Error getting stats: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
@@ -1127,7 +1139,7 @@ def check_summary_exists(ticket_id: str):
     """
     Quick check if summary exists for a ticket
     Useful for frontend to decide whether to show summary preview
-    
+
     Returns:
         {
             "exists": true,
@@ -1139,17 +1151,17 @@ def check_summary_exists(ticket_id: str):
         external_path = Path(settings.external_project_path)
         summaries_folder = external_path / "Reports" / "summaries"
         latest_summary_path = summaries_folder / f"summary_{ticket_id}_latest.json"
-        
+
         if not latest_summary_path.exists():
             return {
                 "exists": False,
                 "ticket_id": ticket_id,
                 "latest_execution": None
             }
-        
+
         with open(latest_summary_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
-        
+
         return {
             "exists": True,
             "ticket_id": ticket_id,
@@ -1158,7 +1170,7 @@ def check_summary_exists(ticket_id: str):
             "has_report": data['artifacts']['has_report'],
             "has_video": data['artifacts']['has_video']
         }
-        
+
     except Exception as e:
         logger.error(f"Error checking summary: {e}")
         return {
@@ -1181,7 +1193,7 @@ def download_playwright_script(execution_id: str, db: Session = Depends(get_db))
 
     if not execution.script_path:
         raise HTTPException(
-            status_code=400, 
+            status_code=400,
             detail="Script not generated yet. Please wait for test completion."
         )
 
@@ -1189,7 +1201,7 @@ def download_playwright_script(execution_id: str, db: Session = Depends(get_db))
 
     if not script_path.exists():
         raise HTTPException(
-            status_code=404, 
+            status_code=404,
             detail=f"Script file not found at: {execution.script_path}"
         )
 
@@ -1216,7 +1228,7 @@ def download_test_video(execution_id: str, db: Session = Depends(get_db)):
 
     if not execution.video_path:
         raise HTTPException(
-            status_code=400, 
+            status_code=400,
             detail="Video not generated yet. Please wait for test completion."
         )
 
@@ -1224,7 +1236,7 @@ def download_test_video(execution_id: str, db: Session = Depends(get_db)):
 
     if not video_path.exists():
         raise HTTPException(
-            status_code=404, 
+            status_code=404,
             detail=f"Video file not found at: {execution.video_path}"
         )
 
@@ -1247,16 +1259,16 @@ def get_execution_logs(execution_id: str):
         log_file = Path("logs") / "app.log"
         if not log_file.exists():
             return {"logs": "Log file not found", "log_path": str(log_file)}
-        
+
         with open(log_file, 'r', encoding='utf-8') as f:
             lines = f.readlines()
-        
+
         # Find lines related to this execution
         relevant_lines = []
         for line in lines:
             if execution_id in line:
                 relevant_lines.append(line.rstrip())
-        
+
         # Get last 100 lines
         return {
             "execution_id": execution_id,
@@ -1274,17 +1286,17 @@ def debug_artifacts(ticket_id: str):
     """
     try:
         from config import settings
-        
+
         external_path = Path(settings.external_project_path)
-        
+
         if not external_path.exists():
             return {"error": f"External project path not found: {external_path}"}
-        
+
         # Search all artifact folders
         reports_folder = external_path / "Reports"
         scripts_folder = external_path / "Generated_Scripts"
         videos_folder = external_path / "Videos"
-        
+
         def get_file_info(path: Path):
             """Get file info with timestamp"""
             stat = path.stat()
@@ -1294,42 +1306,42 @@ def debug_artifacts(ticket_id: str):
                 "size": stat.st_size,
                 "created": datetime.fromtimestamp(stat.st_mtime).isoformat()
             }
-        
+
         # Find all files for this ticket
         reports = []
         if reports_folder.exists():
             reports = [
-                get_file_info(p) 
+                get_file_info(p)
                 for p in sorted(
                     reports_folder.glob(f"*{ticket_id}*.html"),
                     key=lambda x: x.stat().st_mtime,
                     reverse=True
                 )
             ]
-        
+
         scripts = []
         if scripts_folder.exists():
             scripts = [
-                get_file_info(p) 
+                get_file_info(p)
                 for p in sorted(
                     scripts_folder.glob(f"*{ticket_id}*.py"),
                     key=lambda x: x.stat().st_mtime,
                     reverse=True
                 )
             ]
-        
+
         videos = []
         if videos_folder.exists():
             # Get last 5 videos
             videos = [
-                get_file_info(p) 
+                get_file_info(p)
                 for p in sorted(
                     videos_folder.glob("*.webm"),
                     key=lambda x: x.stat().st_mtime,
                     reverse=True
                 )[:5]
             ]
-        
+
         return {
             "ticket_id": ticket_id,
             "external_path": str(external_path),
@@ -1352,20 +1364,20 @@ def debug_parse_report(execution_id: str, db: Session = Depends(get_db)):
         execution = db.query(TestExecution).filter(
             TestExecution.execution_id == execution_id
         ).first()
-        
+
         if not execution or not execution.report_path:
             return {"error": "No report path found"}
-        
+
         report_path = Path(execution.report_path)
-        
+
         if not report_path.exists():
             return {"error": f"Report not found: {report_path}"}
-        
+
         with open(report_path, 'r', encoding='utf-8') as f:
             html_content = f.read()
-        
+
         import re
-        
+
         # Extract key parts
         result = {
             "execution_id": execution_id,
@@ -1373,52 +1385,52 @@ def debug_parse_report(execution_id: str, db: Session = Depends(get_db)):
             "report_size": len(html_content),
             "patterns_found": {}
         }
-        
+
         # Check for overall status patterns
         overall_patterns = {
             "h2_overall_status": r'<h2[^>]*>\s*Overall\s+Status:\s*(PASSED|FAILED)\s*</h2>',
             "div_overall_status": r'<div[^>]*class=["\']overall-status[^"\']*["\'][^>]*>\s*(PASSED|FAILED)',
             "generic_status": r'Overall\s+Status:\s*<[^>]+>\s*(PASSED|FAILED)',
         }
-        
+
         for name, pattern in overall_patterns.items():
             match = re.search(pattern, html_content, re.IGNORECASE)
             if match:
                 result["patterns_found"][name] = match.group(1).upper()
-        
+
         # Count step statuses
         step_table = re.search(r'<table[^>]*>(.*?)</table>', html_content, re.DOTALL | re.IGNORECASE)
         if step_table:
             table_content = step_table.group(1)
-            
+
             passed_in_table = len(re.findall(r'>\s*PASSED\s*<', table_content, re.IGNORECASE))
             failed_in_table = len(re.findall(r'>\s*FAILED\s*<', table_content, re.IGNORECASE))
-            
+
             result["step_table"] = {
                 "found": True,
                 "passed_count": passed_in_table,
                 "failed_count": failed_in_table
             }
-        
+
         # Count all occurrences
         all_passed = len(re.findall(r'\bPASSED\b', html_content))
         all_failed = len(re.findall(r'\bFAILED\b', html_content))
-        
+
         result["word_counts"] = {
             "passed": all_passed,
             "failed": all_failed
         }
-        
+
         # Extract a snippet around "Overall Status" if found
         status_match = re.search(r'.{0,200}Overall\s+Status.{0,200}', html_content, re.IGNORECASE | re.DOTALL)
         if status_match:
             result["status_snippet"] = status_match.group(0)
-        
+
         # Get first 1000 chars of HTML for inspection
         result["html_preview"] = html_content[:1000]
-        
+
         return result
-        
+
     except Exception as e:
         logger.error(f"Debug parse report error: {e}", exc_info=True)
         return {"error": str(e)}
@@ -1432,21 +1444,21 @@ def test_python_executable():
     try:
         from config import settings
         import shutil
-        
+
         external_path = Path(settings.external_project_path)
-        
+
         results = {
             "external_path": str(external_path),
             "external_path_exists": external_path.exists(),
             "python_checks": []
         }
-        
+
         # Check venv paths
         venv_paths = [
             external_path / "venv" / "Scripts" / "python.exe",
             external_path / "venv" / "bin" / "python",
         ]
-        
+
         for venv_path in venv_paths:
             check = {
                 "path": str(venv_path),
@@ -1454,7 +1466,7 @@ def test_python_executable():
                 "version": None,
                 "works": False
             }
-            
+
             if venv_path.exists():
                 try:
                     result = subprocess.run(
@@ -1467,9 +1479,9 @@ def test_python_executable():
                     check["works"] = result.returncode == 0
                 except Exception as e:
                     check["error"] = str(e)
-            
+
             results["python_checks"].append(check)
-        
+
         # Check system Python
         for cmd in ["python", "python3", "py"]:
             python_path = shutil.which(cmd)
@@ -1481,7 +1493,7 @@ def test_python_executable():
                     "version": None,
                     "works": False
                 }
-                
+
                 try:
                     result = subprocess.run(
                         [python_path, "--version"],
@@ -1493,11 +1505,11 @@ def test_python_executable():
                     check["works"] = result.returncode == 0
                 except Exception as e:
                     check["error"] = str(e)
-                
+
                 results["python_checks"].append(check)
-        
+
         return results
-        
+
     except Exception as e:
         logger.error(f"Test Python error: {e}", exc_info=True)
         return {"error": str(e)}
@@ -1513,10 +1525,10 @@ def get_ticket_details(ticket_id: str, db: Session = Depends(get_db)):
     ticket = db.query(Ticket).filter(Ticket.ticket_id == ticket_id).first()
     if not ticket:
         raise HTTPException(
-            status_code=404, 
+            status_code=404,
             detail=f"Ticket '{ticket_id}' not found. Please upload the ticket file to Jira_Tickets/ folder."
         )
-    
+
     # Parse steps from file if available
     steps = []
     if ticket.file_path and Path(ticket.file_path).exists():
@@ -1535,7 +1547,7 @@ def get_ticket_details(ticket_id: str, db: Session = Depends(get_db)):
                         step_num += 1
         except Exception as e:
             logger.warning(f"Could not parse steps from ticket file: {e}")
-    
+
     return {
         "id": ticket.id,
         "ticket_id": ticket.ticket_id,
@@ -1590,7 +1602,7 @@ def execute_test_in_background(
 
         # Path to your external TA_AI_Project
         external_project_path = settings.external_project_path
-        
+
         logger.info(f"📁 External project path: {external_project_path}")
 
         # Verify path exists
@@ -1608,7 +1620,7 @@ def execute_test_in_background(
         logger.info("🏃 Starting test workflow execution...")
         # CRITICAL: Add logging around this call
         logger.info("📞 Calling service.run_test_workflow()...")
-        
+
         # Run test workflow (this will now wait for completion)
         state = service.run_test_workflow(
             ticket_id=ticket_id,
@@ -1636,8 +1648,8 @@ def execute_test_in_background(
         # If we have a report, mark as 'completed' even if tests failed
         has_report = bool(state.get('report_path'))
         overall_status = state.get('overall_status', 'UNKNOWN')
-        
-        
+
+
         if has_report:
             # Mark as completed - user can download report
             final_status = "completed"
@@ -1646,7 +1658,7 @@ def execute_test_in_background(
             # No report - mark as failed
             final_status = "failed"
             logger.warning(f"⚠️  Marking as failed (no report generated)")
-    
+
 
         # Update status to completed
         service.update_execution_status(
@@ -1689,9 +1701,9 @@ def execute_test_in_background(
             if not line.strip().startswith('[INFO]') and not line.strip().startswith('[DEBUG]'):
                 if line.strip():
                     error_lines.append(line.strip())
-        
+
         clean_error = '\n'.join(error_lines[:10]) if error_lines else str(e)
-        
+
         # Truncate if too long
         if len(clean_error) > 500:
             clean_error = clean_error[:500] + "...\n(Check server logs for full details)"

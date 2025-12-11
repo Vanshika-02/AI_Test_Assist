@@ -1,0 +1,385 @@
+2025-11-18 10:23:52,416 - TestAutomationAPI - INFO - Starting Test Automation API...
+2025-11-18 10:23:52,417 - TestAutomationAPI - INFO - Verified all directories exist
+2025-11-18 10:23:52,866 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2025-11-18 10:23:52,867 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-11-18 10:23:52,870 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2025-11-18 10:23:52,871 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-11-18 10:23:52,872 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2025-11-18 10:23:52,873 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-11-18 10:23:52,875 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-18 10:23:52,878 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 10:23:52,878 - sqlalchemy.engine.Engine - INFO - [generated in 0.00066s] {'table_name': 'projects', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 10:23:52,887 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 10:23:52,888 - sqlalchemy.engine.Engine - INFO - [cached since 0.01011s ago] {'table_name': 'testers', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 10:23:52,889 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 10:23:52,890 - sqlalchemy.engine.Engine - INFO - [cached since 0.01211s ago] {'table_name': 'tickets', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 10:23:52,891 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 10:23:52,892 - sqlalchemy.engine.Engine - INFO - [cached since 0.01405s ago] {'table_name': 'test_executions', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 10:23:52,893 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 10:23:52,894 - sqlalchemy.engine.Engine - INFO - [cached since 0.01645s ago] {'table_name': 'execution_steps', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 10:23:52,896 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 10:23:52,896 - sqlalchemy.engine.Engine - INFO - [cached since 0.01861s ago] {'table_name': 'project_configs', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 10:23:52,898 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-11-18 10:23:52,899 - TestAutomationAPI - INFO - Database tables verified
+2025-11-18 10:23:52,905 - TestAutomationAPI - INFO - ======================================================================
+2025-11-18 10:23:52,905 - TestAutomationAPI - INFO - Test Automation API Started Successfully
+2025-11-18 10:23:52,905 - TestAutomationAPI - INFO - Host: 0.0.0.0:8000
+2025-11-18 10:23:52,906 - TestAutomationAPI - INFO - Docs: http://0.0.0.0:8000/docs
+2025-11-18 10:23:52,906 - TestAutomationAPI - INFO - ======================================================================
+2025-11-18 10:24:03,004 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-18 10:24:03,004 - sqlalchemy.engine.Engine - INFO - SELECT tickets.id AS tickets_id, tickets.ticket_id AS tickets_ticket_id, tickets.project_id AS tickets_project_id, tickets.title AS tickets_title, tickets.module AS tickets_module, tickets.description AS tickets_description, tickets.acceptance_criteria AS tickets_acceptance_criteria, tickets.file_path AS tickets_file_path, tickets.created_at AS tickets_created_at 
+FROM tickets 
+WHERE tickets.ticket_id = %(ticket_id_1)s 
+ LIMIT %(param_1)s
+2025-11-18 10:24:03,020 - sqlalchemy.engine.Engine - INFO - [generated in 0.00107s] {'ticket_id_1': 'RBPLCD-8889', 'param_1': 1}
+2025-11-18 10:24:03,026 - sqlalchemy.engine.Engine - INFO - INSERT INTO test_executions (execution_id, ticket_id, project_id, status, overall_status, started_at, completed_at, total_execution_time, report_path, script_path, video_path, error_message) VALUES (%(execution_id)s, %(ticket_id)s, %(project_id)s, %(status)s, %(overall_status)s, %(started_at)s, %(completed_at)s, %(total_execution_time)s, %(report_path)s, %(script_path)s, %(video_path)s, %(error_message)s) RETURNING test_executions.id
+2025-11-18 10:24:03,026 - sqlalchemy.engine.Engine - INFO - [generated in 0.00056s] {'execution_id': 'exec_RBPLCD-8889_20251118_102403', 'ticket_id': 'RBPLCD-8889', 'project_id': 1, 'status': 'running', 'overall_status': None, 'started_at': datetime.datetime(2025, 11, 18, 10, 24, 3, 26904), 'completed_at': None, 'total_execution_time': None, 'report_path': None, 'script_path': None, 'video_path': None, 'error_message': None}
+2025-11-18 10:24:03,052 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-11-18 10:24:03,052 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-18 10:24:03,052 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id, test_executions.execution_id, test_executions.ticket_id, test_executions.project_id, test_executions.status, test_executions.overall_status, test_executions.started_at, test_executions.completed_at, test_executions.total_execution_time, test_executions.report_path, test_executions.script_path, test_executions.video_path, test_executions.error_message 
+FROM test_executions 
+WHERE test_executions.id = %(pk_1)s
+2025-11-18 10:24:05,490 - sqlalchemy.engine.Engine - INFO - [generated in 2.43045s] {'pk_1': 14}
+2025-11-18 10:24:05,490 - TestExecutionService - INFO - Created execution record: exec_RBPLCD-8889_20251118_102403
+2025-11-18 10:24:05,497 - sqlalchemy.engine.Engine - INFO - SELECT tickets.id AS tickets_id, tickets.ticket_id AS tickets_ticket_id, tickets.project_id AS tickets_project_id, tickets.title AS tickets_title, tickets.module AS tickets_module, tickets.description AS tickets_description, tickets.acceptance_criteria AS tickets_acceptance_criteria, tickets.file_path AS tickets_file_path, tickets.created_at AS tickets_created_at 
+FROM tickets 
+WHERE tickets.id = %(pk_1)s
+2025-11-18 10:24:05,497 - sqlalchemy.engine.Engine - INFO - [generated in 0.00066s] {'pk_1': 1}
+2025-11-18 10:24:05,497 - TestAutomationAPI - INFO - ======================================================================
+2025-11-18 10:24:05,594 - TestAutomationAPI - INFO -    Execution ID: exec_RBPLCD-8889_20251118_102403
+2025-11-18 10:24:05,594 - TestAutomationAPI - INFO -    Ticket ID: RBPLCD-8889
+2025-11-18 10:24:05,594 - TestAutomationAPI - INFO -    Project ID: 1
+2025-11-18 10:24:05,594 - TestAutomationAPI - INFO - ======================================================================
+2025-11-18 10:24:05,594 - TestExecutionService - INFO - Starting test workflow for RBPLCD-8889
+2025-11-18 10:24:05,594 - TestExecutionService - INFO - External project path: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project
+2025-11-18 10:24:05,594 - TestExecutionService - INFO - Python executable: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project\venv\Scripts\python.exe
+2025-11-18 10:24:05,594 - TestExecutionService - INFO - Script: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project\run_test.py
+2025-11-18 10:24:05,594 - TestExecutionService - INFO - Ticket ID: RBPLCD-8889
+2025-11-18 10:24:05,594 - TestExecutionService - INFO - Executing: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project\venv\Scripts\python.exe C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project\run_test.py RBPLCD-8889
+2025-11-18 10:24:05,639 - TestExecutionService - INFO - ======================================================================
+2025-11-18 10:24:05,639 - TestExecutionService - INFO - SCRIPT OUTPUT:
+2025-11-18 10:24:05,640 - TestExecutionService - INFO - ======================================================================
+2025-11-18 10:24:05,640 - TestExecutionService - INFO - 
+2025-11-18 10:24:05,640 - TestExecutionService - WARNING - SCRIPT ERRORS:
+2025-11-18 10:24:05,640 - TestExecutionService - WARNING - No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+
+2025-11-18 10:24:05,641 - TestExecutionService - INFO - ======================================================================
+2025-11-18 10:24:05,641 - TestExecutionService - ERROR - Script failed with return code 103
+2025-11-18 10:24:05,641 - TestExecutionService - ERROR - Test workflow failed: Script failed: No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+Traceback (most recent call last):
+  File "C:\Users\ENZ1KOR\my-fastapi-project\services.py", line 166, in run_test_workflow
+    raise Exception(f"Script failed: {result.stderr}")
+Exception: Script failed: No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+
+2025-11-18 10:24:05,665 - TestAutomationAPI - ERROR - ======================================================================
+2025-11-18 10:24:05,669 - TestAutomationAPI - ERROR -    Execution ID: exec_RBPLCD-8889_20251118_102403
+2025-11-18 10:24:05,669 - TestAutomationAPI - ERROR -    Error: Script failed: No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+
+2025-11-18 10:24:05,669 - TestAutomationAPI - ERROR - ======================================================================
+2025-11-18 10:24:05,729 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-18 10:24:05,731 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id AS test_executions_id, test_executions.execution_id AS test_executions_execution_id, test_executions.ticket_id AS test_executions_ticket_id, test_executions.project_id AS test_executions_project_id, test_executions.status AS test_executions_status, test_executions.overall_status AS test_executions_overall_status, test_executions.started_at AS test_executions_started_at, test_executions.completed_at AS test_executions_completed_at, test_executions.total_execution_time AS test_executions_total_execution_time, test_executions.report_path AS test_executions_report_path, test_executions.script_path AS test_executions_script_path, test_executions.video_path AS test_executions_video_path, test_executions.error_message AS test_executions_error_message 
+FROM test_executions 
+WHERE test_executions.execution_id = %(execution_id_1)s 
+ LIMIT %(param_1)s
+2025-11-18 10:24:05,732 - sqlalchemy.engine.Engine - INFO - [generated in 0.00098s] {'execution_id_1': 'exec_RBPLCD-8889_20251118_102403', 'param_1': 1}
+2025-11-18 10:24:05,739 - sqlalchemy.engine.Engine - INFO - UPDATE test_executions SET status=%(status)s, overall_status=%(overall_status)s, completed_at=%(completed_at)s, total_execution_time=%(total_execution_time)s, error_message=%(error_message)s WHERE test_executions.id = %(test_executions_id)s
+2025-11-18 10:24:05,740 - sqlalchemy.engine.Engine - INFO - [generated in 0.00075s] {'status': 'failed', 'overall_status': 'FAILED', 'completed_at': datetime.datetime(2025, 11, 18, 10, 24, 5, 737441), 'total_execution_time': 2.710537, 'error_message': 'Script failed: No Python at \'"C:\\Users\\lfo2kor\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\'\n', 'test_executions_id': 14}
+2025-11-18 10:24:05,743 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-11-18 10:24:05,743 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-18 10:24:05,743 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id, test_executions.execution_id, test_executions.ticket_id, test_executions.project_id, test_executions.status, test_executions.overall_status, test_executions.started_at, test_executions.completed_at, test_executions.total_execution_time, test_executions.report_path, test_executions.script_path, test_executions.video_path, test_executions.error_message 
+FROM test_executions 
+WHERE test_executions.id = %(pk_1)s
+2025-11-18 10:24:05,743 - sqlalchemy.engine.Engine - INFO - [cached since 2.69s ago] {'pk_1': 14}
+2025-11-18 10:24:05,743 - TestExecutionService - INFO - Updated execution exec_RBPLCD-8889_20251118_102403: status=failed
+2025-11-18 10:24:05,743 - TestAutomationAPI - ERROR - Traceback (most recent call last):
+  File "C:\Users\ENZ1KOR\my-fastapi-project\main.py", line 391, in execute_test_in_background
+    state = service.run_test_workflow(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ENZ1KOR\my-fastapi-project\services.py", line 166, in run_test_workflow
+    raise Exception(f"Script failed: {result.stderr}")
+Exception: Script failed: No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+
+
+2025-11-18 10:24:05,743 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-18 10:24:05,743 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-18 10:24:07,526 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-18 10:24:07,528 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id AS test_executions_id, test_executions.execution_id AS test_executions_execution_id, test_executions.ticket_id AS test_executions_ticket_id, test_executions.project_id AS test_executions_project_id, test_executions.status AS test_executions_status, test_executions.overall_status AS test_executions_overall_status, test_executions.started_at AS test_executions_started_at, test_executions.completed_at AS test_executions_completed_at, test_executions.total_execution_time AS test_executions_total_execution_time, test_executions.report_path AS test_executions_report_path, test_executions.script_path AS test_executions_script_path, test_executions.video_path AS test_executions_video_path, test_executions.error_message AS test_executions_error_message 
+FROM test_executions 
+WHERE test_executions.execution_id = %(execution_id_1)s 
+ LIMIT %(param_1)s
+2025-11-18 10:24:07,530 - sqlalchemy.engine.Engine - INFO - [cached since 1.799s ago] {'execution_id_1': 'exec_RBPLCD-8889_20251118_102403', 'param_1': 1}
+2025-11-18 10:24:07,535 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-18 10:24:23,972 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-18 10:24:23,973 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id AS test_executions_id, test_executions.execution_id AS test_executions_execution_id, test_executions.ticket_id AS test_executions_ticket_id, test_executions.project_id AS test_executions_project_id, test_executions.status AS test_executions_status, test_executions.overall_status AS test_executions_overall_status, test_executions.started_at AS test_executions_started_at, test_executions.completed_at AS test_executions_completed_at, test_executions.total_execution_time AS test_executions_total_execution_time, test_executions.report_path AS test_executions_report_path, test_executions.script_path AS test_executions_script_path, test_executions.video_path AS test_executions_video_path, test_executions.error_message AS test_executions_error_message 
+FROM test_executions 
+WHERE test_executions.execution_id = %(execution_id_1)s 
+ LIMIT %(param_1)s
+2025-11-18 10:24:23,975 - sqlalchemy.engine.Engine - INFO - [cached since 18.24s ago] {'execution_id_1': 'exec_RBPLCD-8889_20251118_102403', 'param_1': 1}
+2025-11-18 10:24:23,978 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-18 10:33:05,076 - TestAutomationAPI - INFO - Starting Test Automation API...
+2025-11-18 10:33:05,078 - TestAutomationAPI - INFO - Verified all directories exist
+2025-11-18 10:33:05,145 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2025-11-18 10:33:05,146 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-11-18 10:33:05,149 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2025-11-18 10:33:05,149 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-11-18 10:33:05,152 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2025-11-18 10:33:05,152 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-11-18 10:33:05,154 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-18 10:33:05,160 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 10:33:05,161 - sqlalchemy.engine.Engine - INFO - [generated in 0.00153s] {'table_name': 'projects', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 10:33:05,168 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 10:33:05,169 - sqlalchemy.engine.Engine - INFO - [cached since 0.008884s ago] {'table_name': 'testers', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 10:33:05,171 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 10:33:05,172 - sqlalchemy.engine.Engine - INFO - [cached since 0.01222s ago] {'table_name': 'tickets', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 10:33:05,174 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 10:33:05,175 - sqlalchemy.engine.Engine - INFO - [cached since 0.01507s ago] {'table_name': 'test_executions', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 10:33:05,178 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 10:33:05,178 - sqlalchemy.engine.Engine - INFO - [cached since 0.01865s ago] {'table_name': 'execution_steps', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 10:33:05,180 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 10:33:05,181 - sqlalchemy.engine.Engine - INFO - [cached since 0.02088s ago] {'table_name': 'project_configs', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 10:33:05,182 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-11-18 10:33:05,184 - TestAutomationAPI - INFO - Database tables verified
+2025-11-18 10:33:05,195 - TestAutomationAPI - INFO - ======================================================================
+2025-11-18 10:33:05,197 - TestAutomationAPI - INFO - Test Automation API Started Successfully
+2025-11-18 10:33:05,198 - TestAutomationAPI - INFO - Host: 0.0.0.0:8000
+2025-11-18 10:33:05,198 - TestAutomationAPI - INFO - Docs: http://0.0.0.0:8000/docs
+2025-11-18 10:33:05,200 - TestAutomationAPI - INFO - ======================================================================
+2025-11-18 19:11:28,449 - TestAutomationAPI - INFO - Test Automation API shutting down...
+2025-11-18 19:11:31,389 - TestAutomationAPI - INFO - Starting Test Automation API...
+2025-11-18 19:11:31,390 - TestAutomationAPI - INFO - Verified all directories exist
+2025-11-18 19:11:31,582 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2025-11-18 19:11:31,583 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-11-18 19:11:31,584 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2025-11-18 19:11:31,585 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-11-18 19:11:31,586 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2025-11-18 19:11:31,586 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-11-18 19:11:31,588 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-18 19:11:31,594 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 19:11:31,595 - sqlalchemy.engine.Engine - INFO - [generated in 0.00082s] {'table_name': 'projects', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 19:11:31,600 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 19:11:31,601 - sqlalchemy.engine.Engine - INFO - [cached since 0.007044s ago] {'table_name': 'testers', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 19:11:31,603 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 19:11:31,604 - sqlalchemy.engine.Engine - INFO - [cached since 0.009848s ago] {'table_name': 'tickets', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 19:11:31,605 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 19:11:31,605 - sqlalchemy.engine.Engine - INFO - [cached since 0.01148s ago] {'table_name': 'test_executions', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 19:11:31,607 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 19:11:31,607 - sqlalchemy.engine.Engine - INFO - [cached since 0.01291s ago] {'table_name': 'execution_steps', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 19:11:31,608 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 19:11:31,609 - sqlalchemy.engine.Engine - INFO - [cached since 0.01516s ago] {'table_name': 'project_configs', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 19:11:31,611 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-11-18 19:11:31,612 - TestAutomationAPI - INFO - Database tables verified
+2025-11-18 19:11:31,619 - TestAutomationAPI - INFO - ======================================================================
+2025-11-18 19:11:31,619 - TestAutomationAPI - INFO - Test Automation API Started Successfully
+2025-11-18 19:11:31,619 - TestAutomationAPI - INFO - Host: 0.0.0.0:8000
+2025-11-18 19:11:31,619 - TestAutomationAPI - INFO - Docs: http://0.0.0.0:8000/docs
+2025-11-18 19:11:31,619 - TestAutomationAPI - INFO - ======================================================================
+2025-11-18 19:15:24,526 - TestAutomationAPI - INFO - Test Automation API shutting down...
+2025-11-18 19:16:03,054 - TestAutomationAPI - INFO - Starting Test Automation API...
+2025-11-18 19:16:03,055 - TestAutomationAPI - INFO - Verified all directories exist
+2025-11-18 19:16:03,134 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2025-11-18 19:16:03,135 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-11-18 19:16:03,137 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2025-11-18 19:16:03,137 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-11-18 19:16:03,139 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2025-11-18 19:16:03,139 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-11-18 19:16:03,140 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-18 19:16:03,146 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 19:16:03,147 - sqlalchemy.engine.Engine - INFO - [generated in 0.00139s] {'table_name': 'projects', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 19:16:03,152 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 19:16:03,153 - sqlalchemy.engine.Engine - INFO - [cached since 0.007625s ago] {'table_name': 'testers', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 19:16:03,155 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 19:16:03,156 - sqlalchemy.engine.Engine - INFO - [cached since 0.01049s ago] {'table_name': 'tickets', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 19:16:03,157 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 19:16:03,159 - sqlalchemy.engine.Engine - INFO - [cached since 0.01401s ago] {'table_name': 'test_executions', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 19:16:03,162 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 19:16:03,169 - sqlalchemy.engine.Engine - INFO - [cached since 0.02328s ago] {'table_name': 'execution_steps', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 19:16:03,174 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 19:16:03,178 - sqlalchemy.engine.Engine - INFO - [cached since 0.03269s ago] {'table_name': 'project_configs', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 19:16:03,180 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-11-18 19:16:03,181 - TestAutomationAPI - INFO - Database tables verified
+2025-11-18 19:16:03,215 - TestAutomationAPI - INFO - ======================================================================
+2025-11-18 19:16:03,229 - TestAutomationAPI - INFO - Test Automation API Started Successfully
+2025-11-18 19:16:03,230 - TestAutomationAPI - INFO - Host: 0.0.0.0:8000
+2025-11-18 19:16:03,231 - TestAutomationAPI - INFO - Docs: http://0.0.0.0:8000/docs
+2025-11-18 19:16:03,231 - TestAutomationAPI - INFO - ======================================================================
+2025-11-18 19:16:12,593 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-18 19:16:12,601 - sqlalchemy.engine.Engine - INFO - SELECT tickets.id AS tickets_id, tickets.ticket_id AS tickets_ticket_id, tickets.project_id AS tickets_project_id, tickets.title AS tickets_title, tickets.module AS tickets_module, tickets.description AS tickets_description, tickets.acceptance_criteria AS tickets_acceptance_criteria, tickets.file_path AS tickets_file_path, tickets.created_at AS tickets_created_at 
+FROM tickets 
+WHERE tickets.ticket_id = %(ticket_id_1)s 
+ LIMIT %(param_1)s
+2025-11-18 19:16:12,602 - sqlalchemy.engine.Engine - INFO - [generated in 0.00106s] {'ticket_id_1': 'RBPLCD-8889', 'param_1': 1}
+2025-11-18 19:16:12,621 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-18 19:30:47,381 - TestAutomationAPI - INFO - Test Automation API shutting down...
+2025-11-18 19:30:50,161 - TestAutomationAPI - INFO - Starting Test Automation API...
+2025-11-18 19:30:50,163 - TestAutomationAPI - INFO - Verified all directories exist
+2025-11-18 19:30:50,228 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2025-11-18 19:30:50,229 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-11-18 19:30:50,230 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2025-11-18 19:30:50,231 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-11-18 19:30:50,232 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2025-11-18 19:30:50,233 - sqlalchemy.engine.Engine - INFO - [raw sql] {}
+2025-11-18 19:30:50,235 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-18 19:30:50,240 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 19:30:50,241 - sqlalchemy.engine.Engine - INFO - [generated in 0.00093s] {'table_name': 'projects', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 19:30:50,245 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 19:30:50,246 - sqlalchemy.engine.Engine - INFO - [cached since 0.005215s ago] {'table_name': 'testers', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 19:30:50,247 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 19:30:50,248 - sqlalchemy.engine.Engine - INFO - [cached since 0.00721s ago] {'table_name': 'tickets', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 19:30:50,249 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 19:30:50,249 - sqlalchemy.engine.Engine - INFO - [cached since 0.008871s ago] {'table_name': 'test_executions', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 19:30:50,250 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 19:30:50,251 - sqlalchemy.engine.Engine - INFO - [cached since 0.01055s ago] {'table_name': 'execution_steps', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 19:30:50,253 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = %(table_name)s AND pg_catalog.pg_class.relkind = ANY (ARRAY[%(param_1)s, %(param_2)s, %(param_3)s, %(param_4)s, %(param_5)s]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != %(nspname_1)s
+2025-11-18 19:30:50,253 - sqlalchemy.engine.Engine - INFO - [cached since 0.01283s ago] {'table_name': 'project_configs', 'param_1': 'r', 'param_2': 'p', 'param_3': 'f', 'param_4': 'v', 'param_5': 'm', 'nspname_1': 'pg_catalog'}
+2025-11-18 19:30:50,254 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-11-18 19:30:50,255 - TestAutomationAPI - INFO - Database tables verified
+2025-11-18 19:30:50,264 - TestAutomationAPI - INFO - ======================================================================
+2025-11-18 19:30:50,265 - TestAutomationAPI - INFO - Test Automation API Started Successfully
+2025-11-18 19:30:50,265 - TestAutomationAPI - INFO - Host: 0.0.0.0:8000
+2025-11-18 19:30:50,265 - TestAutomationAPI - INFO - Docs: http://0.0.0.0:8000/docs
+2025-11-18 19:30:50,265 - TestAutomationAPI - INFO - ======================================================================
+2025-11-18 19:33:59,094 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-18 19:33:59,098 - sqlalchemy.engine.Engine - INFO - SELECT tickets.id AS tickets_id, tickets.ticket_id AS tickets_ticket_id, tickets.project_id AS tickets_project_id, tickets.title AS tickets_title, tickets.module AS tickets_module, tickets.description AS tickets_description, tickets.acceptance_criteria AS tickets_acceptance_criteria, tickets.file_path AS tickets_file_path, tickets.created_at AS tickets_created_at 
+FROM tickets 
+WHERE tickets.ticket_id = %(ticket_id_1)s 
+ LIMIT %(param_1)s
+2025-11-18 19:33:59,098 - sqlalchemy.engine.Engine - INFO - [generated in 0.00082s] {'ticket_id_1': 'RBPLCD-8889', 'param_1': 1}
+2025-11-18 19:33:59,106 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-18 19:34:03,612 - TestAutomationAPI - INFO - UI requested test run for ticket: RBPLCD-8889
+2025-11-18 19:34:03,613 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-18 19:34:03,614 - sqlalchemy.engine.Engine - INFO - SELECT tickets.id AS tickets_id, tickets.ticket_id AS tickets_ticket_id, tickets.project_id AS tickets_project_id, tickets.title AS tickets_title, tickets.module AS tickets_module, tickets.description AS tickets_description, tickets.acceptance_criteria AS tickets_acceptance_criteria, tickets.file_path AS tickets_file_path, tickets.created_at AS tickets_created_at 
+FROM tickets 
+WHERE tickets.ticket_id = %(ticket_id_1)s 
+ LIMIT %(param_1)s
+2025-11-18 19:34:03,619 - sqlalchemy.engine.Engine - INFO - [cached since 4.521s ago] {'ticket_id_1': 'RBPLCD-8889', 'param_1': 1}
+2025-11-18 19:34:03,623 - sqlalchemy.engine.Engine - INFO - INSERT INTO test_executions (execution_id, ticket_id, project_id, status, overall_status, started_at, completed_at, total_execution_time, report_path, script_path, video_path, error_message) VALUES (%(execution_id)s, %(ticket_id)s, %(project_id)s, %(status)s, %(overall_status)s, %(started_at)s, %(completed_at)s, %(total_execution_time)s, %(report_path)s, %(script_path)s, %(video_path)s, %(error_message)s) RETURNING test_executions.id
+2025-11-18 19:34:03,624 - sqlalchemy.engine.Engine - INFO - [generated in 0.00087s] {'execution_id': 'exec_RBPLCD-8889_20251118_193403', 'ticket_id': 'RBPLCD-8889', 'project_id': 1, 'status': 'running', 'overall_status': None, 'started_at': datetime.datetime(2025, 11, 18, 19, 34, 3, 620887), 'completed_at': None, 'total_execution_time': None, 'report_path': None, 'script_path': None, 'video_path': None, 'error_message': None}
+2025-11-18 19:34:03,639 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-11-18 19:34:03,642 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-18 19:34:03,645 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id, test_executions.execution_id, test_executions.ticket_id, test_executions.project_id, test_executions.status, test_executions.overall_status, test_executions.started_at, test_executions.completed_at, test_executions.total_execution_time, test_executions.report_path, test_executions.script_path, test_executions.video_path, test_executions.error_message 
+FROM test_executions 
+WHERE test_executions.id = %(pk_1)s
+2025-11-18 19:34:03,646 - sqlalchemy.engine.Engine - INFO - [generated in 0.00071s] {'pk_1': 15}
+2025-11-18 19:34:03,651 - TestExecutionService - INFO - Created execution record: exec_RBPLCD-8889_20251118_193403
+2025-11-18 19:34:03,652 - TestAutomationAPI - INFO - Created execution: exec_RBPLCD-8889_20251118_193403
+2025-11-18 19:34:03,654 - sqlalchemy.engine.Engine - INFO - SELECT tickets.id AS tickets_id, tickets.ticket_id AS tickets_ticket_id, tickets.project_id AS tickets_project_id, tickets.title AS tickets_title, tickets.module AS tickets_module, tickets.description AS tickets_description, tickets.acceptance_criteria AS tickets_acceptance_criteria, tickets.file_path AS tickets_file_path, tickets.created_at AS tickets_created_at 
+FROM tickets 
+WHERE tickets.id = %(pk_1)s
+2025-11-18 19:34:03,656 - sqlalchemy.engine.Engine - INFO - [generated in 0.00188s] {'pk_1': 1}
+2025-11-18 19:34:03,659 - TestAutomationAPI - INFO - ======================================================================
+2025-11-18 19:34:03,786 - TestAutomationAPI - INFO -    Execution ID: exec_RBPLCD-8889_20251118_193403
+2025-11-18 19:34:03,786 - TestAutomationAPI - INFO -    Ticket ID: RBPLCD-8889
+2025-11-18 19:34:03,786 - TestAutomationAPI - INFO -    Project ID: 1
+2025-11-18 19:34:03,787 - TestAutomationAPI - INFO - ======================================================================
+2025-11-18 19:34:03,797 - TestExecutionService - INFO - Starting test workflow for RBPLCD-8889
+2025-11-18 19:34:03,797 - TestExecutionService - INFO - External project path: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project
+2025-11-18 19:34:03,798 - TestExecutionService - INFO - Python executable: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project\venv\Scripts\python.exe
+2025-11-18 19:34:03,798 - TestExecutionService - INFO - Script: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project\run_test.py
+2025-11-18 19:34:03,798 - TestExecutionService - INFO - Ticket ID: RBPLCD-8889
+2025-11-18 19:34:03,798 - TestExecutionService - INFO - Executing: C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project\venv\Scripts\python.exe C:\Users\ENZ1KOR\TA_AI_Project 1\TA_AI_Project 1\TA_AI_Project\run_test.py RBPLCD-8889
+2025-11-18 19:34:03,842 - TestExecutionService - INFO - ======================================================================
+2025-11-18 19:34:03,843 - TestExecutionService - INFO - SCRIPT OUTPUT:
+2025-11-18 19:34:03,843 - TestExecutionService - INFO - ======================================================================
+2025-11-18 19:34:03,843 - TestExecutionService - INFO - 
+2025-11-18 19:34:03,843 - TestExecutionService - WARNING - SCRIPT ERRORS:
+2025-11-18 19:34:03,843 - TestExecutionService - WARNING - No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+
+2025-11-18 19:34:03,844 - TestExecutionService - INFO - ======================================================================
+2025-11-18 19:34:03,844 - TestExecutionService - ERROR - Script failed with return code 103
+2025-11-18 19:34:03,844 - TestExecutionService - ERROR - Test workflow failed: Script failed: No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+Traceback (most recent call last):
+  File "C:\Users\ENZ1KOR\my-fastapi-project\services.py", line 166, in run_test_workflow
+    raise Exception(f"Script failed: {result.stderr}")
+Exception: Script failed: No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+
+2025-11-18 19:34:03,865 - TestAutomationAPI - ERROR - ======================================================================
+2025-11-18 19:34:03,869 - TestAutomationAPI - ERROR -    Execution ID: exec_RBPLCD-8889_20251118_193403
+2025-11-18 19:34:03,869 - TestAutomationAPI - ERROR -    Error: Script failed: No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+
+2025-11-18 19:34:03,869 - TestAutomationAPI - ERROR - ======================================================================
+2025-11-18 19:34:03,919 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-18 19:34:03,921 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id AS test_executions_id, test_executions.execution_id AS test_executions_execution_id, test_executions.ticket_id AS test_executions_ticket_id, test_executions.project_id AS test_executions_project_id, test_executions.status AS test_executions_status, test_executions.overall_status AS test_executions_overall_status, test_executions.started_at AS test_executions_started_at, test_executions.completed_at AS test_executions_completed_at, test_executions.total_execution_time AS test_executions_total_execution_time, test_executions.report_path AS test_executions_report_path, test_executions.script_path AS test_executions_script_path, test_executions.video_path AS test_executions_video_path, test_executions.error_message AS test_executions_error_message 
+FROM test_executions 
+WHERE test_executions.execution_id = %(execution_id_1)s 
+ LIMIT %(param_1)s
+2025-11-18 19:34:03,922 - sqlalchemy.engine.Engine - INFO - [generated in 0.00095s] {'execution_id_1': 'exec_RBPLCD-8889_20251118_193403', 'param_1': 1}
+2025-11-18 19:34:03,929 - sqlalchemy.engine.Engine - INFO - UPDATE test_executions SET status=%(status)s, overall_status=%(overall_status)s, completed_at=%(completed_at)s, total_execution_time=%(total_execution_time)s, error_message=%(error_message)s WHERE test_executions.id = %(test_executions_id)s
+2025-11-18 19:34:03,930 - sqlalchemy.engine.Engine - INFO - [generated in 0.00078s] {'status': 'failed', 'overall_status': 'FAILED', 'completed_at': datetime.datetime(2025, 11, 18, 19, 34, 3, 927071), 'total_execution_time': 0.306184, 'error_message': 'Script failed: No Python at \'"C:\\Users\\lfo2kor\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\'\n', 'test_executions_id': 15}
+2025-11-18 19:34:03,936 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-11-18 19:34:03,938 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-11-18 19:34:03,939 - sqlalchemy.engine.Engine - INFO - SELECT test_executions.id, test_executions.execution_id, test_executions.ticket_id, test_executions.project_id, test_executions.status, test_executions.overall_status, test_executions.started_at, test_executions.completed_at, test_executions.total_execution_time, test_executions.report_path, test_executions.script_path, test_executions.video_path, test_executions.error_message 
+FROM test_executions 
+WHERE test_executions.id = %(pk_1)s
+2025-11-18 19:34:03,940 - sqlalchemy.engine.Engine - INFO - [cached since 0.2945s ago] {'pk_1': 15}
+2025-11-18 19:34:03,940 - TestExecutionService - INFO - Updated execution exec_RBPLCD-8889_20251118_193403: status=failed
+2025-11-18 19:34:03,942 - TestAutomationAPI - ERROR - Traceback (most recent call last):
+  File "C:\Users\ENZ1KOR\my-fastapi-project\main.py", line 429, in execute_test_in_background
+    state = service.run_test_workflow(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ENZ1KOR\my-fastapi-project\services.py", line 166, in run_test_workflow
+    raise Exception(f"Script failed: {result.stderr}")
+Exception: Script failed: No Python at '"C:\Users\lfo2kor\AppData\Local\Programs\Python\Python311\python.exe'
+
+
+2025-11-18 19:34:03,942 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-11-18 19:34:03,946 - sqlalchemy.engine.Engine - INFO - ROLLBACK
