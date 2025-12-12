@@ -342,7 +342,11 @@ getAgentBadgeClass(agent: string): string {
 
         const botMessage: ChatMessage = {
           type: 'bot',
-          text: `❌ Error: Could not find ticket "${ticketId}".\n\nPlease make sure:\n1. The ticket is uploaded to the system\n2. The ticket file exists in Jira_Tickets folder\n3. The ticket ID is correct`,
+          text: `❌ Error: Could not find ticket "${ticketId}".\n
+          Please make sure:\n
+          1. The ticket is uploaded to the system\n
+          2. The ticket file exists in Jira_Tickets folder\n
+          3. The ticket ID is correct`,
           timestamp: new Date()
         };
 
