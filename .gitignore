@@ -22,10 +22,31 @@ __pycache__/
 
 # Virtual Environment - NEVER COMMIT!
 venv/
+my-fastapi-project/venv/
+**venv/
+env/
+ENV/
+
+venv/
 env/
 ENV/
 .venv/
 my-fastapi-project/venv/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
 
 # Logs
 *.log
