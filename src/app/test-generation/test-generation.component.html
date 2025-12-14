@@ -83,9 +83,6 @@
                     <span>Execution Complete</span>
                   </div>
 
-                  <!-- Add this AFTER the execution-result div and BEFORE download-actions -->
-
-<!-- NEW: Test Summary Section -->
 <div class="test-summary-section compact"  *ngIf="message.summary && message.showSummary">
   <div class="summary-header" (click)="toggleSummary(message)">
     <h3 class="summary-title">
@@ -282,7 +279,7 @@
         <div class="a-text-area" *ngIf="!hasPlaywrightScript()">
           <textarea id="messageInput"
                     #messageTextarea
-                    placeholder="Enter JIRA Ticket ID (e.g., RBPLCD-8835)"
+                    placeholder="Enter JIRA Ticket ID (e.g., ABCD-1234)"
                     (keydown)="onEnterPress($event)"
                     [(ngModel)]="currentMessage"
                     [disabled]="loading"></textarea>

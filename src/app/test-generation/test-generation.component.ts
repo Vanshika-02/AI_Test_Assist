@@ -82,10 +82,18 @@ export class TestGenerationComponent implements OnInit, OnDestroy {
      const account = this.msalService.instance.getActiveAccount();
 
     if (account && account.name) {
-      this.username = account.name;           
+      this.username = this.extractFirstName(account.name);           
     }
   }
 
+  private extractFirstName(fullName: string): string {
+    fullName = fullName.split('–')[0]; 
+    fullName = fullName.split('-')[0];
+    fullName = fullName.split('(')[0]; 
+    fullName = fullName.split('@')[0];
+    return fullName.trim().split(' ')[0];
+  }
+  
   ngOnDestroy(): void {
     if (this.pollingSubscription) {
       this.pollingSubscription.unsubscribe();
@@ -334,7 +342,11 @@ getAgentBadgeClass(agent: string): string {
 
         const botMessage: ChatMessage = {
           type: 'bot',
-          text: `❌ Error: Could not find ticket "${ticketId}".\n\nPlease make sure:\n1. The ticket is uploaded to the system\n2. The ticket file exists in Jira_Tickets folder\n3. The ticket ID is correct`,
+          text: `❌ Error: Could not find ticket "${ticketId}".\n
+          Please make sure:\n
+          1. The ticket is uploaded to the system\n
+          2. The ticket file exists in Jira_Tickets folder\n
+          3. The ticket ID is correct`,
           timestamp: new Date()
         };
 

@@ -481,6 +481,9 @@
 
 .summary-content {
   padding: 24px;
+  display: flex;
+  flex-direction: column; /* One below another */
+  gap: 16px;
 }
 
 /* Main Status Card */
@@ -551,12 +554,12 @@
   }
 }
 
-/* Metrics Grid */
 .metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  display: flex;
+  flex-wrap: nowrap;     /* Prevent wrapping to next line */
   gap: 16px;
-  margin-bottom: 24px;
+  overflow-x: auto;       /* Scroll horizontally if content overflows */
+  padding-bottom: 6px;
 }
 
 .metric-card {
@@ -1596,6 +1599,10 @@
   }
 }
 
+.message-text {
+  white-space: pre-line;
+}
+
 /* Breadcrumb navigation */
 .breadcrumb1 {
   display: flex;
@@ -1686,7 +1693,7 @@
 
 .history-title {
   display: block;
-  font-size: 14px;
+  font-size: 16px;
   color: #333;
   line-height: 1.5;
   font-weight: 500;
