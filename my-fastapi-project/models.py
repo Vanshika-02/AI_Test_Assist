@@ -1,7 +1,8 @@
 """
 SQLAlchemy models for database tables
 """
-from sqlalchemy import Column, Integer, String, Text, Float, ForeignKey, TIMESTAMP
+from sqlalchemy import Column, Integer, String, Text, Float, ForeignKey, TIMESTAMP, DateTime
+from datetime import datetime
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from database import Base
@@ -79,24 +80,38 @@ class TestExecution(Base):
     steps = relationship("ExecutionStep", back_populates="execution", cascade="all, delete-orphan")
 
 
+# class ExecutionStep(Base):
+#     __tablename__ = "execution_steps"
+    
+#     id = Column(Integer, primary_key=True, index=True)
+#     execution_id = Column(String(100), ForeignKey("test_executions.execution_id", ondelete="CASCADE"), index=True)
+#     step_num = Column(Integer, nullable=False)
+#     step_text = Column(Text, nullable=False)
+#     status = Column(String(50), nullable=False)  # "PASSED", "FAILED"
+#     selector_used = Column(Text)
+#     level_used = Column(String(50))  # "L1", "L2", "L3"
+#     confidence = Column(Float)
+#     execution_time = Column(Float)
+#     screenshot_before = Column(String(500))
+#     screenshot_after = Column(String(500))
+#     error_message = Column(Text)
+#     created_at = Column(TIMESTAMP, server_default=func.now())
+    
+#     # Relationships
+#     execution = relationship("TestExecution", back_populates="steps")
+
 class ExecutionStep(Base):
     __tablename__ = "execution_steps"
-    
     id = Column(Integer, primary_key=True, index=True)
     execution_id = Column(String(100), ForeignKey("test_executions.execution_id", ondelete="CASCADE"), index=True)
-    step_num = Column(Integer, nullable=False)
-    step_text = Column(Text, nullable=False)
-    status = Column(String(50), nullable=False)  # "PASSED", "FAILED"
-    selector_used = Column(Text)
-    level_used = Column(String(50))  # "L1", "L2", "L3"
-    confidence = Column(Float)
-    execution_time = Column(Float)
-    screenshot_before = Column(String(500))
-    screenshot_after = Column(String(500))
-    error_message = Column(Text)
-    created_at = Column(TIMESTAMP, server_default=func.now())
-    
-    # Relationships
+    step_num = Column(Integer)
+    step_text = Column(String)
+    status = Column(String)
+    selector_used = Column(String, nullable=True)
+    agent_used = Column(String, nullable=True)      # <-- Add this
+    confidence = Column(Float, nullable=True)        # <-- Add this
+    action_type = Column(String, nullable=True)      # <-- Add this
+    created_at = Column(DateTime, default=datetime.utcnow)
     execution = relationship("TestExecution", back_populates="steps")
 
 

@@ -740,6 +740,89 @@ def list_generated_scripts(ticket_id: str):
     except Exception as e:
         logger.error(f"Error listing scripts: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# @app.get("/api/execution-status/{execution_id}")
+# def get_execution_status(
+#     execution_id: str,
+#     db: Session = Depends(get_db)
+# ):
+#     """
+#     Get real-time execution status with progress
+#     """
+#     execution = db.query(TestExecution).filter(
+#         TestExecution.execution_id == execution_id
+#     ).first()
+
+#     if not execution:
+#         raise HTTPException(status_code=404, detail="Execution not found")
+
+#     # Get step information
+#     total_steps = db.query(ExecutionStep).filter(
+#         ExecutionStep.execution_id == execution_id
+#     ).count()
+
+#     completed_steps = db.query(ExecutionStep).filter(
+#         ExecutionStep.execution_id == execution_id,
+#         ExecutionStep.status.in_(["PASSED", "FAILED"])
+#     ).count()
+
+#     # Calculate progress
+#     progress = 0
+#     message = "Initializing..."
+#     current_step = None
+
+#     if execution.status == "pending":
+#         progress = 0
+#         message = "Test execution queued..."
+#     elif execution.status == "running":
+#         if total_steps > 0:
+#             progress = int((completed_steps / total_steps) * 100)
+
+#             last_step = db.query(ExecutionStep).filter(
+#                 ExecutionStep.execution_id == execution_id
+#             ).order_by(ExecutionStep.step_num.desc()).first()
+
+#             if last_step:
+#                 current_step = last_step.step_text
+#                 message = f"Executing Step {completed_steps + 1}/{total_steps}..."
+#         else:
+#             progress = 10
+#             message = "Parsing JIRA ticket and preparing test steps..."
+#     elif execution.status == "completed":
+#         progress = 100
+#         message = f"Test execution completed - {execution.overall_status}"
+#     elif execution.status == "failed":
+#         progress = 100
+#         message = execution.error_message or "Test execution failed"
+
+#     # 🆕 ADD THIS: Check if summary exists
+#     summary_available = False
+#     if execution.status == "completed" and execution.ticket_id:
+#         external_path = Path(settings.external_project_path)
+#         summary_path = external_path / "Reports" / "summaries" / f"summary_{execution.ticket_id}_latest.json"
+#         summary_available = summary_path.exists()
+#         logger.info(f"📊 Summary check for {execution.ticket_id}: {summary_available} (path: {summary_path})")
+
+#     return {
+#         "execution_id": execution.execution_id,
+#         "ticket_id": execution.ticket_id,
+#         "status": execution.status,
+#         "progress": progress,
+#         "overall_status": execution.overall_status,
+#         "message": message,
+#         "current_step": current_step,
+#         "steps_completed": completed_steps,
+#         "steps_total": total_steps,
+#         "started_at": execution.started_at.isoformat() if execution.started_at else None,
+#         "completed_at": execution.completed_at.isoformat() if execution.completed_at else None,
+#         "report_path": execution.report_path,
+#         "script_path": execution.script_path,
+#         "video_path": execution.video_path,
+#         "summary_available": summary_available  # 🆕 NEW FIELD
+#     }
+
+
 @app.get("/api/execution-status/{execution_id}")
 def get_execution_status(
     execution_id: str,
@@ -775,18 +858,29 @@ def get_execution_status(
         message = "Test execution queued..."
     elif execution.status == "running":
         if total_steps > 0:
-            progress = int((completed_steps / total_steps) * 100)
-
+            # 🔥 FIX: Better progress calculation
+            progress = min(int((completed_steps / total_steps) * 90), 90)
+            
             last_step = db.query(ExecutionStep).filter(
                 ExecutionStep.execution_id == execution_id
             ).order_by(ExecutionStep.step_num.desc()).first()
 
             if last_step:
                 current_step = last_step.step_text
-                message = f"Executing Step {completed_steps + 1}/{total_steps}..."
+                message = f"Executing Step {completed_steps + 1}/{total_steps}: {last_step.step_text[:50]}..."
+            else:
+                message = f"Processing steps... ({completed_steps}/{total_steps})"
         else:
-            progress = 10
-            message = "Parsing JIRA ticket and preparing test steps..."
+            # 🔥 FIX: Show incremental progress based on time elapsed
+            if execution.started_at:
+                elapsed_seconds = (datetime.utcnow() - execution.started_at).total_seconds()
+                # Estimate: 60 seconds = 80% progress
+                estimated_progress = min(int((elapsed_seconds / 60) * 80), 80)
+                progress = max(10, estimated_progress)
+                message = f"Parsing JIRA ticket and preparing test steps... ({int(elapsed_seconds)}s elapsed)"
+            else:
+                progress = 10
+                message = "Parsing JIRA ticket and preparing test steps..."
     elif execution.status == "completed":
         progress = 100
         message = f"Test execution completed - {execution.overall_status}"
@@ -794,7 +888,7 @@ def get_execution_status(
         progress = 100
         message = execution.error_message or "Test execution failed"
 
-    # 🆕 ADD THIS: Check if summary exists
+    # Check if summary exists
     summary_available = False
     if execution.status == "completed" and execution.ticket_id:
         external_path = Path(settings.external_project_path)
@@ -802,9 +896,16 @@ def get_execution_status(
         summary_available = summary_path.exists()
         logger.info(f"📊 Summary check for {execution.ticket_id}: {summary_available} (path: {summary_path})")
 
+        # 🔥 ADD THIS: List what files ARE in summaries folder
+        if not summary_available:
+            summaries_folder = external_path / "Reports" / "summaries"
+            if summaries_folder.exists():
+                existing_files = list(summaries_folder.glob("*.json"))
+                logger.warning(f"⚠️ Summary NOT found. Existing summaries: {[f.name for f in existing_files]}")
+
     return {
         "execution_id": execution.execution_id,
-        "ticket_id": execution.ticket_id,
+        "ticket_id": execution.ticket_id,  # 🔥 CRITICAL: Return ticket_id
         "status": execution.status,
         "progress": progress,
         "overall_status": execution.overall_status,
@@ -817,7 +918,7 @@ def get_execution_status(
         "report_path": execution.report_path,
         "script_path": execution.script_path,
         "video_path": execution.video_path,
-        "summary_available": summary_available  # 🆕 NEW FIELD
+        "summary_available": summary_available
     }
 
 
@@ -1644,6 +1745,7 @@ def execute_test_in_background(
 
         # Save results to database (steps are already saved in run_test_workflow)
         service.save_execution_results(execution_id, state)
+        service._generate_summary_from_db(execution_id, ticket_id)
         # Determine if we should mark as 'completed' or 'failed'
         # If we have a report, mark as 'completed' even if tests failed
         has_report = bool(state.get('report_path'))

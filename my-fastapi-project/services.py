@@ -514,7 +514,8 @@ class TestExecutionService:
                 execution_id=execution_id,
                 step_num=step.get('step_number', 0),
                 step_text=step.get('step_text', '')[:200],
-                selector=step.get('selector', ''),
+                # selector=step.get('selector', ''),
+                selector_used=step.get('selector', ''),
                 confidence=step.get('confidence', 0.0),
                 agent_used=step.get('agent_used', ''),
                 action_type=step.get('action_type', ''),
@@ -571,6 +572,99 @@ class TestExecutionService:
     def save_execution_results(self, execution_id: str, state: Dict):
         """Save final execution results - compatibility method"""
         self.logger.info(f"💾 Final results saved for {execution_id}")
+
+    def _generate_summary_from_db(self, execution_id: str, ticket_id: str):
+        """
+        Generate summary JSON file from database execution_steps
+        """
+        import json
+        from datetime import datetime
+
+        # Fetch execution record
+        execution = self.db.query(TestExecution).filter(
+            TestExecution.execution_id == execution_id
+        ).first()
+        if not execution:
+           self.logger.warning(f"Cannot generate summary: execution {execution_id} not found")
+           return
+
+        # Fetch all steps for this execution
+        steps = self.db.query(ExecutionStep).filter(
+            ExecutionStep.execution_id == execution_id
+        ).order_by(ExecutionStep.step_num).all()
+        if not steps:
+           self.logger.warning(f"Cannot generate summary: no steps found for {execution_id}")
+           return
+
+        total_steps = len(steps)
+        passed_steps = sum(1 for s in steps if s.status == 'PASSED')
+        failed_steps = sum(1 for s in steps if s.status == 'FAILED')
+        skipped_steps = sum(1 for s in steps if s.status == 'SKIPPED')
+        confidences = [s.confidence for s in steps if s.confidence is not None]
+        avg_confidence = round(sum(confidences) / len(confidences), 2) if confidences else 0.0
+
+        if failed_steps > 0:
+            calculated_overall_status = "FAILED"
+        elif passed_steps > 0:
+            calculated_overall_status = "PASSED"
+        else:
+            calculated_overall_status = "UNKNOWN"
+
+        self.logger.info(f"Calculated status: {calculated_overall_status} (P:{passed_steps}, F:{failed_steps}, S:{skipped_steps})")
+
+
+        summary = {
+            "ticket_id": ticket_id,
+            "execution_id": execution_id,
+            "execution_date": execution.completed_at.strftime("%Y-%m-%d %H:%M:%S") if execution.completed_at else datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "ticket_title": f"Test execution for {ticket_id}",
+            "module": "Unknown",
+            "summary": {
+                 "overall_status": calculated_overall_status,
+                #  "overall_status": execution.overall_status,
+                 "total_steps": total_steps,
+                 "passed": passed_steps,
+                 "failed": failed_steps,
+                 "skipped": skipped_steps,
+                 "execution_time": "N/A",
+                 "avg_confidence": avg_confidence
+            },
+            "steps": [
+                {
+                   "step_num": s.step_num,
+                   "description": s.step_text,
+                   "status": s.status,
+                   "agent_used": s.agent_used or "L1",
+                   "confidence": s.confidence or 0.0,
+                   "action_type": s.action_type or "unknown"
+                }
+                for s in steps
+            ],
+            "insights": {
+                # "status_emoji": "✅" if execution.overall_status == "PASSED" else "❌",
+                "status_emoji": "✅" if calculated_overall_status == "PASSED" else "❌",  # 🔥 USE CALCULATED STATUS
+                "success_rate": round((passed_steps / total_steps * 100), 1) if total_steps > 0 else 0.0
+            },
+            "artifacts": {
+                # "has_report": bool(execution.report_path),
+                # "has_script": bool(execution.script_path),
+                # "has_video": bool(execution.video_path)
+                # 🔥 FIX: Check if files actually exist on disk
+                "has_report": bool(execution.report_path and Path(execution.report_path).exists()),
+                "has_script": bool(execution.script_path and Path(execution.script_path).exists()),
+                "has_video": bool(execution.video_path and Path(execution.video_path).exists())
+            }
+        }
+
+        # Save summary JSON
+        external_path = Path(self.external_project_path) if hasattr(self, 'external_project_path') else Path(os.getenv("EXTERNAL_PROJECT_PATH", "."))
+        summaries_folder = external_path / "Reports" / "summaries"
+        summaries_folder.mkdir(parents=True, exist_ok=True)
+        latest_file = summaries_folder / f"summary_{ticket_id}_latest.json"
+        with open(latest_file, 'w', encoding='utf-8') as f:
+            json.dump(summary, f, indent=2, ensure_ascii=False)
+        self.logger.info(f"Summary generated: {latest_file}")
+        
 
     def _get_python_executable(self, external_project_path: Path) -> Path:
         """Find Python executable - prioritize project venv"""
