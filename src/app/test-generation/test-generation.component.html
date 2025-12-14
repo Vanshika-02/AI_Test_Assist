@@ -22,7 +22,7 @@
             <mat-icon class="user-icon">account_circle</mat-icon>
           </div>
 
-          
+
           <div class="bot-message-wrapper" *ngIf="message.type === 'bot'">
             <div class="bot-message">
               <mat-icon class="bot-icon">auto_awesome</mat-icon>
@@ -101,6 +101,16 @@
                         <mat-icon>{{ message.showSummary ? 'expand_less' : 'expand_more' }}</mat-icon>
                       </button>
                     </div>
+<div class="test-summary-section compact"  *ngIf="message.summary && message.showSummary">
+  <div class="summary-header" (click)="toggleSummary(message)">
+    <h3 class="summary-title">
+      <mat-icon>assessment</mat-icon>
+      Test Execution Summary
+    </h3>
+    <button class="toggle-summary-btn" >
+      <mat-icon>{{ message.showSummary ? 'expand_less' : 'expand_more' }}</mat-icon>
+    </button>
+  </div>
 
                     <div class="summary-content" *ngIf="message.showSummary">
                       <!-- Overall Status Card -->
@@ -340,8 +350,12 @@
           </div>
         </div>
         <div class="a-text-area" *ngIf="!hasPlaywrightScript()">
-          <textarea id="messageInput" #messageTextarea placeholder="Enter JIRA Ticket ID (e.g., RBPLCD-8835)"
-            (keydown)="onEnterPress($event)" [(ngModel)]="currentMessage" [disabled]="loading"></textarea>
+          <textarea id="messageInput"
+                    #messageTextarea
+                    placeholder="Enter JIRA Ticket ID (e.g., ABCD-1234)"
+                    (keydown)="onEnterPress($event)"
+                    [(ngModel)]="currentMessage"
+                    [disabled]="loading"></textarea>
           <div class="send-icon" *ngIf="!loading" (click)="submitMessage()" [class.disabled]="!currentMessage.trim()">
             <mat-icon>send</mat-icon>
           </div>

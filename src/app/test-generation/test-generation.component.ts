@@ -101,8 +101,16 @@ export class TestGenerationComponent implements OnInit, OnDestroy {
     this.loadChatHistories();
     const account = this.msalService.instance.getActiveAccount();
     if (account && account.name) {
-      this.username = account.name;
+      this.username = this.extractFirstName(account.name);
     }
+  }
+
+  private extractFirstName(fullName: string): string {
+    fullName = fullName.split('–')[0];
+    fullName = fullName.split('-')[0];
+    fullName = fullName.split('(')[0];
+    fullName = fullName.split('@')[0];
+    return fullName.trim().split(' ')[0];
   }
 
   ngOnDestroy(): void {
@@ -209,8 +217,8 @@ export class TestGenerationComponent implements OnInit, OnDestroy {
 
 //           // 🔥 FIX: Ensure ticketDetails exists before loading summary
 //         if (!message.ticketDetails && status.ticket_id) {
-//           message.ticketDetails = { 
-//             ticket_id: status.ticket_id 
+//           message.ticketDetails = {
+//             ticket_id: status.ticket_id
 //           } as TicketDetail;
 //         }
 //         // 🔥 FIX: Load summary with proper ticket ID
@@ -296,34 +304,34 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
     next: (status) => {
       // Update progress
       message.executionProgress = status.progress || 0;
-      
+
       // 🔥 CRITICAL: Ensure ticketDetails exists BEFORE completion
       if (!message.ticketDetails && status.ticket_id) {
-        message.ticketDetails = { 
-          ticket_id: status.ticket_id 
+        message.ticketDetails = {
+          ticket_id: status.ticket_id
         } as TicketDetail;
         console.log('✅ Set ticketDetails from status:', message.ticketDetails);
       }
-      
+
       if (status.status === 'running') {
         message.text = `🔄 Test execution in progress...\n\n🆔 Execution ID: ${executionId}\n📊 Progress: ${status.progress}%\n⏱️ Status: ${status.message}`;
       }
-      
+
       if (status.status === 'completed') {
         message.isRunning = false;
         message.executionProgress = 100;
         message.executionStatus = status.overall_status === 'PASSED' ? 'success' : 'failed';
-        
+
         const statusIcon = status.overall_status === 'PASSED' ? '✅' : '❌';
         const statusText = status.overall_status === 'PASSED' ? 'PASSED' : 'FAILED';
-        
+
         message.executionMessage = `${statusIcon} Test execution completed!\n\nOverall Status: ${statusText}`;
         message.text = message.executionMessage;
         message.reportGenerated = true;
         message.reportPath = status.report_path;
         message.scriptPath = status.script_path;
         message.videoPath = status.video_path;
-        
+
         message.generatedFiles = [
           status.report_path,
           status.script_path,
@@ -347,7 +355,7 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
             has_ticketDetails: !!message.ticketDetails
           });
         }
-        
+
         this.saveChatToHistory();
       } else if (status.status === 'failed') {
         message.isRunning = false;
@@ -355,13 +363,13 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
         message.executionStatus = 'failed';
         message.executionMessage = `❌ Test execution failed!\n\nError: ${status.message || 'Unknown error'}`;
         message.text = message.executionMessage;
-        
+
         // Try to load summary even for failed executions
         if (status.summary_available && message.ticketDetails?.ticket_id) {
           console.log('⚠️ Loading summary for failed execution...');
           this.loadTestSummary(message);
         }
-        
+
         this.saveChatToHistory();
       }
     },
@@ -413,7 +421,7 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
 
   const ticketId = message.ticketDetails.ticket_id;
   console.log(`📊 Fetching summary for ticket: ${ticketId}`);
-  
+
   this.apiService.getTestSummary(ticketId).subscribe({
     next: (summary) => {
       console.log('✅ Summary loaded successfully:', summary);
@@ -494,14 +502,14 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
   private fetchTicketAndGenerate(ticketId: string) {
     this.isLoadingJira = true;
     this.jiraTicket = null;
-    
+
     this.apiService.getJiraTicket(ticketId).subscribe({
       next: (data: any) => {
         console.log('Parsed Jira ticket:', data);
         this.jiraTicket = data;
         this.isLoadingJira = false;
         this.loading = false;
-        
+
         // Create bot message with full ticket details
         const botMessage: ChatMessage = {
           type: 'bot',
@@ -516,7 +524,7 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
           } as TicketDetail,
           waitingForConfirmation: true
         };
-        
+
         this.currentChatMessages.push(botMessage);
         this.saveChatToHistory();
       },
@@ -524,13 +532,17 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
         console.error('Error fetching Jira ticket:', error);
         this.isLoadingJira = false;
         this.loading = false;
-        
+
         const botMessage: ChatMessage = {
           type: 'bot',
-          text: `❌ Error: Could not find ticket "${ticketId}".\n\nPlease make sure:\n1. The ticket exists in Jira\n2. The ticket ID is correct\n\n${error.error?.detail || error.message}`,
+          text: `❌ Error: Could not find ticket "${ticketId}".\n
+          Please make sure:\n
+          1. The ticket is uploaded to the system\n
+          2. The ticket file exists in Jira_Tickets folder\n
+          3. The ticket ID is correct`,
           timestamp: new Date()
         };
-        
+
         this.currentChatMessages.push(botMessage);
         this.saveChatToHistory();
       }
@@ -590,7 +602,7 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
       timestamp: new Date()
     };
     this.currentChatMessages.push(userConfirmMessage);
-    
+
     // Always call the API - let the backend handle script validation
     this.rerunTest(message.ticketDetails.ticket_id);
   }
@@ -905,7 +917,7 @@ startNewChat() {
   this.currentMessage = '';
   this.loading = false;
   this.aborting = false;
-  
+
   // 🆕 ADD THESE LINES TO CLEAR JIRA TICKET STATE:
   this.jiraTicket = null;
   this.isLoadingJira = false;
@@ -914,7 +926,7 @@ startNewChat() {
   this.error = '';
 
   this.activeTab = 'tab1';
-  
+
   // Scroll to top
   setTimeout(() => {
     if (this.chatContainer) {
