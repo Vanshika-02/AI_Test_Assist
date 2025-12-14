@@ -101,16 +101,6 @@
                         <mat-icon>{{ message.showSummary ? 'expand_less' : 'expand_more' }}</mat-icon>
                       </button>
                     </div>
-<div class="test-summary-section compact"  *ngIf="message.summary && message.showSummary">
-  <div class="summary-header" (click)="toggleSummary(message)">
-    <h3 class="summary-title">
-      <mat-icon>assessment</mat-icon>
-      Test Execution Summary
-    </h3>
-    <button class="toggle-summary-btn" >
-      <mat-icon>{{ message.showSummary ? 'expand_less' : 'expand_more' }}</mat-icon>
-    </button>
-  </div>
 
                     <div class="summary-content" *ngIf="message.showSummary">
                       <!-- Overall Status Card -->
@@ -310,35 +300,6 @@
         <p class="loading-text">Fetching ticket details...</p>
       </div>
 
-      <!-- <div *ngIf="jiraTicket" class="jira-ticket-details">
-        <h3>JIRA Ticket Details</h3>
-
-        <div class="ticket-header">
-          <div><strong>Ticket ID:</strong> {{ jiraTicket.ticket_id }}</div>
-          <div><strong>Title:</strong> {{ jiraTicket.title }}</div>
-          <div><strong>Module:</strong> <span class="module-badge">{{ jiraTicket.module }}</span></div>
-        </div>
-
-        <div class="ticket-description">
-          <strong>Description:</strong>
-          <div class="description-content">{{ jiraTicket.raw_description }}</div>
-        </div>
-
-        <div class="ticket-steps">
-          <strong>Parsed Test Steps ({{ jiraTicket.steps?.length || 0 }}):</strong>
-          <ol class="steps-list">
-            <li *ngFor="let step of jiraTicket.steps" class="step-item">
-              <span class="step-number">{{ step.number }}.</span>
-              <span class="step-text">{{ step.text }}</span>
-              <span *ngIf="step.expected" class="step-expected">
-                <strong>Expected:</strong> {{ step.expected }}
-              </span>
-            </li>
-          </ol>
-        </div>
-      </div> -->
-
-
       <div class="textarea-wrapper" [class.disabled]="hasPlaywrightScript()">
         <div class="new-chat-message" *ngIf="hasPlaywrightScript()">
           <div class="info-text">
@@ -350,12 +311,8 @@
           </div>
         </div>
         <div class="a-text-area" *ngIf="!hasPlaywrightScript()">
-          <textarea id="messageInput"
-                    #messageTextarea
-                    placeholder="Enter JIRA Ticket ID (e.g., ABCD-1234)"
-                    (keydown)="onEnterPress($event)"
-                    [(ngModel)]="currentMessage"
-                    [disabled]="loading"></textarea>
+          <textarea id="messageInput" #messageTextarea placeholder="Enter JIRA Ticket ID (e.g., ABCD-1234)"
+            (keydown)="onEnterPress($event)" [(ngModel)]="currentMessage" [disabled]="loading"></textarea>
           <div class="send-icon" *ngIf="!loading" (click)="submitMessage()" [class.disabled]="!currentMessage.trim()">
             <mat-icon>send</mat-icon>
           </div>
@@ -364,6 +321,7 @@
       </div>
     </div>
     <div *ngIf="activeTab === 'tab2'" class="bottom-section">
+      <!-- <div *ngIf="activeTab === ('tab2' as string)" class="bottom-section"></div> -->
       <div class="load-con" *ngIf="aborting">
         <div class="a-activity-indicator service-list-loader" aria-live="off">
           <div class="a-activity-indicator__top-box"></div>

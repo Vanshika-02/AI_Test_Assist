@@ -1,13 +1,12 @@
 import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';  // ADD THIS
+import { HttpClient } from '@angular/common/http'; 
 import { ApiService, TestSummary, TicketDetail } from '../services/api.service';
 import { interval, Subscription } from 'rxjs';
 import { switchMap, takeWhile } from 'rxjs/operators';
 import { MatIconModule } from '@angular/material/icon';
 import { MsalService } from '@azure/msal-angular';
-// import { JiraService } from '../services/jira.service';
 
 interface ChatMessage {
   type: 'user' | 'bot';
@@ -182,116 +181,6 @@ export class TestGenerationComponent implements OnInit, OnDestroy {
     }
   }
 
-//   private pollExecutionStatus(executionId: string, message: ChatMessage) {
-//     this.pollingSubscription = interval(2000).pipe(
-//       switchMap(() => {
-//         console.log('📊 Execution completed, checking summary...');
-//         return this.apiService.getExecutionStatus(executionId);
-//       }),
-//       takeWhile((status) => {
-//         return status.status === 'running' || status.status === 'pending';
-//       }, true)
-//     ).subscribe({
-//       next: (status) => {
-//         message.executionProgress = status.progress || 0;
-//         if (status.status === 'running') {
-//           message.text = `🔄 Test execution in progress...\n\n🆔 Execution ID: ${executionId}\n📊 Progress: ${status.progress}%\n⏱️ Status: ${status.message}`;
-//         }
-//         if (status.status === 'completed') {
-//           message.isRunning = false;
-//           message.executionProgress = 100;
-//           message.executionStatus = status.overall_status === 'PASSED' ? 'success' : 'failed';
-//           const statusIcon = status.overall_status === 'PASSED' ? '✅' : '❌';
-//           const statusText = status.overall_status === 'PASSED' ? 'PASSED' : 'FAILED';
-//           message.executionMessage = `${statusIcon} Test execution completed!\n\nOverall Status: ${statusText}`;
-//           message.text = message.executionMessage;
-//           message.reportGenerated = true;
-//           message.reportPath = status.report_path;
-//           message.scriptPath = status.script_path;
-//           message.videoPath = status.video_path;
-//           message.generatedFiles = [
-//             status.report_path,
-//             status.script_path,
-//             status.video_path
-//           ].filter((path): path is string => !!path && path.trim() !== '');
-
-//           // 🔥 FIX: Ensure ticketDetails exists before loading summary
-//         if (!message.ticketDetails && status.ticket_id) {
-//           message.ticketDetails = {
-//             ticket_id: status.ticket_id
-//           } as TicketDetail;
-//         }
-//         // 🔥 FIX: Load summary with proper ticket ID
-//         console.log('📊 Checking summary availability:', {
-//           summary_available: status.summary_available,
-//           ticket_id: status.ticket_id,
-//           ticketDetails: message.ticketDetails
-//         });
-
-
-//           console.log('📊 Execution completed, checking summary...');
-//           console.log('Summary available:', status.summary_available);
-//           console.log('Ticket ID:', message.ticketDetails?.ticket_id);
-//           console.log('📊 Execution completed, checking summary...');
-//           console.log('Summary available:', status.summary_available);
-//           console.log('Ticket ID from status:', status.ticket_id);
-
-//           // if (status.summary_available && status.ticket_id) {
-//           //   console.log('✅ Loading summary for ticket:', status.ticket_id);
-//           //   if (!message.ticketDetails) {
-//           //     message.ticketDetails = { ticket_id: status.ticket_id } as TicketDetail;
-//           //   }
-//           //   this.loadTestSummary(message);
-//           // } else {
-//           //   console.warn('⚠️ Summary not available:', {
-//           //     summary_available: status.summary_available,
-//           //     ticket_id: status.ticket_id,
-//           //     has_ticketDetails: !!message.ticketDetails
-//           //   });
-//           // }
-//            if (status.summary_available && message.ticketDetails?.ticket_id) {
-//           console.log('✅ Loading summary for:', message.ticketDetails.ticket_id);
-//           this.loadTestSummary(message);
-//         } else {
-//           console.warn('⚠️ Cannot load summary:', {
-//             summary_available: status.summary_available,
-//             has_ticket_id: !!status.ticket_id,
-//             has_ticketDetails: !!message.ticketDetails
-//           });
-//         }
-//           this.saveChatToHistory();
-//         } else if (status.status === 'failed') {
-//           message.isRunning = false;
-//           message.executionProgress = 100;
-//           message.executionStatus = 'failed';
-//           message.executionMessage = `❌ Test execution failed!\n\nError: ${status.message || 'Unknown error'}`;
-//           message.text = message.executionMessage;
-
-//  // Try to load summary even for failed executions
-//         if (!message.ticketDetails && status.ticket_id) {
-//           message.ticketDetails = { ticket_id: status.ticket_id } as TicketDetail;
-//         }
-
-//           if (status.summary_available && message.ticketDetails?.ticket_id) {
-//             console.log('⚠️ Loading summary for failed execution...');
-//             this.loadTestSummary(message);
-//           }
-//           this.saveChatToHistory();
-//         }
-//       },
-//       error: (error) => {
-//         console.error('❌ Polling error:', error);
-//         message.isRunning = false;
-//         message.executionStatus = 'failed';
-//         message.executionMessage = '❌ Error monitoring test execution. Please check the logs.';
-//         message.text = message.executionMessage;
-//         this.saveChatToHistory();
-//       }
-//     });
-//   }
-
-
-
 private pollExecutionStatus(executionId: string, message: ChatMessage) {
   this.pollingSubscription = interval(3000).pipe(
     switchMap(() => {
@@ -305,7 +194,7 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
       // Update progress
       message.executionProgress = status.progress || 0;
 
-      // 🔥 CRITICAL: Ensure ticketDetails exists BEFORE completion
+      // CRITICAL: Ensure ticketDetails exists BEFORE completion
       if (!message.ticketDetails && status.ticket_id) {
         message.ticketDetails = {
           ticket_id: status.ticket_id
@@ -338,7 +227,7 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
           status.video_path
         ].filter((path): path is string => !!path && path.trim() !== '');
 
-        // 🔥 LOAD SUMMARY
+        // LOAD SUMMARY
         console.log('📊 Execution completed, checking summary:', {
           summary_available: status.summary_available,
           ticket_id: message.ticketDetails?.ticket_id,
@@ -383,30 +272,6 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
     }
   });
 }
-
-  // private loadTestSummary(message: ChatMessage) {
-  //   if (!message.ticketDetails?.ticket_id) {
-  //     console.error('❌ No ticket ID available for summary');
-  //     return;
-  //   }
-  //   const ticketId = message.ticketDetails.ticket_id;
-  //   console.log(`📊 Fetching summary for ticket: ${ticketId}`);
-  //   this.apiService.getTestSummary(ticketId).subscribe({
-  //     next: (summary) => {
-  //       console.log('✅ Summary loaded successfully:', summary);
-  //       message.summary = summary;
-  //       message.showSummary = true;
-  //       this.saveChatToHistory();
-  //     },
-  //     error: (error) => {
-  //       console.error('❌ Could not load summary:', error);
-  //       console.error('Error details:', error.error);
-  //       console.error('Status:', error.status);
-  //     }
-  //   });
-  // }
-
-
 
   private loadTestSummary(message: ChatMessage) {
   console.log('🔍 loadTestSummary called with:', {
@@ -471,34 +336,6 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
     }
   }
 
-  // private fetchTicketAndGenerate(ticketId: string) {
-  // this.apiService.getJiraTicket(ticketId).subscribe({
-  //   next: (ticketDetails) => {
-  //     this.loading = false;
-  //     const botMessage: ChatMessage = {
-  //       type: 'bot',
-  //       text: `✅ Found JIRA ticket: ${ticketDetails.ticket_id}\n\n📋 Title: ${ticketDetails.summary}\n\n📝 Description: ${ticketDetails.description || 'N/A'}\n\nDo you want to run the automated test?`,
-  //       timestamp: new Date(),
-  //       ticketDetails: ticketDetails,
-  //       waitingForConfirmation: true
-  //     };
-  //     this.currentChatMessages.push(botMessage);
-  //     this.saveChatToHistory();
-  //   },
-  //   error: (error) => {
-  //     this.loading = false;
-  //     const botMessage: ChatMessage = {
-  //       type: 'bot',
-  //       text: `❌ Error: Could not find ticket "${ticketId}".\n\nPlease make sure:\n1. The ticket exists in Jira\n2. The ticket ID is correct`,
-  //       timestamp: new Date()
-  //     };
-  //     this.currentChatMessages.push(botMessage);
-  //     this.saveChatToHistory();
-  //   }
-  // });
-
-  // }
-
   private fetchTicketAndGenerate(ticketId: string) {
     this.isLoadingJira = true;
     this.jiraTicket = null;
@@ -552,7 +389,6 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
   // 3. ADD THIS NEW METHOD after fetchTicketAndGenerate
   showMessage(message: string, type: string = 'success') {
     console.log(`[${type}] ${message}`);
-    // You can implement a toast/snackbar here later
   }
 
 
@@ -568,29 +404,6 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
       this.runTest(message.ticketDetails.ticket_id);
     }
   }
-
-  // onRerunTestClick(message: ChatMessage) {
-  //   if (message.ticketDetails) {
-  //     if (!message.hasExistingScripts || message.scriptsCount === 0) {
-  //       const warningMessage: ChatMessage = {
-  //         type: 'bot',
-  //         text: '⚠️ No existing test scripts found for this ticket.\n\nPlease use "Generate and Run Testcase" first to create the test script.',
-  //         timestamp: new Date()
-  //       };
-  //       this.currentChatMessages.push(warningMessage);
-  //       this.saveChatToHistory();
-  //       return;
-  //     }
-  //     message.waitingForConfirmation = false;
-  //     const userConfirmMessage: ChatMessage = {
-  //       type: 'user',
-  //       text: '🔄 Rerun Testcase',
-  //       timestamp: new Date()
-  //     };
-  //     this.currentChatMessages.push(userConfirmMessage);
-  //     this.rerunTest(message.ticketDetails.ticket_id);
-  //   }
-  // }
 
   onRerunTestClick(message: ChatMessage) {
   if (message.ticketDetails) {
@@ -892,17 +705,6 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
     }
   }
 
-  // startNewChat() {
-  //   if (this.pollingSubscription) {
-  //     this.pollingSubscription.unsubscribe();
-  //   }
-  //   this.currentChatMessages = [];
-  //   this.currentChatId = null;
-  //   this.activeTab = 'tab1';
-  //   this.loading = false;
-  // }
-
-  // Find the startNewChat() method and update it:
 
 startNewChat() {
   // Save current chat if it has messages
@@ -943,6 +745,7 @@ startNewChat() {
       this.startNewChat();
     }
   }
+
 
   onLike(message: ChatMessage) {
     if (message.disliked) {
