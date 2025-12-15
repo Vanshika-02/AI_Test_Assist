@@ -65,21 +65,25 @@
                       title="No scripts found for this ticket">⚠️</span>
                   </button>
                 </div>
-                <div class="execution-container" *ngIf="message.isRunning || message.executionProgress">
-                  <div class="execution-header">
+
+                <!-- Execution Container - Only show loader while running -->
+                <div class="execution-container"
+                     [ngClass]="{'execution-complete': message.executionStatus && !message.isRunning}"
+                     *ngIf="message.isRunning || message.executionProgress || message.executionStatus">
+                  <div class="execution-header" *ngIf="message.isRunning">
                     <span class="execution-title">Test Execution in Progress</span>
                   </div>
-                  <div class="progress-bar-container">
-                    <div class="progress-label">Progress: {{ message.executionProgress }}%</div>
-                    <div class="progress-bar">
-                      <div class="progress-fill" [style.width.%]="message.executionProgress"></div>
-                    </div>
-                  </div>
+
                   <div class="running-status" *ngIf="message.isRunning">
-                    <div class="spinner"></div>
+                    <div class="a-activity-indicator compact" aria-live="off">
+                      <div class="a-activity-indicator__top-box"></div>
+                      <div class="a-activity-indicator__bottom-box"></div>
+                    </div>
                     <span class="status-text">Running tests... Please wait.</span>
                   </div>
                 </div>
+
+                <!-- Execution Complete Section - Only show after completion -->
                 <div *ngIf="message.executionStatus && !message.isRunning">
                   <div class="execution-result success">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -101,11 +105,30 @@
                         <mat-icon>{{ message.showSummary ? 'expand_less' : 'expand_more' }}</mat-icon>
                       </button>
                     </div>
+                  <div class="test-summary-section compact" *ngIf="message.summary && message.showSummary">
+                    <div class="summary-header" (click)="toggleSummary(message)">
+                      <h3 class="summary-title">
+                        <mat-icon>assessment</mat-icon>
+                        Test Execution Summary
+                      </h3>
+                      <button class="toggle-summary-btn">
+                        <mat-icon>{{ message.showSummary ? 'expand_less' : 'expand_more' }}</mat-icon>
+                      </button>
+                    </div>
 
                     <div class="summary-content" *ngIf="message.showSummary">
                       <!-- Overall Status Card -->
                       <div class="summary-card main-status"
                         [ngClass]="getStatusColorClass(message.summary.summary.overall_status)">
+                        <div class="card-icon">{{ message.summary.insights.status_emoji }}</div>
+                        <div class="card-content">
+                          <div class="card-label">Overall Status</div>
+                          <div class="card-value">{{ message.summary.summary.overall_status }}</div>
+                        </div>
+                      </div>
+                    <div class="summary-content" *ngIf="message.showSummary">
+                      <!-- Overall Status Card -->
+                      <div class="summary-card main-status" [ngClass]="getStatusColorClass(message.summary.summary.overall_status)">
                         <div class="card-icon">{{ message.summary.insights.status_emoji }}</div>
                         <div class="card-content">
                           <div class="card-label">Overall Status</div>
@@ -147,6 +170,13 @@
                             <div class="metric-value">{{ message.summary.summary.skipped }}</div>
                           </div>
                         </div>
+                        <div class="metric-card" *ngIf="message.summary.summary.skipped > 0">
+                          <div class="metric-icon">⏭️</div>
+                          <div class="metric-content">
+                            <div class="metric-label">Skipped</div>
+                            <div class="metric-value">{{ message.summary.summary.skipped }}</div>
+                          </div>
+                        </div>
 
                         <div class="metric-card">
                           <div class="metric-icon">⏱️</div>
@@ -165,6 +195,14 @@
                           </div>
                         </div>
                       </div>
+                        <div class="metric-card">
+                          <div class="metric-icon">🎯</div>
+                          <div class="metric-content">
+                            <div class="metric-label">Avg Confidence</div>
+                            <div class="metric-value">{{ (message.summary.summary.avg_confidence * 100).toFixed(0) }}%</div>
+                          </div>
+                        </div>
+                      </div>
 
                       <!-- Critical Failures (if any) -->
                       <div class="critical-failures-section"
@@ -180,10 +218,30 @@
                       </div>
                     </div>
                   </div>
+                      <!-- Critical Failures (if any) -->
+                      <div class="critical-failures-section" *ngIf="message.summary.insights.critical_failures.length > 0">
+                        <h4 class="section-title error">
+                          <mat-icon>error</mat-icon>
+                          Critical Failures
+                        </h4>
+                        <div class="failure-card" *ngFor="let failure of message.summary.insights.critical_failures">
+                          <div class="failure-step">Step {{ failure.step_number }}: {{ failure.step_text }}</div>
+                          <div class="failure-error">{{ failure.error }}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
                   <!-- Show summary toggle button if summary exists but is hidden -->
                   <button class="show-summary-btn" *ngIf="message.summary && !message.showSummary"
                     (click)="toggleSummary(message)">
+                    <mat-icon>assessment</mat-icon>
+                    View Test Summary
+                  </button>
+                  <!-- Show summary toggle button if summary exists but is hidden -->
+                  <button class="show-summary-btn"
+                          *ngIf="message.summary && !message.showSummary"
+                          (click)="toggleSummary(message)">
                     <mat-icon>assessment</mat-icon>
                     View Test Summary
                   </button>

@@ -15,6 +15,25 @@ export interface TicketDetail {
   created_at?: string;
 }
 
+export interface ChatSession {
+  id: string;
+  title: string;
+  date: string;
+  messages: any[];
+}
+
+
+export interface UpdateTitleRequest {
+  session_id: string;
+  new_title: string;
+}
+
+export interface UpdateTitleResponse {
+  session_id: string;
+  title: string;
+  updated_at: string;
+  message: string;
+}
 export interface ExecutionResponse {
   execution_id: string;
   ticket_id: string;
@@ -237,6 +256,35 @@ getJiraTicket(ticketId: string): Observable<any> {
     });
   }
 
+  updateChatTitle(sessionId: string, newTitle: string): Observable<UpdateTitleResponse> {
+  const body: UpdateTitleRequest = {
+    session_id: sessionId,
+    new_title: newTitle
+  };
+  
+  return this.http.put<UpdateTitleResponse>(
+    `${this.apiUrl}/chat-session/title`, 
+    body
+  );
+}
+
+/**
+ * Get all chat sessions for current user
+ */
+getChatSessions(): Observable<{ count: number; sessions: ChatSession[] }> {
+  return this.http.get<{ count: number; sessions: ChatSession[] }>(
+    `${this.apiUrl}/chat-sessions`
+  );
+}
+
+/**
+ * Delete a chat session
+ */
+deleteChatSession(sessionId: string): Observable<{ message: string; session_id: string }> {
+  return this.http.delete<{ message: string; session_id: string }>(
+    `${this.apiUrl}/chat-session/${sessionId}`
+  );
+}
   // ============================================================================
   // NEW: Summary API Methods
   // ============================================================================

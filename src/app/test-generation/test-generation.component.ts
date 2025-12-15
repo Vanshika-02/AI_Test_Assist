@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http'; 
+import { HttpClient } from '@angular/common/http';
 import { ApiService, TestSummary, TicketDetail } from '../services/api.service';
 import { interval, Subscription } from 'rxjs';
 import { switchMap, takeWhile } from 'rxjs/operators';
@@ -649,20 +649,22 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
     this.editingIndex = index;
   }
 
-  saveEdit(index: number, event: Event) {
-    event.stopPropagation();
-    const target = event.target as HTMLElement;
-    const newTitle = target.innerText.trim();
-    if (newTitle && newTitle !== this.backupTitle) {
-      this.chatHistories[index].title = newTitle;
-      this.saveToLocalStorage();
-    } else if (newTitle === '') {
-      this.chatHistories[index].title = this.backupTitle;
-      target.innerText = this.backupTitle;
-    }
-    this.editingIndex = null;
-    this.backupTitle = '';
-  }
+  // saveEdit(index: number, event: Event) {
+  //   event.stopPropagation();
+  //   const target = event.target as HTMLElement;
+  //   const newTitle = target.innerText.trim();
+
+  //   if (newTitle && newTitle !== this.backupTitle) {
+  //     this.chatHistories[index].title = newTitle;
+  //     this.saveToLocalStorage();
+  //   } else if (newTitle === '') {
+  //     this.chatHistories[index].title = this.backupTitle;
+  //     target.innerText = this.backupTitle;
+  //   }
+
+  //   this.editingIndex = null;
+  //   this.backupTitle = '';
+  // }
 
   cancelEdit(index: number, event: Event) {
     event.stopPropagation();
@@ -685,32 +687,136 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
     this.selectedIndex = null;
   }
 
-  onConfirm(dialog: HTMLDialogElement, event: Event) {
-    event.stopPropagation();
-    if (this.selectedIndex !== null) {
-      const sessionToDelete = this.chatHistories[this.selectedIndex];
-      const sessionId = sessionToDelete.id;
-      this.deletingSessionId = sessionId;
-      setTimeout(() => {
+  // onConfirm(dialog: HTMLDialogElement, event: Event) {
+  //   event.stopPropagation();
+
+  //   if (this.selectedIndex !== null) {
+  //     const sessionToDelete = this.chatHistories[this.selectedIndex];
+  //     const sessionId = sessionToDelete.id;
+
+  //     this.deletingSessionId = sessionId;
+
+  //     setTimeout(() => {
+  //       this.chatHistories.splice(this.selectedIndex!, 1);
+
+  //       if (this.currentChatId === sessionId) {
+  //         this.currentChatMessages = [];
+  //         this.currentChatId = null;
+  //       }
+
+  //       this.saveToLocalStorage();
+  //       this.deletingSessionId = null;
+
+  //       dialog.close();
+  //       this.selectedIndex = null;
+  //     }, 500);
+  //   }
+  // }
+// Update your saveEdit method in test-generation.component.ts
+
+saveEdit(index: number, event: Event) {
+  event.stopPropagation();
+  const target = event.target as HTMLElement;
+  const newTitle = target.innerText.trim();
+
+  if (!newTitle) {
+    // Restore backup if empty
+    this.chatHistories[index].title = this.backupTitle;
+    target.innerText = this.backupTitle;
+    this.editingIndex = null;
+    this.backupTitle = '';
+    return;
+  }
+
+  if (newTitle === this.backupTitle) {
+    // No change
+    this.editingIndex = null;
+    this.backupTitle = '';
+    return;
+  }
+
+  // Save to backend
+  const sessionId = this.chatHistories[index].id;
+
+  this.apiService.updateChatTitle(sessionId, newTitle).subscribe({
+    next: (response) => {
+      console.log('✅ Title updated successfully:', response);
+
+      // Update local state
+      this.chatHistories[index].title = newTitle;
+      this.chatHistories[index].date = new Date(response.updated_at);
+
+      // Update localStorage
+      this.saveToLocalStorage();
+
+      // Clear editing state
+      this.editingIndex = null;
+      this.backupTitle = '';
+    },
+    error: (error) => {
+      console.error('❌ Failed to update title:', error);
+
+      // Revert on error
+      this.chatHistories[index].title = this.backupTitle;
+      target.innerText = this.backupTitle;
+
+      // Show error message (you can use a toast/snackbar service)
+      alert('Failed to update title. Please try again.');
+
+      this.editingIndex = null;
+      this.backupTitle = '';
+    }
+  });
+}
+
+// Also update the onConfirm method to call backend delete
+
+onConfirm(dialog: HTMLDialogElement, event: Event) {
+  event.stopPropagation();
+
+  if (this.selectedIndex !== null) {
+    const sessionToDelete = this.chatHistories[this.selectedIndex];
+    const sessionId = sessionToDelete.id;
+
+    this.deletingSessionId = sessionId;
+
+    // Call backend API to delete
+    this.apiService.deleteChatSession(sessionId).subscribe({
+      next: (response) => {
+        console.log('✅ Session deleted from backend:', response);
+
+        // Remove from local array
         this.chatHistories.splice(this.selectedIndex!, 1);
+
+        // Clear current chat if it was the deleted one
         if (this.currentChatId === sessionId) {
           this.currentChatMessages = [];
           this.currentChatId = null;
         }
+
+        // Update localStorage
         this.saveToLocalStorage();
+
+        // Reset state
         this.deletingSessionId = null;
         dialog.close();
         this.selectedIndex = null;
-      }, 500);
+      },
+      error: (error) => {
+        console.error('❌ Failed to delete session:', error);
+        alert('Failed to delete chat. Please try again.');
+
+        this.deletingSessionId = null;
+        dialog.close();
+        this.selectedIndex = null;
+      }
+    });
+  }
+}
+  startNewChat() {
+    if (this.pollingSubscription) {
+      this.pollingSubscription.unsubscribe();
     }
-  }
-
-
-startNewChat() {
-  // Save current chat if it has messages
-  if (this.currentChatMessages.length > 0) {
-    this.saveChatToHistory();
-  }
 
   // Reset all chat-related state
   this.currentChatId = null;
