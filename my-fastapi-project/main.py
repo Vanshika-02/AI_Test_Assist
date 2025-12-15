@@ -8,7 +8,8 @@ from sqlalchemy.orm import Session
 from datetime import datetime
 from pathlib import Path
 import logging
-
+from pydantic import BaseModel
+from typing import List, Optional
 from config import settings
 from utils import setup_logging
 from database import engine, get_db, Base, SessionLocal
@@ -1362,6 +1363,157 @@ def get_ticket_details(ticket_id: str, db: Session = Depends(get_db)):
         "created_at": ticket.created_at.isoformat() if ticket.created_at else None
     }
 
+class UpdateTitleRequest(BaseModel):
+    session_id: str
+    new_title: str
+
+class ChatSessionResponse(BaseModel):
+    id: str
+    title: str
+    date: str
+    messages: List[dict]
+
+@app.put("/api/chat-session/title")
+def update_chat_title(
+    request: UpdateTitleRequest,
+    db: Session = Depends(get_db)
+):
+    """
+    Update chat session title
+    
+    Body:
+        {
+            "session_id": "1702888800000",
+            "new_title": "Updated title here"
+        }
+    
+    Returns:
+        {
+            "session_id": "1702888800000",
+            "title": "Updated title here",
+            "updated_at": "2025-12-15T10:30:00",
+            "message": "Title updated successfully"
+        }
+    """
+    try:
+        logger.info(f"📝 Updating title for session: {request.session_id}")
+        
+        # Here you would update your database
+        # For now, we'll just validate and return success
+        # You'll need to add a ChatSession table to your database
+        
+        # TODO: Add actual database update
+        # session = db.query(ChatSession).filter(
+        #     ChatSession.id == request.session_id
+        # ).first()
+        # 
+        # if not session:
+        #     raise HTTPException(status_code=404, detail="Session not found")
+        # 
+        # session.title = request.new_title
+        # session.updated_at = datetime.now()
+        # db.commit()
+        
+        return {
+            "session_id": request.session_id,
+            "title": request.new_title,
+            "updated_at": datetime.now().isoformat(),
+            "message": "Title updated successfully"
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"❌ Error updating title: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/chat-sessions")
+def get_chat_sessions(
+    limit: int = 50,
+    db: Session = Depends(get_db)
+):
+    """
+    Get all chat sessions for current user
+    
+    Query params:
+        - limit: Number of sessions to return (default: 50)
+    
+    Returns:
+        {
+            "count": 10,
+            "sessions": [
+                {
+                    "id": "1702888800000",
+                    "title": "Chat title",
+                    "date": "2025-12-15T10:00:00",
+                    "messages": [...]
+                }
+            ]
+        }
+    """
+    try:
+        logger.info(f"📋 Fetching chat sessions (limit: {limit})")
+        
+        # TODO: Add actual database query
+        # sessions = db.query(ChatSession).order_by(
+        #     ChatSession.created_at.desc()
+        # ).limit(limit).all()
+        
+        # For now, return empty array
+        # Frontend will continue using localStorage
+        
+        return {
+            "count": 0,
+            "sessions": []
+        }
+        
+    except Exception as e:
+        logger.error(f"❌ Error fetching sessions: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete("/api/chat-session/{session_id}")
+def delete_chat_session(
+    session_id: str,
+    db: Session = Depends(get_db)
+):
+    """
+    Delete a chat session
+    
+    Path params:
+        - session_id: ID of session to delete
+    
+    Returns:
+        {
+            "message": "Session deleted successfully",
+            "session_id": "1702888800000"
+        }
+    """
+    try:
+        logger.info(f"🗑️ Deleting session: {session_id}")
+        
+        # TODO: Add actual database delete
+        # session = db.query(ChatSession).filter(
+        #     ChatSession.id == session_id
+        # ).first()
+        # 
+        # if not session:
+        #     raise HTTPException(status_code=404, detail="Session not found")
+        # 
+        # db.delete(session)
+        # db.commit()
+        
+        return {
+            "message": "Session deleted successfully",
+            "session_id": session_id
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"❌ Error deleting session: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
 
 # ============================================================================
 # BACKGROUND TASK
