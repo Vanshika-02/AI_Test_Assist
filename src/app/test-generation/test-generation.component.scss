@@ -66,7 +66,7 @@
 }
 
 .progress-label {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   margin-bottom: 8px;
   color: #333;
@@ -113,7 +113,7 @@
 }
 
 .progress-label {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: #333;
 }
@@ -192,7 +192,7 @@
 }
 
 .status-text {
-  font-size: 14px;
+  font-size: 16px;
   color: #1976d2;
   font-weight: 500;
 }
@@ -232,7 +232,7 @@
   color: white;
   border: none;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -270,7 +270,7 @@
   color: white;
   border: none;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -313,7 +313,7 @@
   margin: 4px 0;
   background: #f5f5f5;
   border-radius: 4px;
-  font-size: 13px;
+  font-size: 16px;
   color: #333;
   font-family: 'Courier New', monospace;
 }
@@ -489,7 +489,7 @@
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
@@ -621,7 +621,7 @@
   }
 
   .card-label {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 500;
     color: #666;
     margin-bottom: 4px;
@@ -767,7 +767,7 @@
   padding: 10px 16px;
   border-radius: 8px;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 16px;
   transition: all 0.2s;
 
   &:hover {
@@ -958,7 +958,7 @@
 
   li {
     margin-bottom: 8px;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.6;
     color: #1565c0;
   }
@@ -1082,7 +1082,7 @@
   padding: 6px 14px;
   border-radius: 6px;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 16px;
   
   &.status-passed {
     background: #d4edda;
@@ -1108,7 +1108,7 @@
   margin-top: 12px;
   padding: 12px 16px;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
 }
 
@@ -1144,7 +1144,7 @@
   color: white;
   border: none;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -1221,7 +1221,7 @@
   padding: 8px 16px;
   border: none;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -1364,7 +1364,7 @@
 
 .script-title {
   font-weight: 600;
-  font-size: 14px;
+  font-size: 16px;
   color: #333;
 }
 
@@ -1579,9 +1579,10 @@
 }
 
 .info-text {
-  font-size: 14px;
+  font-size: 16px;
   color: #1565c0;
   line-height: 1.6;
+  font-weight: 800;
 }
 
 .inline-new-chat-btn {
@@ -1591,7 +1592,7 @@
   border: none;
   padding: 4px 12px;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   margin: 0 4px;
@@ -1716,7 +1717,7 @@
 .breadcrumb1 {
   display: flex;
   align-items: center;
-  font-size: 14px;
+  font-size: 16px;
   margin-bottom: 24px;
   color: #666;
   padding-bottom: 16px;
@@ -1763,7 +1764,7 @@
     color: #666;
     
     &.empty-subtitle {
-      font-size: 14px;
+      font-size: 16px;
       color: #999;
     }
   }
@@ -1973,7 +1974,7 @@
   padding: 12px 28px;
   border: none;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -2032,7 +2033,7 @@
 /* Loading text for history */
 .loading-text {
   margin-top: 12px;
-  font-size: 14px;
+  font-size: 16px;
   color: #666;
   text-align: center;
 }
@@ -2214,8 +2215,8 @@
     border: 1px solid #e0e0e0;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 800;
     transition: all 0.2s;
     color: #333;
     
@@ -2279,7 +2280,7 @@
 
   .detail-row {
     margin: 8px 0;
-    font-size: 14px;
+    font-size: 16px;
     color: #333;
     line-height: 1.6;
 
@@ -2328,7 +2329,7 @@
     margin-top: 12px;
 
     .status-text {
-      font-size: 14px;
+      font-size: 16px;
       color: #1976d2;
       font-weight: 500;
     }
@@ -2344,7 +2345,7 @@
   border: 1px solid #e0e0e0;
 
   .download-title {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
     color: #333;
     margin-bottom: 12px;
@@ -2363,7 +2364,7 @@
       border: none;
       border-radius: 6px;
       font-size: 13px;
-      font-weight: 500;
+      font-weight: 800;
       cursor: pointer;
       transition: all 0.2s;
       color: #333;
@@ -2387,7 +2388,7 @@
   color: white;
   border: none;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
