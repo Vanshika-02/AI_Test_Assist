@@ -84,7 +84,17 @@
                 </div>
 
                 <!-- Execution Complete Section - Only show after completion -->
-                <div *ngIf="message.executionStatus && !message.isRunning">
+                <!-- <div *ngIf="message.executionStatus && !message.isRunning">
+                  <div class="execution-result success">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="20,6 9,17 4,12"></polyline>
+                    </svg>
+                    <span>Execution Complete</span>
+                  </div> -->
+
+                  <!-- Add this AFTER the execution-result div and BEFORE download-actions -->
+
+                  <div *ngIf="message.executionStatus && !message.isRunning">
                   <div class="execution-result success">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <polyline points="20,6 9,17 4,12"></polyline>
@@ -92,19 +102,6 @@
                     <span>Execution Complete</span>
                   </div>
 
-                  <!-- Add this AFTER the execution-result div and BEFORE download-actions -->
-
-                  <!-- NEW: Test Summary Section -->
-                  <div class="test-summary-section compact" *ngIf="message.summary && message.showSummary">
-                    <div class="summary-header" (click)="toggleSummary(message)">
-                      <h3 class="summary-title">
-                        <mat-icon>assessment</mat-icon>
-                        Test Execution Summary
-                      </h3>
-                      <button class="toggle-summary-btn">
-                        <mat-icon>{{ message.showSummary ? 'expand_less' : 'expand_more' }}</mat-icon>
-                      </button>
-                    </div>
                   <div class="test-summary-section compact" *ngIf="message.summary && message.showSummary">
                     <div class="summary-header" (click)="toggleSummary(message)">
                       <h3 class="summary-title">
@@ -116,16 +113,6 @@
                       </button>
                     </div>
 
-                    <div class="summary-content" *ngIf="message.showSummary">
-                      <!-- Overall Status Card -->
-                      <div class="summary-card main-status"
-                        [ngClass]="getStatusColorClass(message.summary.summary.overall_status)">
-                        <div class="card-icon">{{ message.summary.insights.status_emoji }}</div>
-                        <div class="card-content">
-                          <div class="card-label">Overall Status</div>
-                          <div class="card-value">{{ message.summary.summary.overall_status }}</div>
-                        </div>
-                      </div>
                     <div class="summary-content" *ngIf="message.showSummary">
                       <!-- Overall Status Card -->
                       <div class="summary-card main-status" [ngClass]="getStatusColorClass(message.summary.summary.overall_status)">
@@ -162,14 +149,6 @@
                           </div>
                         </div>
 
-
-                        <div class="metric-card" *ngIf="message.summary.summary.skipped > 0">
-                          <div class="metric-icon">⏭️</div>
-                          <div class="metric-content">
-                            <div class="metric-label">Skipped</div>
-                            <div class="metric-value">{{ message.summary.summary.skipped }}</div>
-                          </div>
-                        </div>
                         <div class="metric-card" *ngIf="message.summary.summary.skipped > 0">
                           <div class="metric-icon">⏭️</div>
                           <div class="metric-content">
@@ -190,34 +169,11 @@
                           <div class="metric-icon">🎯</div>
                           <div class="metric-content">
                             <div class="metric-label">Avg Confidence</div>
-                            <div class="metric-value">{{ (message.summary.summary.avg_confidence * 100).toFixed(0) }}%
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                        <div class="metric-card">
-                          <div class="metric-icon">🎯</div>
-                          <div class="metric-content">
-                            <div class="metric-label">Avg Confidence</div>
                             <div class="metric-value">{{ (message.summary.summary.avg_confidence * 100).toFixed(0) }}%</div>
                           </div>
                         </div>
                       </div>
 
-                      <!-- Critical Failures (if any) -->
-                      <div class="critical-failures-section"
-                        *ngIf="message.summary.insights.critical_failures.length > 0">
-                        <h4 class="section-title error">
-                          <mat-icon>error</mat-icon>
-                          Critical Failures
-                        </h4>
-                        <div class="failure-card" *ngFor="let failure of message.summary.insights.critical_failures">
-                          <div class="failure-step">Step {{ failure.step_number }}: {{ failure.step_text }}</div>
-                          <div class="failure-error">{{ failure.error }}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                       <!-- Critical Failures (if any) -->
                       <div class="critical-failures-section" *ngIf="message.summary.insights.critical_failures.length > 0">
                         <h4 class="section-title error">
@@ -233,14 +189,8 @@
                   </div>
 
                   <!-- Show summary toggle button if summary exists but is hidden -->
-                  <button class="show-summary-btn" *ngIf="message.summary && !message.showSummary"
-                    (click)="toggleSummary(message)">
-                    <mat-icon>assessment</mat-icon>
-                    View Test Summary
-                  </button>
-                  <!-- Show summary toggle button if summary exists but is hidden -->
-                  <button class="show-summary-btn"
-                          *ngIf="message.summary && !message.showSummary"
+                  <button class="show-summary-btn" 
+                          *ngIf="message.summary && !message.showSummary" 
                           (click)="toggleSummary(message)">
                     <mat-icon>assessment</mat-icon>
                     View Test Summary
@@ -391,7 +341,7 @@
       </div>
     </div>
   </div>
-</div>
+<!-- </div> -->
 <div class="history-section" *ngIf="activeTab === 'tab2'">
   <span class="breadcrumb1">
     <span class="breadcrumb-link1" (click)="switchTab('tab1')">
@@ -407,12 +357,38 @@
   </div>
   <div *ngFor="let chat of chatHistories; let i = index" class="history-item" (click)="selectChat(i)">
     <div class="history-item-content">
-      <span class="history-title" [attr.contenteditable]="editingIndex === i" (blur)="saveEdit(i, $event)"
+      <!-- <span class="history-title" [attr.contenteditable]="editingIndex === i" (blur)="saveEdit(i, $event)"
         (keydown.enter)="saveEdit(i, $event)" (keydown.escape)="cancelEdit(i, $event)"
-        (click)="$event.stopPropagation()" [title]="chat.title">
+        (click)="$event.stopPropagation()" [title]="chat.title"> -->
+        <span #historyTitle 
+      class="history-title" 
+      [attr.contenteditable]="editingIndex === i" 
+      (blur)="saveEdit(i, $event, historyTitle)"
+      (keydown.enter)="saveEdit(i, $event, historyTitle)" 
+      (keydown.escape)="cancelEdit(i, $event, historyTitle)"
+      (click)="$event.stopPropagation()" 
+      [title]="chat.title">
         {{ editingIndex === i ? chat.title : (chat.title.length > 100 ? chat.title.substring(0, 100) + '...' :
         chat.title) }}
       </span>
+      <!-- <span
+  #titleSpan
+  class="history-title"
+  [attr.contenteditable]="editingIndex === i"
+  (blur)="saveEdit(i, titleSpan.innerText)"
+  (keydown.enter)="saveEdit(i, titleSpan.innerText)"
+  (keydown.escape)="cancelEdit(i, $event)"
+  (click)="$event.stopPropagation()"
+  [title]="chat.title"
+>
+  {{ editingIndex === i
+    ? chat.title
+    : (chat.title.length > 100
+        ? chat.title.substring(0, 100) + '...'
+        : chat.title)
+  }}
+</span> -->
+
     </div>
     <div class="history-actions">
       <ng-container *ngIf="editingIndex !== i; else editActions">
@@ -457,9 +433,12 @@
         </div>
       </ng-container>
       <ng-template #editActions>
-        <button class="action-btn save-btn" (click)="saveEdit(i, $event)" title="Save">
+        <!-- <button class="action-btn save-btn" (click)="saveEdit(i, $event)" title="Save">
           <mat-icon>check</mat-icon>
-        </button>
+        </button> -->
+        <button class="action-btn save-btn" (click)="saveEdit(i, $event, historyTitle)" title="Save">
+  <mat-icon>check</mat-icon>
+</button>
         <button class="action-btn cancel-btn" (click)="cancelEdit(i, $event)" title="Cancel">
           <mat-icon>close</mat-icon>
         </button>

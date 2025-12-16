@@ -60,7 +60,7 @@ interface ChatSession {
 export class TestGenerationComponent implements OnInit, OnDestroy {
   private readonly MAX_HISTORY_COUNT = 10;
   username: string = '';
-  activeTab: string = 'tab1';
+  activeTab: 'tab1' | 'tab2' = 'tab1';
   userMessage: string = '';
   currentMessage: string = '';
   chatHistories: ChatSession[] = [];
@@ -336,55 +336,221 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
     }
   }
 
+  // private fetchTicketAndGenerate(ticketId: string) {
+  //   this.isLoadingJira = true;
+  //   this.jiraTicket = null;
+
+  //   this.apiService.getJiraTicket(ticketId).subscribe({
+  //     next: (data: any) => {
+  //       console.log('Parsed Jira ticket:', data);
+  //       this.jiraTicket = data;
+  //       this.isLoadingJira = false;
+  //       this.loading = false;
+
+  //       // Create bot message with full ticket details
+  //       const botMessage: ChatMessage = {
+  //         type: 'bot',
+  //         text: `✅ Found JIRA ticket: ${data.ticket_id}\n\n📋 Title: ${data.title}\n📦 Module: ${data.module}\n\n🔢 Test Steps: ${data.steps?.length || 0}\n\nDo you want to run the automated test?`,
+  //         timestamp: new Date(),
+  //         ticketDetails: {
+  //           ticket_id: data.ticket_id,
+  //           title: data.title,
+  //           description: data.raw_description,
+  //           module: data.module,
+  //           steps: data.steps
+  //         } as TicketDetail,
+  //         waitingForConfirmation: true, 
+  //       };
+
+  //       this.currentChatMessages.push(botMessage);
+  //       this.saveChatToHistory();
+  //     },
+  //     error: (error) => {
+  //       console.error('Error fetching Jira ticket:', error);
+  //       this.isLoadingJira = false;
+  //       this.loading = false;
+
+  //       // const botMessage: ChatMessage = {
+  //       //   type: 'bot',
+  //       //   text: `❌ Error: Could not find ticket "${ticketId}".\n
+  //       //   Please make sure:\n
+  //       //   1. The ticket is uploaded to the system\n
+  //       //   2. The ticket file exists in Jira_Tickets folder\n
+  //       //   3. The ticket ID is correct`,
+  //       //   timestamp: new Date()
+  //       // };
+
+  //       // UPDATED ERROR MESSAGE FOR JIRA BOARD
+  //     const botMessage: ChatMessage = {
+  //       type: 'bot',
+  //       text: `❌ Error: Could not find ticket "${ticketId}" on Jira board.\n
+  //       Please make sure:\n
+  //       1. The ticket ID is correct (e.g., RBPLCD-1234)\n
+  //       2. The ticket exists in your Jira board\n
+  //       3. You have access permissions to view this ticket`,
+  //       timestamp: new Date()
+  //     };
+
+  //       this.currentChatMessages.push(botMessage);
+  //       this.saveChatToHistory();
+  //     }
+  //   });
+  // }
+
+
+
+
+
+  // private fetchTicketAndGenerate(ticketId: string) {
+  //   this.apiService.getTicketDetails(ticketId).subscribe({
+  //     next: (ticketDetails) => {
+  //       this.apiService.listScripts(ticketId).subscribe({
+  //         next: (scriptsResponse) => {
+  //           this.loading = false;
+
+  //           const hasScripts = scriptsResponse.scripts_count > 0;
+
+  //           const botMessage: ChatMessage = {
+  //             type: 'bot',
+  //             text: `✅ Found JIRA ticket: ${ticketDetails.ticket_id}\n\n📋 Title: ${ticketDetails.title}\n📦 Module: ${ticketDetails.module || 'N/A'}\n\n🔢 Test Steps Found: ${ticketDetails.steps?.length || 0}\n\nDo you want to run the automated test?`,
+  //             timestamp: new Date(),
+  //             ticketDetails: ticketDetails,
+  //             waitingForConfirmation: true,
+  //             hasExistingScripts: hasScripts,
+  //             scriptsCount: scriptsResponse.scripts_count
+  //           };
+
+  //           this.currentChatMessages.push(botMessage);
+  //           this.saveChatToHistory();
+  //         },
+  //         error: (scriptError) => {
+  //           this.loading = false;
+
+  //           const botMessage: ChatMessage = {
+  //             type: 'bot',
+  //             text: `✅ Found JIRA ticket: ${ticketDetails.ticket_id}\n\n📋 Title: ${ticketDetails.title}\n📦 Module: ${ticketDetails.module || 'N/A'}\n\n🔢 Test Steps Found: ${ticketDetails.steps?.length || 0}\n\nDo you want to run the automated test?`,
+  //             timestamp: new Date(),
+  //             ticketDetails: ticketDetails,
+  //             waitingForConfirmation: true,
+  //             hasExistingScripts: false,
+  //             scriptsCount: 0
+  //           };
+
+  //           this.currentChatMessages.push(botMessage);
+  //           this.saveChatToHistory();
+  //         }
+  //       });
+  //     },
+  //     error: (error) => {
+  //       this.loading = false;
+
+  //       const botMessage: ChatMessage = {
+  //         type: 'bot',
+  //         text: `❌ Error: Could not find ticket "${ticketId}".\n
+  //         Please make sure:\n
+  //         1. The ticket is uploaded to the system\n
+  //         2. The ticket file exists in Jira_Tickets folder\n
+  //         3. The ticket ID is correct`,
+  //         timestamp: new Date()
+  //       };
+
+  //       this.currentChatMessages.push(botMessage);
+  //       this.saveChatToHistory();
+  //     }
+  //   });
+  // }
+
+
+
   private fetchTicketAndGenerate(ticketId: string) {
-    this.isLoadingJira = true;
-    this.jiraTicket = null;
+  this.isLoadingJira = true;
+  this.jiraTicket = null;
 
-    this.apiService.getJiraTicket(ticketId).subscribe({
-      next: (data: any) => {
-        console.log('Parsed Jira ticket:', data);
-        this.jiraTicket = data;
-        this.isLoadingJira = false;
-        this.loading = false;
+  // 🔥 STEP 1: Fetch ticket from Jira API
+  this.apiService.getJiraTicket(ticketId).subscribe({
+    next: (data: any) => {
+      console.log('✅ Parsed Jira ticket:', data);
+      this.jiraTicket = data;
 
-        // Create bot message with full ticket details
-        const botMessage: ChatMessage = {
-          type: 'bot',
-          text: `✅ Found JIRA ticket: ${data.ticket_id}\n\n📋 Title: ${data.title}\n📦 Module: ${data.module}\n\n🔢 Test Steps: ${data.steps?.length || 0}\n\nDo you want to run the automated test?`,
-          timestamp: new Date(),
-          ticketDetails: {
-            ticket_id: data.ticket_id,
-            title: data.title,
-            description: data.raw_description,
-            module: data.module,
-            steps: data.steps
-          } as TicketDetail,
-          waitingForConfirmation: true
-        };
+      // 🔥 STEP 2: Check for existing scripts after getting Jira ticket
+      this.apiService.listScripts(ticketId).subscribe({
+        next: (scriptsResponse) => {
+          this.isLoadingJira = false;
+          this.loading = false;
 
-        this.currentChatMessages.push(botMessage);
-        this.saveChatToHistory();
-      },
-      error: (error) => {
-        console.error('Error fetching Jira ticket:', error);
-        this.isLoadingJira = false;
-        this.loading = false;
+          const hasScripts = scriptsResponse.scripts_count > 0;
 
-        const botMessage: ChatMessage = {
-          type: 'bot',
-          text: `❌ Error: Could not find ticket "${ticketId}".\n
-          Please make sure:\n
-          1. The ticket is uploaded to the system\n
-          2. The ticket file exists in Jira_Tickets folder\n
-          3. The ticket ID is correct`,
-          timestamp: new Date()
-        };
+          // Create bot message with both Jira data AND script info
+          const botMessage: ChatMessage = {
+            type: 'bot',
+            text: `✅ Found JIRA ticket: ${data.ticket_id}\n\n📋 Title: ${data.title}\n📦 Module: ${data.module || 'N/A'}\n\n🔢 Test Steps: ${data.steps?.length || 0}\n\nDo you want to run the automated test?`,
+            timestamp: new Date(),
+            ticketDetails: {
+              ticket_id: data.ticket_id,
+              title: data.title,
+              description: data.raw_description,
+              module: data.module,
+              steps: data.steps
+            } as TicketDetail,
+            waitingForConfirmation: true,
+            // 🔥 ADD SCRIPT INFORMATION
+            hasExistingScripts: hasScripts,
+            scriptsCount: scriptsResponse.scripts_count
+          };
 
-        this.currentChatMessages.push(botMessage);
-        this.saveChatToHistory();
-      }
-    });
-  }
+          this.currentChatMessages.push(botMessage);
+          this.saveChatToHistory();
+        },
+        error: (scriptError) => {
+          // 🔥 GRACEFUL FALLBACK: If script check fails, continue without script info
+          console.warn('⚠️ Could not check scripts, continuing without script info:', scriptError);
+          
+          this.isLoadingJira = false;
+          this.loading = false;
+
+          const botMessage: ChatMessage = {
+            type: 'bot',
+            text: `✅ Found JIRA ticket: ${data.ticket_id}\n\n📋 Title: ${data.title}\n📦 Module: ${data.module || 'N/A'}\n\n🔢 Test Steps: ${data.steps?.length || 0}\n\nDo you want to run the automated test?`,
+            timestamp: new Date(),
+            ticketDetails: {
+              ticket_id: data.ticket_id,
+              title: data.title,
+              description: data.raw_description,
+              module: data.module,
+              steps: data.steps
+            } as TicketDetail,
+            waitingForConfirmation: true,
+            // 🔥 DEFAULT TO NO SCRIPTS IF CHECK FAILS
+            hasExistingScripts: false,
+            scriptsCount: 0
+          };
+
+          this.currentChatMessages.push(botMessage);
+          this.saveChatToHistory();
+        }
+      });
+    },
+    error: (error) => {
+      console.error('❌ Error fetching Jira ticket:', error);
+      this.isLoadingJira = false;
+      this.loading = false;
+
+      // UPDATED ERROR MESSAGE FOR JIRA BOARD
+      const botMessage: ChatMessage = {
+        type: 'bot',
+        text: `❌ Error: Could not find ticket "${ticketId}" on Jira board.\n
+        Please make sure:\n
+        1. The ticket ID is correct (e.g., RBPLCD-1234)\n
+        2. The ticket exists in your Jira board\n
+        3. You have access permissions to view this ticket`,
+        timestamp: new Date()
+      };
+
+      this.currentChatMessages.push(botMessage);
+      this.saveChatToHistory();
+    }
+  });
+}
 
   // 3. ADD THIS NEW METHOD after fetchTicketAndGenerate
   showMessage(message: string, type: string = 'success') {
@@ -398,7 +564,8 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
       const userConfirmMessage: ChatMessage = {
         type: 'user',
         text: '✅ Generate and Run Testcase',
-        timestamp: new Date()
+        timestamp: new Date(),
+        ticketDetails: message.ticketDetails  // ✅ ADD THIS - Preserve ticket details
       };
       this.currentChatMessages.push(userConfirmMessage);
       this.runTest(message.ticketDetails.ticket_id);
@@ -412,7 +579,8 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
     const userConfirmMessage: ChatMessage = {
       type: 'user',
       text: '🔄 Rerun Testcase',
-      timestamp: new Date()
+      timestamp: new Date(),
+      ticketDetails: message.ticketDetails  // ✅ ADD THIS - Preserve ticket details
     };
     this.currentChatMessages.push(userConfirmMessage);
 
@@ -422,12 +590,17 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
 }
 
   private runTest(ticketId: string) {
+    // ✅ Find the original message with ticket details
+  const originalMessage = this.currentChatMessages.find(
+    msg => msg.ticketDetails?.ticket_id === ticketId
+  );
     const botMessage: ChatMessage = {
       type: 'bot',
       text: `🚀 Starting test generation and execution for ${ticketId}...\n\nInitializing automation framework...`,
       timestamp: new Date(),
       isRunning: true,
-      executionProgress: 0
+      executionProgress: 0,
+      ticketDetails: originalMessage?.ticketDetails
     };
     this.currentChatMessages.push(botMessage);
     this.saveChatToHistory();
@@ -449,12 +622,18 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
   }
 
   private rerunTest(ticketId: string) {
+    // ✅ Find the original message with ticket details
+  const originalMessage = this.currentChatMessages.find(
+    msg => msg.ticketDetails?.ticket_id === ticketId
+  );
     const botMessage: ChatMessage = {
       type: 'bot',
       text: `🔄 Rerunning test for ${ticketId} using existing script...\n\nExecuting saved test script...`,
       timestamp: new Date(),
       isRunning: true,
-      executionProgress: 0
+      executionProgress: 0,
+      ticketDetails: originalMessage?.ticketDetails
+      
     };
     this.currentChatMessages.push(botMessage);
     this.saveChatToHistory();
@@ -666,14 +845,28 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
   //   this.backupTitle = '';
   // }
 
-  cancelEdit(index: number, event: Event) {
-    event.stopPropagation();
-    const target = event.target as HTMLElement;
-    target.innerText = this.backupTitle;
-    this.chatHistories[index].title = this.backupTitle;
-    this.editingIndex = null;
-    this.backupTitle = '';
-  }
+
+
+  // cancelEdit(index: number, event: Event) {
+  //   event.stopPropagation();
+  //   const target = event.target as HTMLElement;
+  //   target.innerText = this.backupTitle;
+  //   this.chatHistories[index].title = this.backupTitle;
+  //   this.editingIndex = null;
+  //   this.backupTitle = '';
+  // }
+
+  cancelEdit(index: number, event: Event, titleElement?: HTMLElement) {
+  event.stopPropagation();
+  
+  // Get the actual title element
+  const target = titleElement || (event.target as HTMLElement);
+  
+  target.innerText = this.backupTitle;
+  this.chatHistories[index].title = this.backupTitle;
+  this.editingIndex = null;
+  this.backupTitle = '';
+}
 
   showDialog(index: number, dialog: HTMLDialogElement, event: Event) {
     event.stopPropagation();
@@ -714,10 +907,103 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
   // }
 // Update your saveEdit method in test-generation.component.ts
 
-saveEdit(index: number, event: Event) {
+// saveEdit(index: number, event: Event) {
+//   event.stopPropagation();
+//   const target = event.target as HTMLElement;
+//   const newTitle = target.innerText.trim();
+
+//   if (!newTitle) {
+//     // Restore backup if empty
+//     this.chatHistories[index].title = this.backupTitle;
+//     target.innerText = this.backupTitle;
+//     this.editingIndex = null;
+//     this.backupTitle = '';
+//     return;
+//   }
+
+// // saveEdit(index: number, updatedText: string) {
+// //   const title = updatedText?.trim();
+
+// //   if (!title) {
+// //     this.cancelEdit(index);
+// //     return;
+// //   }
+
+// //   this.chatHistories[index].title = title;
+
+// //   // 🔥 Call API with `title`
+// //   this.updateChatTitle(this.chatHistories[index].id, title);
+
+// //   this.editingIndex = null;
+// // }
+
+
+
+//   if (newTitle === this.backupTitle) {
+//     // No change
+//     this.editingIndex = null;
+//     this.backupTitle = '';
+//     return;
+//   }
+
+//   // Save to backend
+//   const sessionId = this.chatHistories[index].id;
+
+//   this.apiService.updateChatTitle(sessionId, newTitle).subscribe({
+//     next: (response) => {
+//       console.log('✅ Title updated successfully:', response);
+
+//       // Update local state
+//       this.chatHistories[index].title = newTitle;
+//       this.chatHistories[index].date = new Date(response.updated_at);
+
+//       // Update localStorage
+//       this.saveToLocalStorage();
+
+//       // Clear editing state
+//       this.editingIndex = null;
+//       this.backupTitle = '';
+//     },
+//     error: (error) => {
+//       console.error('❌ Failed to update title:', error);
+
+//       // Revert on error
+//       this.chatHistories[index].title = this.backupTitle;
+//       target.innerText = this.backupTitle;
+
+//       // Show error message (you can use a toast/snackbar service)
+//       alert('Failed to update title. Please try again.');
+
+//       this.editingIndex = null;
+//       this.backupTitle = '';
+//     }
+//   });
+// }
+
+
+saveEdit(index: number, event: Event, titleElement?: HTMLElement) {
   event.stopPropagation();
-  const target = event.target as HTMLElement;
+  
+  // Get the actual title element - either from parameter or from event target
+  let target: HTMLElement;
+  
+  if (titleElement) {
+    // Called from button click with template reference
+    target = titleElement;
+  } else {
+    // Called from blur/enter on the span itself
+    target = event.target as HTMLElement;
+  }
+  
   const newTitle = target.innerText.trim();
+  
+  console.log('📝 Saving edit:', {
+    index,
+    newTitle,
+    backupTitle: this.backupTitle,
+    eventType: event.type,
+    targetType: target.tagName
+  });
 
   if (!newTitle) {
     // Restore backup if empty
@@ -760,7 +1046,6 @@ saveEdit(index: number, event: Event) {
       this.chatHistories[index].title = this.backupTitle;
       target.innerText = this.backupTitle;
 
-      // Show error message (you can use a toast/snackbar service)
       alert('Failed to update title. Please try again.');
 
       this.editingIndex = null;
@@ -768,6 +1053,9 @@ saveEdit(index: number, event: Event) {
     }
   });
 }
+
+
+
 
 // Also update the onConfirm method to call backend delete
 
@@ -845,11 +1133,11 @@ onConfirm(dialog: HTMLDialogElement, event: Event) {
   console.log('✅ Started new chat session');
 }
 
-  switchTab(tab: string) {
-    this.activeTab = tab;
-    if (tab === 'tab1') {
-      this.startNewChat();
-    }
+  switchTab(tab: 'tab1' | 'tab2') {
+  this.activeTab = tab;
+  if (tab === 'tab1') {
+    this.startNewChat();
+  }
   }
 
 
