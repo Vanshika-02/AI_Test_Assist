@@ -1,14 +1,20 @@
 """
 FastAPI Application for Test Automation Backend - CLEANED VERSION
 """
-from fastapi import FastAPI, Depends, HTTPException, BackgroundTasks
+from fastapi import FastAPI, Depends, HTTPException, BackgroundTasks, Request
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from datetime import datetime
 from pathlib import Path
+from datetime import timezone
 import logging
 import re  # Add this import
+import json
+from openai import AzureOpenAI
+from fastapi import Query
+from config_loader import load_config, get_azure_client
+from fastapi import BackgroundTasks
 
 from pydantic import BaseModel
 from typing import List, Optional
@@ -21,7 +27,9 @@ from jira_api import router as jira_router  # 🟢 ADD THIS LINE
 from typing import Optional
 import os
 import requests
+import subprocess
 from dotenv import load_dotenv
+from selector_feedback import router as selector_feedback_router
 
 load_dotenv()
 JIRA_BASE_URL = os.getenv("JIRA_BASE_URL")
@@ -48,6 +56,32 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
+azure_client = AzureOpenAI(
+    api_key=settings.azure_openai_api_key,
+    api_version=settings.azure_openai_api_version,
+    azure_endpoint=settings.azure_openai_endpoint
+)
+
+PENDING_DIR = r"C:\Idea Projects\AI_Test_Assist\insights\pending"
+
+class Feedback(BaseModel):
+    step: str
+    selector: str
+    ticket_id: str
+    step_number: int
+
+# def generate_embedding(text: str):
+#     # Dummy embedding, replace with actual model
+#     return [0.1, 0.2, 0.3]
+
+
+# def generate_embedding(text: str):
+#     response = azure_client.embeddings.create(
+#         input=text,
+#         model=settings.azure_openai_embedding_model
+#     )
+#     return response.data[0].embedding  # This will be a list of 1536 floats
+
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
@@ -61,6 +95,7 @@ app.add_middleware(
 
 # 🟢 INCLUDE JIRA ROUTER
 app.include_router(jira_router)
+app.include_router(selector_feedback_router)
 
 # ============================================================================
 # HEALTH CHECK ENDPOINTS
@@ -629,6 +664,8 @@ def rerun_test_in_background(
         execution.error_message = None
         db.commit()
 
+# 🔥 ADD THIS LINE HERE
+        service._generate_summary_from_db(execution_id, ticket_id)
         logger.info("="*70)
         logger.info("✅ TEST RERUN COMPLETED SUCCESSFULLY")
         logger.info(f"   Execution ID: {execution_id}")
@@ -786,7 +823,7 @@ def list_generated_scripts(ticket_id: str):
 #             ).order_by(ExecutionStep.step_num.desc()).first()
 
 #             if last_step:
-#                 current_step = last_step.step_text
+#                 current_step = last_step.description
 #                 message = f"Executing Step {completed_steps + 1}/{total_steps}..."
 #         else:
 #             progress = 10
@@ -868,14 +905,15 @@ def get_execution_status(
             ).order_by(ExecutionStep.step_num.desc()).first()
 
             if last_step:
-                current_step = last_step.step_text
-                message = f"Executing Step {completed_steps + 1}/{total_steps}: {last_step.step_text[:50]}..."
+                current_step = last_step.description
+                message = f"Executing Step {completed_steps + 1}/{total_steps}: {last_step.description[:50]}..."
             else:
                 message = f"Processing steps... ({completed_steps}/{total_steps})"
         else:
             # 🔥 FIX: Show incremental progress based on time elapsed
             if execution.started_at:
-                elapsed_seconds = (datetime.utcnow() - execution.started_at).total_seconds()
+                # elapsed_seconds = (datetime.utcnow() - execution.started_at).total_seconds()
+                elapsed_seconds = (datetime.now() - execution.started_at).total_seconds()
                 # Estimate: 60 seconds = 80% progress
                 estimated_progress = min(int((elapsed_seconds / 60) * 80), 80)
                 progress = max(10, estimated_progress)
@@ -961,8 +999,8 @@ def download_html_report(execution_id: str, db: Session = Depends(get_db)):
         media_type="text/html",
         filename=f"{execution.ticket_id}_report.html"
     )
-from pathlib import Path
-import json
+# from pathlib import Path
+# import json
 
 # ============================================================================
 # SUMMARY JSON ENDPOINTS
@@ -1232,6 +1270,210 @@ def get_summary_statistics():
         logger.error(f"Error getting stats: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
+
+# @app.post("/api/process-feedback")
+# async def process_feedback(ticket_id: str):
+#     import subprocess
+#     external_project_path = settings.external_project_path
+#     plcd_script = Path(external_project_path) / "plcd_taseq.py"
+#     python_exe = str(Path(external_project_path) / "venv" / "Scripts" / "python.exe")
+#     # Call plcd_taseq.py with --process-feedback argument
+#     result = subprocess.run(
+#         [python_exe, str(plcd_script), ticket_id, "--process-feedback"],
+#         cwd=str(external_project_path),
+#         capture_output=True,
+#         text=True,
+#         timeout=300
+#     )
+#     return {
+#         "stdout": result.stdout,
+#         "stderr": result.stderr,
+#         "returncode": result.returncode
+#     }
+
+from pydantic import BaseModel
+from fastapi import Query
+
+class FeedbackProcessRequest(BaseModel):
+    feedback: str
+
+@app.post("/api/process-feedback")
+async def process_feedback(
+    ticket_id: str = Query(...),
+    request: FeedbackProcessRequest = None
+):
+    import subprocess
+    external_project_path = settings.external_project_path
+    plcd_script = Path(external_project_path) / "plcd_taseq.py"
+    python_exe = str(Path(external_project_path) / "venv" / "Scripts" / "python.exe")
+    feedback_text = request.feedback if request else ""
+    # Pass feedback_text as an argument to plcd_taseq.py
+    result = subprocess.run(
+        [python_exe, str(plcd_script), ticket_id, "--process-feedback", feedback_text],
+        cwd=str(external_project_path),
+        capture_output=True,
+        text=True,
+        timeout=300
+    )
+    return {
+        "stdout": result.stdout,
+        "stderr": result.stderr,
+        "returncode": result.returncode
+    }
+
+
+class RerunFeedbackRequest(BaseModel):
+    ticket_id: str
+    feedback_text: str = ""
+    
+# @app.post("/api/rerun-with-feedback")
+# async def rerun_with_feedback(
+#     # ticket_id: str,
+#     # feedback_text: str = "",
+    
+#     # ticket_id = requests.request.ticket_id,
+#     # feedback_text = requests.request.feedback_text,
+#     # background_tasks: BackgroundTasks = None
+#     request: RerunFeedbackRequest,
+#     background_tasks: BackgroundTasks = None
+# ):
+#     """
+#     Trigger plcd_taseq.py feedback loop for rerun with updated selectors.
+#     """
+#     ticket_id = request.ticket_id
+#     feedback_text = request.feedback_text
+#     logger.info(f"🔁 [API] Rerun with feedback called for ticket: {ticket_id}, feedback: {feedback_text}")
+#     import subprocess
+#     external_project_path = settings.external_project_path
+#     plcd_script = Path(external_project_path) / "plcd_taseq.py"
+#     python_exe = str(Path(external_project_path) / "venv" / "Scripts" / "python.exe")
+
+#     def run_feedback_loop():
+#         subprocess.run(
+#             [python_exe, str(plcd_script), ticket_id, "--process-feedback", feedback_text],
+#             cwd=str(external_project_path),
+#             capture_output=True,
+#             text=True,
+#             timeout=600
+#         )
+
+#     if background_tasks:
+#         background_tasks.add_task(run_feedback_loop)
+#         return {"status": "started"}
+#     else:
+#         run_feedback_loop()
+#         return {"status": "completed"}
+    
+
+@app.post("/api/rerun-with-feedback")
+async def rerun_with_feedback(
+    request: RerunFeedbackRequest,
+    background_tasks: BackgroundTasks = None,
+    db: Session = Depends(get_db)
+):
+    """
+    Process feedback and then rerun the test for the ticket.
+    """
+    ticket_id = request.ticket_id
+    feedback_text = request.feedback_text
+    logger.info(f"🔁 [API] Rerun with feedback called for ticket: {ticket_id}, feedback: {feedback_text}")
+
+    external_project_path = settings.external_project_path
+    plcd_script = Path(external_project_path) / "plcd_taseq.py"
+    python_exe = str(Path(external_project_path) / "venv" / "Scripts" / "python.exe")
+
+    def process_feedback_and_rerun():
+        # 1. Process feedback
+        subprocess.run(
+            [python_exe, str(plcd_script), ticket_id, "--process-feedback", feedback_text],
+            cwd=str(external_project_path),
+            capture_output=True,
+            text=True,
+            timeout=600
+        )
+        # 2. Find latest script for rerun
+        scripts_folder = Path(external_project_path) / "Generated_Scripts"
+        matching_scripts = list(scripts_folder.glob(f"*{ticket_id}*.py"))
+        if not matching_scripts:
+            logger.error(f"No generated script found for ticket '{ticket_id}'.")
+            return
+        latest_script = max(matching_scripts, key=lambda p: p.stat().st_mtime)
+        # 3. Create new execution record for rerun
+        service = TestExecutionService(db)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        execution_id = f"rerun_{ticket_id}_{timestamp}"
+        execution = TestExecution(
+            execution_id=execution_id,
+            ticket_id=ticket_id,
+            project_id=None,
+            status="pending",
+            overall_status="UNKNOWN",
+            started_at=datetime.now()
+        )
+        db.add(execution)
+        db.commit()
+        db.refresh(execution)
+        # 4. Start rerun in background
+        rerun_test_in_background(
+            execution_id=execution_id,
+            ticket_id=ticket_id,
+            script_path=str(latest_script),
+            project_id=None
+        )
+
+    if background_tasks:
+        background_tasks.add_task(process_feedback_and_rerun)
+        return {"status": "started"}
+    else:
+        process_feedback_and_rerun()
+        return {"status": "completed"}
+    
+@app.post("/api/feedback")
+async def receive_feedback(feedback: Feedback):
+    embedding = generate_embedding(feedback.selector)
+    data = {
+        "step": feedback.step,
+        "selector": feedback.selector,
+        "confidence": 0.95,
+        "category": "failed",
+        "module": "Teststep",
+        "context": {
+            "module": "Teststep",
+            "action_type": "click",
+            "sequential_context": {
+                "previous_steps": [],
+                "last_successful_action": None,
+                "last_selector_used": None,
+                "page_state_before_failure": "",
+                "current_module": "Teststep"
+            }
+        },
+        "metadata": {
+            "ticket_id": feedback.ticket_id,
+            "step_number": feedback.step_number,
+            "timestamp": datetime.now().isoformat(),
+            "issue_description": "selector not found",
+            "reasoning": "",
+            "browser": "edge",
+            "tester_id": "manual_feedback",
+            "source": "tester_feedback",
+            "feedback_type": "failed"
+        },
+        "embedding": embedding,
+        "storage_metadata": {
+            "saved_at": datetime.now().isoformat(),
+            "file_path": "",  # Fill in if needed
+            "storage_type": "failed",
+            "embedded": True
+        }
+    }
+    os.makedirs(PENDING_DIR, exist_ok=True)
+    filename = f"{feedback.ticket_id}_step{feedback.step_number}_{int(datetime.now().timestamp())}.json"
+    filepath = os.path.join(PENDING_DIR, filename)
+    data["storage_metadata"]["file_path"] = filepath
+    with open(filepath, "w") as f:
+        json.dump(data, f, indent=2)
+    return {"status": "success", "file": filename}
 
 # ============================================================================
 # HELPER: Check if summary exists
@@ -1823,169 +2065,812 @@ REPLACE the execute_test_in_background function in your main.py with this versio
 This ensures proper completion and error handling
 """
 
+# def execute_test_in_background(
+#     execution_id: str,
+#     ticket_id: str,
+#     # project_id: int
+#     project_id: Optional[int]  # 🟢 CHANGE THIS - Allow None
+
+# ):
+#     """
+#     Background task to execute test workflow using external run_test.py
+#     FIXED: Better error handling and ensures completion
+#     """
+#     db = SessionLocal()
+#     service = TestExecutionService(db)
+    
+#     # Track if we've successfully updated to a final state
+#     final_status_set = False
+
+#     logger.info("="*70)
+#     logger.info(f"🚀 BACKGROUND TASK STARTED")
+#     logger.info(f"   Execution ID: {execution_id}")
+#     logger.info(f"   Ticket ID: {ticket_id}")
+#     logger.info(f"   Project ID: {project_id}")  # 🟢 ADD THIS LINE
+#     logger.info(f"   External Path: {settings.external_project_path}")
+#     logger.info(f"   Started at: {datetime.now().isoformat()}")
+#     logger.info("="*70)
+
+#     try:
+#         # Update status to running
+#         service.update_execution_status(
+#             execution_id=execution_id,
+#             status="running"
+#         )
+#         logger.info("✅ Status updated to 'running'")
+
+#         # Path to your external TA_AI_Project
+#         external_project_path = settings.external_project_path
+
+#         logger.info(f"📁 External project path: {external_project_path}")
+
+#         # Verify path exists
+#         if not Path(external_project_path).exists():
+#             raise FileNotFoundError(f"External project not found: {external_project_path}")
+#             logger.info("✅ External project path exists")
+
+#        # Check if plcd_taseq.py exists
+#         plcd_script = Path(external_project_path) / "plcd_taseq.py"
+#         if not plcd_script.exists():
+#             raise FileNotFoundError(f"plcd_taseq.py not found at: {plcd_script}")
+#         logger.info(f"✅ Found plcd_taseq.py at: {plcd_script}")
+
+
+#         logger.info("🏃 Starting test workflow execution...")
+#         # CRITICAL: Add logging around this call
+#         logger.info("📞 Calling service.run_test_workflow()...")
+
+#         # Run test workflow (this will now wait for completion)
+#         state = service.run_test_workflow(
+#             ticket_id=ticket_id,
+#             project_id=project_id,
+#             execution_id=execution_id,
+#             external_project_path=external_project_path
+#         )
+#         if not state:
+#           logger.error("❌ Test runner returned None or empty state! Marking as failed.")
+#           service.update_execution_status(
+#                 execution_id=execution_id,
+#                 status="failed",
+#                 overall_status="FAILED",
+#                 error_message="Test runner crashed or did not return results."
+#           )
+#           service._generate_summary_from_db(execution_id, ticket_id)  # <-- ADD THIS LINE
+#           db.close()
+#           return
+#         logger.info(f"📋 Workflow returned state: {state}")
+
+
+# # Log what we got back
+#         if state:
+#             logger.info(f"📄 Report path: {state.get('report_path')}")
+#             logger.info(f"📜 Script path: {state.get('script_path')}")
+#             logger.info(f"🎥 Video path: {state.get('video_path')}")
+#             logger.info(f"📊 Overall status: {state.get('overall_status')}")
+#         else:
+#             logger.warning("⚠️  Workflow returned None or empty state!")
+
+#         logger.info("✅ Test workflow completed, saving results to database...")
+
+#         # Save results to database (steps are already saved in run_test_workflow)
+#         service.save_execution_results(execution_id, state)
+#         service._generate_summary_from_db(execution_id, ticket_id)
+#         # Determine if we should mark as 'completed' or 'failed'
+#         # If we have a report, mark as 'completed' even if tests failed
+#         has_report = bool(state.get('report_path'))
+#         overall_status = state.get('overall_status', 'UNKNOWN')
+
+
+#         # if has_report:
+#         #     # Mark as completed - user can download report
+#         #     final_status = "completed"
+#         #     logger.info(f"✅ Marking as completed (report available, status: {overall_status})")
+#         # else:
+#         #     # No report - mark as failed
+#         #     final_status = "failed"
+#         #     logger.warning(f"⚠️  Marking as failed (no report generated)")
+#         if has_report and overall_status != "FAILED":
+#            final_status = "completed"
+#            logger.info(f"✅ Marking as completed (report available, status: {overall_status})")
+#         else:
+#            final_status = "failed"
+#            logger.warning(f"⚠️  Marking as failed (no report or test failed, status: {overall_status})")
+
+
+#         # Update status to completed
+#         service.update_execution_status(
+#             execution_id=execution_id,
+#             status=final_status,
+#             overall_status=overall_status,
+#             report_path=state.get('report_path', ''),
+#             script_path=state.get('script_path', ''),
+#             video_path=state.get('video_path', ''),
+#             error_message=None if has_report else "Test execution failed or no report generated."
+            
+#         )
+#         service._generate_summary_from_db(execution_id, ticket_id)  # <-- Add this line here
+#         logger.info("="*70)
+#         logger.info("✅ TEST EXECUTION COMPLETED SUCCESSFULLY")
+#         logger.info(f"   Execution ID: {execution_id}")
+#         logger.info(f"   Overall Status: {state.get('overall_status', 'UNKNOWN')}")
+#         logger.info(f"   📄 Report: {state.get('report_path', 'N/A')}")
+#         logger.info(f"   📜 Script: {state.get('script_path', 'N/A')}")
+#         logger.info(f"   🎥 Video: {state.get('video_path', 'N/A')}")
+#         logger.info(f"   Completed at: {datetime.now().isoformat()}")
+#         logger.info("="*70)
+
+#     except Exception as e:
+#         logger.error("="*70)
+#         logger.error(f"❌ BACKGROUND TASK FAILED")
+#         logger.error(f"   Execution ID: {execution_id}")
+#         logger.error(f"   Error: {e}")
+#         logger.error(f"   Failed at: {datetime.now().isoformat()}")
+#         logger.error("="*70)
+
+#  # Log full traceback
+#         import traceback
+#         logger.error("Full traceback:")
+#         logger.error(traceback.format_exc())
+
+#         # Get detailed error message
+#         error_str = str(e)
+#         error_lines = []
+#         for line in error_str.split('\n'):
+#             if not line.strip().startswith('[INFO]') and not line.strip().startswith('[DEBUG]'):
+#                 if line.strip():
+#                     error_lines.append(line.strip())
+
+#         clean_error = '\n'.join(error_lines[:10]) if error_lines else str(e)
+
+#         # Truncate if too long
+#         if len(clean_error) > 500:
+#             clean_error = clean_error[:500] + "...\n(Check server logs for full details)"
+
+
+#         # Mark as failed in database
+#         try:
+#             service.update_execution_status(
+#                 execution_id=execution_id,
+#                 status="failed",
+#                 overall_status="FAILED",
+#                 # error_message=error_message
+#                 error_message=clean_error  # <-- Use the cleaned error message here
+#             )
+#             service._generate_summary_from_db(execution_id, ticket_id)  # <-- ADD THIS LINE
+#             logger.info("✅ Updated execution status to 'failed' in database")
+#         except Exception as db_error:
+#             logger.error(f"❌ Could not update database with failure: {db_error}")
+
+#         # Log full traceback
+#         import traceback
+#         logger.error("Full traceback:")
+#         logger.error(traceback.format_exc())
+
+#     finally:
+#         db.close()
+#         logger.info(f"🏁 Background task ended for {execution_id}")
+#         logger.info("")  # Empty line for readability
+
+
+
+
+# def execute_test_in_background(
+#     execution_id: str,
+#     ticket_id: str,
+#     project_id: Optional[int]
+# ):
+#     db = SessionLocal()
+#     service = TestExecutionService(db)
+
+#     logger.info("=" * 70)
+#     logger.info(f"🚀 BACKGROUND TASK STARTED")
+#     logger.info(f"   Execution ID: {execution_id}")
+#     logger.info(f"   Ticket ID: {ticket_id}")
+#     logger.info(f"   Project ID: {project_id}")
+#     logger.info("=" * 70)
+
+#     try:
+#         # 1️⃣ Mark running
+#         service.update_execution_status(
+#             execution_id=execution_id,
+#             status="running"
+#         )
+
+#         external_project_path = Path(settings.external_project_path)
+
+#         # 2️⃣ Run Playwright workflow (BLOCKING)
+#         state = service.run_test_workflow(
+#             ticket_id=ticket_id,
+#             project_id=project_id,
+#             execution_id=execution_id,
+#             external_project_path=str(external_project_path)
+#         )
+
+#         if not state:
+#             raise RuntimeError("Test workflow returned empty state")
+
+#         # 3️⃣ Generate summary (this already works)
+#         service._generate_summary_from_db(execution_id, ticket_id)
+
+#         # ============================================================
+#         # 🔥 FORCE SYNC DB WITH REAL FILES (CRITICAL FIX)
+#         # ============================================================
+
+#         report_path = None
+#         video_path = None
+#         script_path = None
+
+#         # 📄 Report
+#         reports_folder = external_project_path / "Reports"
+#         if reports_folder.exists():
+#             reports = sorted(
+#                 reports_folder.glob(f"*{ticket_id}*.html"),
+#                 key=lambda p: p.stat().st_mtime,
+#                 reverse=True
+#             )
+#             if reports:
+#                 report_path = str(reports[0])
+
+#         # 🎥 Video
+#         videos_folder = external_project_path / "Videos"
+#         if videos_folder.exists():
+#             videos = sorted(
+#                 videos_folder.glob("*.webm"),
+#                 key=lambda p: p.stat().st_mtime,
+#                 reverse=True
+#             )
+#             if videos:
+#                 video_path = str(videos[0])
+
+#         # 📜 Script
+#         scripts_folder = external_project_path / "Generated_Scripts"
+#         if scripts_folder.exists():
+#             scripts = sorted(
+#                 scripts_folder.glob(f"*{ticket_id}*.py"),
+#                 key=lambda p: p.stat().st_mtime,
+#                 reverse=True
+#             )
+#             if scripts:
+#                 script_path = str(scripts[0])
+
+#         # 4️⃣ Determine final status
+#         overall_status = state.get("overall_status", "UNKNOWN")
+#         final_status = "completed" if report_path else "failed"
+
+#         # 5️⃣ FINAL DB UPDATE (THIS FIXES UI)
+#         execution = db.query(TestExecution).filter(
+#             TestExecution.execution_id == execution_id
+#         ).first()
+
+#         execution.status = final_status
+#         execution.overall_status = overall_status
+#         execution.report_path = report_path
+#         execution.script_path = script_path
+#         execution.video_path = video_path
+#         execution.completed_at = datetime.now()
+#         execution.error_message = None
+
+#         db.commit()
+
+#         logger.info("✅ EXECUTION COMPLETED AND DB SYNCED")
+#         logger.info(f"📄 Report: {report_path}")
+#         logger.info(f"📜 Script: {script_path}")
+#         logger.info(f"🎥 Video: {video_path}")
+
+#     except Exception as e:
+#         logger.error(f"❌ EXECUTION FAILED: {e}", exc_info=True)
+
+#         service.update_execution_status(
+#             execution_id=execution_id,
+#             status="failed",
+#             overall_status="FAILED",
+#             error_message=str(e)[:500]
+#         )
+
+#     finally:
+#         db.close()
+#         logger.info(f"🏁 Background task ended: {execution_id}")
+
+
+
+
 def execute_test_in_background(
     execution_id: str,
     ticket_id: str,
-    # project_id: int
-    project_id: Optional[int]  # 🟢 CHANGE THIS - Allow None
-
+    project_id: Optional[int]
 ):
     """
-    Background task to execute test workflow using external run_test.py
-    FIXED: Better error handling and ensures completion
+    Background task to execute test workflow using external plcd_taseq.py
+    FIXED: Ensures clean termination and immediate summary generation
     """
     db = SessionLocal()
     service = TestExecutionService(db)
+    final_status_set = False
 
     logger.info("="*70)
     logger.info(f"🚀 BACKGROUND TASK STARTED")
     logger.info(f"   Execution ID: {execution_id}")
     logger.info(f"   Ticket ID: {ticket_id}")
-    logger.info(f"   Project ID: {project_id}")  # 🟢 ADD THIS LINE
-    logger.info(f"   External Path: {settings.external_project_path}")
-    logger.info(f"   Started at: {datetime.now().isoformat()}")
+    logger.info(f"   Project ID: {project_id}")
     logger.info("="*70)
 
     try:
-        # Update status to running
-        service.update_execution_status(
-            execution_id=execution_id,
-            status="running"
-        )
+        # ============================================================================
+        # STEP 1: Mark as running
+        # ============================================================================
+        execution = db.query(TestExecution).filter(
+            TestExecution.execution_id == execution_id
+        ).first()
+
+        if not execution:
+            logger.error(f"❌ Execution {execution_id} not found!")
+            return
+
+        execution.status = "running"
+        execution.started_at = datetime.utcnow()
+        db.commit()
         logger.info("✅ Status updated to 'running'")
 
-        # Path to your external TA_AI_Project
-        external_project_path = settings.external_project_path
-
-        logger.info(f"📁 External project path: {external_project_path}")
-
-        # Verify path exists
-        if not Path(external_project_path).exists():
+        # ============================================================================
+        # STEP 2: Validate external project
+        # ============================================================================
+        external_project_path = Path(settings.external_project_path)
+        if not external_project_path.exists():
             raise FileNotFoundError(f"External project not found: {external_project_path}")
-            logger.info("✅ External project path exists")
 
-       # Check if plcd_taseq.py exists
-        plcd_script = Path(external_project_path) / "plcd_taseq.py"
+        plcd_script = external_project_path / "plcd_taseq.py"
         if not plcd_script.exists():
             raise FileNotFoundError(f"plcd_taseq.py not found at: {plcd_script}")
+        
         logger.info(f"✅ Found plcd_taseq.py at: {plcd_script}")
 
+        # ============================================================================
+        # STEP 3: Find Python executable
+        # ============================================================================
+        python_exe = None
+        venv_paths = [
+            external_project_path / "venv" / "Scripts" / "python.exe",  # Windows
+            external_project_path / "venv" / "bin" / "python",  # Linux/Mac
+        ]
 
-        logger.info("🏃 Starting test workflow execution...")
-        # CRITICAL: Add logging around this call
-        logger.info("📞 Calling service.run_test_workflow()...")
+        for venv_path in venv_paths:
+            if venv_path.exists():
+                python_exe = str(venv_path)
+                logger.info(f"✅ Found Python: {python_exe}")
+                break
 
-        # Run test workflow (this will now wait for completion)
-        state = service.run_test_workflow(
-            ticket_id=ticket_id,
-            project_id=project_id,
-            execution_id=execution_id,
-            external_project_path=external_project_path
-        )
-        logger.info(f"📋 Workflow returned state: {state}")
+        if not python_exe:
+            import shutil
+            python_exe = shutil.which("python") or shutil.which("python3")
+            if not python_exe:
+                raise FileNotFoundError("Python executable not found")
+            logger.info(f"⚠️ Using system Python: {python_exe}")
 
-
-# Log what we got back
-        if state:
-            logger.info(f"📄 Report path: {state.get('report_path')}")
-            logger.info(f"📜 Script path: {state.get('script_path')}")
-            logger.info(f"🎥 Video path: {state.get('video_path')}")
-            logger.info(f"📊 Overall status: {state.get('overall_status')}")
-        else:
-            logger.warning("⚠️  Workflow returned None or empty state!")
-
-        logger.info("✅ Test workflow completed, saving results to database...")
-
-        # Save results to database (steps are already saved in run_test_workflow)
-        service.save_execution_results(execution_id, state)
-        service._generate_summary_from_db(execution_id, ticket_id)
-        # Determine if we should mark as 'completed' or 'failed'
-        # If we have a report, mark as 'completed' even if tests failed
-        has_report = bool(state.get('report_path'))
-        overall_status = state.get('overall_status', 'UNKNOWN')
-
-
-        if has_report:
-            # Mark as completed - user can download report
-            final_status = "completed"
-            logger.info(f"✅ Marking as completed (report available, status: {overall_status})")
-        else:
-            # No report - mark as failed
-            final_status = "failed"
-            logger.warning(f"⚠️  Marking as failed (no report generated)")
-
-
-        # Update status to completed
-        service.update_execution_status(
-            execution_id=execution_id,
-            status=final_status,
-            overall_status=overall_status,
-            report_path=state.get('report_path', ''),
-            script_path=state.get('script_path', ''),
-            video_path=state.get('video_path', ''),
-            error_message=None  # Clear any error message if we have results
+        # ============================================================================
+        # STEP 4: Execute Playwright test (SINGLE RUN, NO FEEDBACK)
+        # ============================================================================
+        logger.info(f"🏃 Executing test: {ticket_id} --no-feedback")
+        
+        # ✅ CRITICAL: Use --no-feedback flag to prevent interactive loop
+        result = subprocess.run(
+            [python_exe, str(plcd_script), ticket_id, "--no-feedback"],
+            cwd=str(external_project_path),
+            capture_output=True,
+            text=True,
+            timeout=600  # 10 minutes
         )
 
+        logger.info(f"📤 Playwright execution completed with return code: {result.returncode}")
+
+        if result.stdout:
+            logger.debug(f"STDOUT:\n{result.stdout[:1000]}")
+        if result.stderr:
+            logger.warning(f"STDERR:\n{result.stderr[:1000]}")
+
+        # ============================================================================
+        # STEP 5: Locate generated artifacts (SYNC WITH ACTUAL FILES)
+        # ============================================================================
+        report_path = None
+        script_path = None
+        video_path = None
+        overall_status = "UNKNOWN"
+
+        # Find report
+        reports_folder = external_project_path / "Reports"
+        if reports_folder.exists():
+            reports = sorted(
+                reports_folder.glob(f"*{ticket_id}*.html"),
+                key=lambda p: p.stat().st_mtime,
+                reverse=True
+            )
+            if reports:
+                report_path = str(reports[0])
+                logger.info(f"📄 Found report: {reports[0].name}")
+
+        # Find script
+        scripts_folder = external_project_path / "Generated_Scripts"
+        if scripts_folder.exists():
+            scripts = sorted(
+                scripts_folder.glob(f"*{ticket_id}*.py"),
+                key=lambda p: p.stat().st_mtime,
+                reverse=True
+            )
+            if scripts:
+                script_path = str(scripts[0])
+                logger.info(f"📜 Found script: {scripts[0].name}")
+
+        # Find video
+        videos_folder = external_project_path / "Videos"
+        if videos_folder.exists():
+            videos = sorted(
+                videos_folder.glob("*.webm"),
+                key=lambda p: p.stat().st_mtime,
+                reverse=True
+            )
+            if videos:
+                video_path = str(videos[0])
+                logger.info(f"🎥 Found video: {videos[0].name}")
+
+        # Parse overall status from report
+        if report_path and Path(report_path).exists():
+            try:
+                with open(report_path, 'r', encoding='utf-8') as f:
+                    html_content = f.read()
+
+                patterns = [
+                    r'<h2[^>]*>\s*Overall\s+Status:\s*(PASSED|FAILED)\s*</h2>',
+                    r'<div[^>]*class=["\']overall-status[^"\']*["\'][^>]*>\s*(PASSED|FAILED)',
+                ]
+
+                for pattern in patterns:
+                    match = re.search(pattern, html_content, re.IGNORECASE)
+                    if match:
+                        overall_status = match.group(1).upper()
+                        logger.info(f"✅ Parsed overall status: {overall_status}")
+                        break
+
+                if overall_status == "UNKNOWN":
+                    passed_count = len(re.findall(r'>\s*PASSED\s*<', html_content, re.IGNORECASE))
+                    failed_count = len(re.findall(r'>\s*FAILED\s*<', html_content, re.IGNORECASE))
+                    overall_status = "FAILED" if failed_count > 0 else ("PASSED" if passed_count > 0 else "UNKNOWN")
+                    logger.info(f"📊 Inferred status: {overall_status} (P:{passed_count}, F:{failed_count})")
+
+            except Exception as e:
+                logger.warning(f"Could not parse report status: {e}")
+
+        # ============================================================================
+        # STEP 6: Save execution steps from report (for summary generation)
+        # ============================================================================
+        if report_path and Path(report_path).exists():
+            try:
+                with open(report_path, 'r', encoding='utf-8') as f:
+                    html_content = f.read()
+
+                table_match = re.search(r'<table[^>]*>(.*?)</table>', html_content, re.DOTALL | re.IGNORECASE)
+                if table_match:
+                    table_content = table_match.group(1)
+                    rows = re.findall(r'<tr[^>]*>(.*?)</tr>', table_content, re.DOTALL | re.IGNORECASE)
+
+                    step_num = 1
+                    for row in rows[1:]:  # Skip header
+                        cells = re.findall(r'<td[^>]*>(.*?)</td>', row, re.DOTALL | re.IGNORECASE)
+                        if len(cells) >= 3:
+                            step_text = re.sub(r'<[^>]+>', '', cells[1]).strip()
+                            status = re.sub(r'<[^>]+>', '', cells[2]).strip().upper()
+
+                            if step_text and status in ['PASSED', 'FAILED']:
+                                step = ExecutionStep(
+                                    execution_id=execution_id,
+                                    step_num=step_num,
+                                    step_text=step_text,
+                                    status=status,
+                                    screenshot_path=None
+                                )
+                                db.add(step)
+                                step_num += 1
+
+                    db.commit()
+                    logger.info(f"✅ Saved {step_num-1} steps to database")
+
+            except Exception as e:
+                logger.warning(f"Could not parse steps: {e}")
+
+        # ============================================================================
+        # STEP 7: Update execution to "completed" (CRITICAL)
+        # ============================================================================
+        final_status = "completed" if report_path else "failed"
+        
+        db.refresh(execution)  # Get fresh state
+        execution.status = final_status
+        execution.overall_status = overall_status
+        execution.completed_at = datetime.utcnow()
+        execution.report_path = report_path
+        execution.script_path = script_path
+        execution.video_path = video_path
+        execution.error_message = None if report_path else "No report generated"
+        db.commit()
+        final_status_set = True
+        
+        logger.info(f"✅ Execution marked as '{final_status}'")
+
+        # ============================================================================
+        # STEP 8: Generate summary (AFTER DB update, BEFORE feedback)
+        # ============================================================================
+        logger.info("📊 Generating test summary...")
+        try:
+            service._generate_summary_from_db(execution_id, ticket_id)
+            logger.info("✅ Summary generated successfully")
+        except Exception as summary_error:
+            logger.error(f"⚠️ Summary generation failed: {summary_error}")
+
+        # ============================================================================
+        # SUCCESS
+        # ============================================================================
         logger.info("="*70)
         logger.info("✅ TEST EXECUTION COMPLETED SUCCESSFULLY")
         logger.info(f"   Execution ID: {execution_id}")
-        logger.info(f"   Overall Status: {state.get('overall_status', 'UNKNOWN')}")
-        logger.info(f"   📄 Report: {state.get('report_path', 'N/A')}")
-        logger.info(f"   📜 Script: {state.get('script_path', 'N/A')}")
-        logger.info(f"   🎥 Video: {state.get('video_path', 'N/A')}")
-        logger.info(f"   Completed at: {datetime.now().isoformat()}")
+        logger.info(f"   Final Status: {final_status}")
+        logger.info(f"   Overall Status: {overall_status}")
+        logger.info(f"   📄 Report: {report_path or 'N/A'}")
+        logger.info(f"   📜 Script: {script_path or 'N/A'}")
+        logger.info(f"   🎥 Video: {video_path or 'N/A'}")
         logger.info("="*70)
+
+    except subprocess.TimeoutExpired:
+        error_msg = "Test execution timed out (10 minutes)"
+        logger.error(f"⏰ {error_msg}")
+        _mark_execution_as_failed(db, execution_id, error_msg, service, ticket_id)
+        final_status_set = True
+
+    except FileNotFoundError as e:
+        error_msg = f"Configuration error: {str(e)}"
+        logger.error(f"❌ {error_msg}")
+        _mark_execution_as_failed(db, execution_id, error_msg, service, ticket_id)
+        final_status_set = True
 
     except Exception as e:
         logger.error("="*70)
-        logger.error(f"❌ BACKGROUND TASK FAILED")
+        logger.error(f"❌ EXECUTION FAILED")
         logger.error(f"   Execution ID: {execution_id}")
         logger.error(f"   Error: {e}")
-        logger.error(f"   Failed at: {datetime.now().isoformat()}")
         logger.error("="*70)
 
- # Log full traceback
         import traceback
         logger.error("Full traceback:")
         logger.error(traceback.format_exc())
 
-        # Get detailed error message
-        error_str = str(e)
-        error_lines = []
-        for line in error_str.split('\n'):
-            if not line.strip().startswith('[INFO]') and not line.strip().startswith('[DEBUG]'):
-                if line.strip():
-                    error_lines.append(line.strip())
-
-        clean_error = '\n'.join(error_lines[:10]) if error_lines else str(e)
-
-        # Truncate if too long
-        if len(clean_error) > 500:
-            clean_error = clean_error[:500] + "...\n(Check server logs for full details)"
-
-
-        # Mark as failed in database
-        try:
-            service.update_execution_status(
-                execution_id=execution_id,
-                status="failed",
-                overall_status="FAILED",
-                error_message=error_message
-            )
-            logger.info("✅ Updated execution status to 'failed' in database")
-        except Exception as db_error:
-            logger.error(f"❌ Could not update database with failure: {db_error}")
-
-        # Log full traceback
-        import traceback
-        logger.error("Full traceback:")
-        logger.error(traceback.format_exc())
+        error_message = str(e)[:500]
+        _mark_execution_as_failed(db, execution_id, error_message, service, ticket_id)
+        final_status_set = True
 
     finally:
-        db.close()
-        logger.info(f"🏁 Background task ended for {execution_id}")
-        logger.info("")  # Empty line for readability
+        # ============================================================================
+        # CRITICAL: Ensure execution is NEVER left in 'running' state
+        # ============================================================================
+        try:
+            if not final_status_set:
+                logger.warning("⚠️ Final status was NOT set - forcing to 'failed'")
+                execution = db.query(TestExecution).filter(
+                    TestExecution.execution_id == execution_id
+                ).first()
 
+                if execution and execution.status == "running":
+                    logger.error(f"❌ Execution {execution_id} still 'running'! Forcing to 'failed'")
+                    execution.status = "failed"
+                    execution.completed_at = datetime.utcnow()
+                    execution.overall_status = "FAILED"
+                    execution.error_message = "Execution did not complete normally"
+                    db.commit()
+                    
+                    # Try to generate summary even for forced failure
+                    try:
+                        service._generate_summary_from_db(execution_id, ticket_id)
+                    except:
+                        pass
+
+        except Exception as finally_error:
+            logger.error(f"❌ Error in finally block: {finally_error}")
+        
+        finally:
+            db.close()
+            logger.info(f"🔒 Database session closed for {execution_id}\n")
+
+
+def _mark_execution_as_failed(
+    db: Session, 
+    execution_id: str, 
+    error_message: str,
+    service: TestExecutionService,
+    ticket_id: str
+):
+    """Mark execution as failed and generate summary"""
+    try:
+        execution = db.query(TestExecution).filter(
+            TestExecution.execution_id == execution_id
+        ).first()
+
+        if execution:
+            execution.status = "failed"
+            execution.overall_status = "FAILED"
+            execution.completed_at = datetime.utcnow()
+            execution.error_message = error_message[:500]
+            db.commit()
+            logger.info(f"✅ Execution {execution_id} marked as 'failed'")
+            
+            # Generate summary for failed execution
+            try:
+                service._generate_summary_from_db(execution_id, ticket_id)
+                logger.info("✅ Generated summary for failed execution")
+            except Exception as e:
+                logger.warning(f"⚠️ Could not generate summary for failed execution: {e}")
+
+    except Exception as e:
+        logger.error(f"❌ Failed to mark execution as failed: {e}")
+
+
+
+# def execute_test_in_background(
+#     execution_id: str,
+#     ticket_id: str,
+#     # project_id: int
+#     project_id: Optional[int]  # 🟢 CHANGE THIS - Allow None
+
+# ):
+#     """
+#     Background task to execute test workflow using external run_test.py
+#     FIXED: Better error handling and ensures completion
+#     """
+#     db = SessionLocal()
+#     service = TestExecutionService(db)
+
+#     logger.info("="*70)
+#     logger.info(f"🚀 BACKGROUND TASK STARTED")
+#     logger.info(f"   Execution ID: {execution_id}")
+#     logger.info(f"   Ticket ID: {ticket_id}")
+#     logger.info(f"   Project ID: {project_id}")  # 🟢 ADD THIS LINE
+#     logger.info(f"   External Path: {settings.external_project_path}")
+#     logger.info(f"   Started at: {datetime.now().isoformat()}")
+#     logger.info("="*70)
+
+#     try:
+#         # Update status to running
+#         service.update_execution_status(
+#             execution_id=execution_id,
+#             status="running"
+#         )
+#         logger.info("✅ Status updated to 'running'")
+
+#         # Path to your external TA_AI_Project
+#         external_project_path = settings.external_project_path
+
+#         logger.info(f"📁 External project path: {external_project_path}")
+
+#         # Verify path exists
+#         if not Path(external_project_path).exists():
+#             raise FileNotFoundError(f"External project not found: {external_project_path}")
+#             logger.info("✅ External project path exists")
+
+#        # Check if plcd_taseq.py exists
+#         plcd_script = Path(external_project_path) / "plcd_taseq.py"
+#         if not plcd_script.exists():
+#             raise FileNotFoundError(f"plcd_taseq.py not found at: {plcd_script}")
+#         logger.info(f"✅ Found plcd_taseq.py at: {plcd_script}")
+
+
+#         logger.info("🏃 Starting test workflow execution...")
+#         # CRITICAL: Add logging around this call
+#         logger.info("📞 Calling service.run_test_workflow()...")
+
+#         # Run test workflow (this will now wait for completion)
+#         state = service.run_test_workflow(
+#             ticket_id=ticket_id,
+#             project_id=project_id,
+#             execution_id=execution_id,
+#             external_project_path=external_project_path
+#         )
+#         logger.info(f"📋 Workflow returned state: {state}")
+
+
+# # Log what we got back
+#         if state:
+#             logger.info(f"📄 Report path: {state.get('report_path')}")
+#             logger.info(f"📜 Script path: {state.get('script_path')}")
+#             logger.info(f"🎥 Video path: {state.get('video_path')}")
+#             logger.info(f"📊 Overall status: {state.get('overall_status')}")
+#         else:
+#             logger.warning("⚠️  Workflow returned None or empty state!")
+
+#         logger.info("✅ Test workflow completed, saving results to database...")
+
+#         # Save results to database (steps are already saved in run_test_workflow)
+#         service.save_execution_results(execution_id, state)
+#         service._generate_summary_from_db(execution_id, ticket_id)
+#         # Determine if we should mark as 'completed' or 'failed'
+#         # If we have a report, mark as 'completed' even if tests failed
+#         has_report = bool(state.get('report_path'))
+#         overall_status = state.get('overall_status', 'UNKNOWN')
+
+
+#         if has_report:
+#             # Mark as completed - user can download report
+#             final_status = "completed"
+#             logger.info(f"✅ Marking as completed (report available, status: {overall_status})")
+#         else:
+#             # No report - mark as failed
+#             final_status = "failed"
+#             logger.warning(f"⚠️  Marking as failed (no report generated)")
+
+
+#         # Update status to completed
+#         service.update_execution_status(
+#             execution_id=execution_id,
+#             status=final_status,
+#             overall_status=overall_status,
+#             report_path=state.get('report_path', ''),
+#             script_path=state.get('script_path', ''),
+#             video_path=state.get('video_path', ''),
+#             error_message=None  # Clear any error message if we have results
+#         )
+
+#         logger.info("="*70)
+#         logger.info("✅ TEST EXECUTION COMPLETED SUCCESSFULLY")
+#         logger.info(f"   Execution ID: {execution_id}")
+#         logger.info(f"   Overall Status: {state.get('overall_status', 'UNKNOWN')}")
+#         logger.info(f"   📄 Report: {state.get('report_path', 'N/A')}")
+#         logger.info(f"   📜 Script: {state.get('script_path', 'N/A')}")
+#         logger.info(f"   🎥 Video: {state.get('video_path', 'N/A')}")
+#         logger.info(f"   Completed at: {datetime.now().isoformat()}")
+#         logger.info("="*70)
+
+#     except Exception as e:
+#         logger.error("="*70)
+#         logger.error(f"❌ BACKGROUND TASK FAILED")
+#         logger.error(f"   Execution ID: {execution_id}")
+#         logger.error(f"   Error: {e}")
+#         logger.error(f"   Failed at: {datetime.now().isoformat()}")
+#         logger.error("="*70)
+
+#  # Log full traceback
+#         import traceback
+#         logger.error("Full traceback:")
+#         logger.error(traceback.format_exc())
+
+#         # Get detailed error message
+#         error_str = str(e)
+#         error_lines = []
+#         for line in error_str.split('\n'):
+#             if not line.strip().startswith('[INFO]') and not line.strip().startswith('[DEBUG]'):
+#                 if line.strip():
+#                     error_lines.append(line.strip())
+
+#         clean_error = '\n'.join(error_lines[:10]) if error_lines else str(e)
+
+#         # Truncate if too long
+#         if len(clean_error) > 500:
+#             clean_error = clean_error[:500] + "...\n(Check server logs for full details)"
+
+
+#         # Mark as failed in database
+#         try:
+#             service.update_execution_status(
+#                 execution_id=execution_id,
+#                 status="failed",
+#                 overall_status="FAILED",
+#                 error_message=clean_error
+#             )
+#             logger.info("✅ Updated execution status to 'failed' in database")
+#         except Exception as db_error:
+#             logger.error(f"❌ Could not update database with failure: {db_error}")
+
+#         # Log full traceback
+#         import traceback
+#         logger.error("Full traceback:")
+#         logger.error(traceback.format_exc())
+
+#     finally:
+#         db.close()
+#         logger.info(f"🏁 Background task ended for {execution_id}")
+#         logger.info("")  # Empty line for readability
 
 # ============================================================================
 # RUN SERVER
