@@ -77,6 +77,19 @@ export interface ScriptsListResponse {
 // NEW: Summary Interfaces
 // ============================================================================
 
+export interface TestStepResult {
+  step_num: number;           // match backend
+  description: string;        // match backend
+  status: string;
+  agent_used?: string;
+  confidence?: number;
+  action_type?: string;
+  suspicious?: boolean;
+  correctedSelector?: string;
+  feedbackSubmitted?: boolean;
+}
+
+
 export interface TestSummary {
   ticket_id: string;
   ticket_title: string;
@@ -118,7 +131,8 @@ export interface TestSummary {
     has_video: boolean;
     has_report: boolean;
   };
-  
+  steps: TestStepResult[]; // <-- ADD THIS LINE
+
   insights: {
     status_emoji: string;
     status_color: string;
@@ -135,6 +149,7 @@ export interface TestSummary {
       error: string;
     }>;
   };
+//   steps: TestStepResult[]; // <-- ADD THIS LINE
 }
 
 export interface SummaryListItem {

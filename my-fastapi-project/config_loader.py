@@ -11,6 +11,15 @@ import chromadb
 import os
 from chromadb.config import Settings
 
+def expand_env_vars(obj):
+    if isinstance(obj, dict):
+        return {k: expand_env_vars(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [expand_env_vars(i) for i in obj]
+    elif isinstance(obj, str):
+        return os.path.expandvars(obj)
+    else:
+        return obj
 
 def load_config(config_path: str = "plcdtestassistant.yaml") -> Dict[str, Any]:
     """
@@ -39,8 +48,11 @@ def load_config(config_path: str = "plcdtestassistant.yaml") -> Dict[str, Any]:
         )
 
     try:
-        with open(yaml_file, 'r', encoding='utf-8') as f:
+        # with open(yaml_file, 'r', encoding='utf-8') as f:
+        with open("C:\\Idea Projects\\AI_Test_Assist\\plcdtestassistant.yaml", "r") as f:
             config = yaml.safe_load(f)
+        # ADD THIS LINE - Expand environment variables in the config
+        config = expand_env_vars(config)
     except yaml.YAMLError as e:
         raise yaml.YAMLError(f"Error parsing YAML file: {e}")
 
