@@ -7,6 +7,7 @@ import { interval, Subscription } from 'rxjs';
 import { switchMap, takeWhile } from 'rxjs/operators';
 import { MatIconModule } from '@angular/material/icon';
 import { MsalService } from '@azure/msal-angular';
+import { SelectorFeedbackService } from '../services/selector-feedback.service';
 
 interface ChatMessage {
   type: 'user' | 'bot';
@@ -33,6 +34,10 @@ interface ChatMessage {
   scriptsCount?: number;
   summary?: TestSummary;
   showSummary?: boolean;
+  correctedSelector?: string;
+  feedbackSubmitted?: boolean;
+  rerunSummary?: TestSummary;
+  showRerunSummary?: boolean;
 }
 
 interface ChatSession {
@@ -73,6 +78,8 @@ export class TestGenerationComponent implements OnInit, OnDestroy {
   showDeleteDialog: boolean = false;
   selectedIndex: number | null = null;
   deletingSessionId: string | null = null;
+  overallCorrectedSelector: string = '';
+overallFeedbackSubmitted: boolean = false;
 
   private pollingSubscription?: Subscription;
 
@@ -93,7 +100,8 @@ export class TestGenerationComponent implements OnInit, OnDestroy {
     // private jiraService: JiraService,
     private apiService: ApiService,
     private msalService: MsalService,
-    private http: HttpClient  // ADD HttpClient injection
+    private http: HttpClient,  // ADD HttpClient injection
+    private selectorFeedbackService: SelectorFeedbackService
   ) {}
 
   ngOnInit(): void {
@@ -102,6 +110,15 @@ export class TestGenerationComponent implements OnInit, OnDestroy {
     if (account && account.name) {
       this.username = this.extractFirstName(account.name);
     }
+    // Restore current chat if available
+  const savedChatId = localStorage.getItem('testGenCurrentChatId');
+  if (savedChatId) {
+    const found = this.chatHistories.find(chat => chat.id === savedChatId);
+    if (found) {
+      this.currentChatMessages = [...found.messages];
+      this.currentChatId = found.id;
+    }
+  }
   }
 
   private extractFirstName(fullName: string): string {
@@ -181,20 +198,128 @@ export class TestGenerationComponent implements OnInit, OnDestroy {
     }
   }
 
+// private pollExecutionStatus(executionId: string, message: ChatMessage) {
+//   this.pollingSubscription = interval(3000).pipe(
+//     switchMap(() => {
+//       return this.apiService.getExecutionStatus(executionId);
+//     }),
+//     takeWhile((status) => {
+//       return status.status === 'running' || status.status === 'pending';
+//     }, true)
+//   ).subscribe({
+//     next: (status) => {
+//       // Update progress
+//       message.executionProgress = status.progress || 0;
+
+//       // CRITICAL: Ensure ticketDetails exists BEFORE completion
+//       if (!message.ticketDetails && status.ticket_id) {
+//         message.ticketDetails = {
+//           ticket_id: status.ticket_id
+//         } as TicketDetail;
+//         console.log('✅ Set ticketDetails from status:', message.ticketDetails);
+//       }
+
+//       if (status.status === 'running') {
+//         message.text = `🔄 Test execution in progress...\n\n🆔 Execution ID: ${executionId}\n📊 Progress: ${status.progress}%\n⏱️ Status: ${status.message}`;
+//       }
+
+//       if (status.status === 'completed') {
+//         message.isRunning = false;
+//         message.executionProgress = 100;
+//         message.executionStatus = status.overall_status === 'PASSED' ? 'success' : 'failed';
+
+//         const statusIcon = status.overall_status === 'PASSED' ? '✅' : '❌';
+//         const statusText = status.overall_status === 'PASSED' ? 'PASSED' : 'FAILED';
+
+//         message.executionMessage = `${statusIcon} Test execution completed!\n\nOverall Status: ${statusText}`;
+//         message.text = message.executionMessage;
+//         message.reportGenerated = true;
+//         message.reportPath = status.report_path;
+//         message.scriptPath = status.script_path;
+//         message.videoPath = status.video_path;
+
+//         message.generatedFiles = [
+//           status.report_path,
+//           status.script_path,
+//           status.video_path
+//         ].filter((path): path is string => !!path && path.trim() !== '');
+
+//         // LOAD SUMMARY
+//         console.log('📊 Execution completed, checking summary:', {
+//           summary_available: status.summary_available,
+//           ticket_id: message.ticketDetails?.ticket_id,
+//           has_ticketDetails: !!message.ticketDetails
+//         });
+
+//         // if (status.summary_available && message.ticketDetails?.ticket_id) {
+//         //   console.log('✅ Loading summary for:', message.ticketDetails.ticket_id);
+//         //   this.loadTestSummary(message);
+//         // } else {
+//         //   console.warn('⚠️ Cannot load summary:', {
+//         //     summary_available: status.summary_available,
+//         //     ticket_id: status.ticket_id,
+//         //     has_ticketDetails: !!message.ticketDetails
+//         //   });
+//         // }
+//         if (message.ticketDetails?.ticket_id) {
+//   console.log('✅ Loading summary for:', message.ticketDetails.ticket_id);
+//   this.loadTestSummary(message);
+// } else {
+//   console.warn('⚠️ Cannot load summary: ticketDetails missing');
+// }
+
+//         this.saveChatToHistory();
+//       } else if (status.status === 'failed') {
+//         message.isRunning = false;
+//         message.executionProgress = 100;
+//         message.executionStatus = 'failed';
+//         message.executionMessage = `❌ Test execution failed!\n\nError: ${status.message || 'Unknown error'}`;
+//         message.text = message.executionMessage;
+
+//         // Try to load summary even for failed executions
+//         // if (status.summary_available && message.ticketDetails?.ticket_id) {
+//         //   console.log('⚠️ Loading summary for failed execution...');
+//         //   this.loadTestSummary(message);
+//         // }
+//         if (message.ticketDetails?.ticket_id) {
+//   this.loadTestSummary(message);
+// }
+
+//         this.saveChatToHistory();
+//       }
+//     },
+//     error: (error) => {
+//       console.error('❌ Polling error:', error);
+//       message.isRunning = false;
+//       message.executionStatus = 'failed';
+//       message.executionMessage = '❌ Error monitoring test execution. Please check the logs.';
+//       message.text = message.executionMessage;
+//       this.saveChatToHistory();
+//     }
+//   });
+// }
+
+
 private pollExecutionStatus(executionId: string, message: ChatMessage) {
-  this.pollingSubscription = interval(3000).pipe(
+  this.pollingSubscription = interval(5000).pipe(
     switchMap(() => {
       return this.apiService.getExecutionStatus(executionId);
     }),
+    // Keep polling until test is completed/failed AND summary is available
     takeWhile((status) => {
-      return status.status === 'running' || status.status === 'pending';
+      // Continue polling if still running or pending, or if summary is not yet available
+      return (
+        status.status === 'running' ||
+        status.status === 'pending' ||
+        ((status.status === 'completed' || status.status === 'failed') && !status.summary_available)
+      );
     }, true)
   ).subscribe({
     next: (status) => {
       // Update progress
       message.executionProgress = status.progress || 0;
 
-      // CRITICAL: Ensure ticketDetails exists BEFORE completion
+      // Ensure ticketDetails exists BEFORE completion
       if (!message.ticketDetails && status.ticket_id) {
         message.ticketDetails = {
           ticket_id: status.ticket_id
@@ -206,7 +331,12 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
         message.text = `🔄 Test execution in progress...\n\n🆔 Execution ID: ${executionId}\n📊 Progress: ${status.progress}%\n⏱️ Status: ${status.message}`;
       }
 
-      if (status.status === 'completed') {
+      // Only proceed if test is completed/failed AND summary is available
+      if (
+        (status.status === 'completed' || status.status === 'failed') &&
+        status.summary_available &&
+        message.ticketDetails?.ticket_id
+      ) {
         message.isRunning = false;
         message.executionProgress = 100;
         message.executionStatus = status.overall_status === 'PASSED' ? 'success' : 'failed';
@@ -228,37 +358,12 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
         ].filter((path): path is string => !!path && path.trim() !== '');
 
         // LOAD SUMMARY
-        console.log('📊 Execution completed, checking summary:', {
+        console.log('📊 Execution completed and summary available, loading summary:', {
           summary_available: status.summary_available,
-          ticket_id: message.ticketDetails?.ticket_id,
-          has_ticketDetails: !!message.ticketDetails
+          ticket_id: message.ticketDetails.ticket_id
         });
 
-        if (status.summary_available && message.ticketDetails?.ticket_id) {
-          console.log('✅ Loading summary for:', message.ticketDetails.ticket_id);
-          this.loadTestSummary(message);
-        } else {
-          console.warn('⚠️ Cannot load summary:', {
-            summary_available: status.summary_available,
-            ticket_id: status.ticket_id,
-            has_ticketDetails: !!message.ticketDetails
-          });
-        }
-
-        this.saveChatToHistory();
-      } else if (status.status === 'failed') {
-        message.isRunning = false;
-        message.executionProgress = 100;
-        message.executionStatus = 'failed';
-        message.executionMessage = `❌ Test execution failed!\n\nError: ${status.message || 'Unknown error'}`;
-        message.text = message.executionMessage;
-
-        // Try to load summary even for failed executions
-        if (status.summary_available && message.ticketDetails?.ticket_id) {
-          console.log('⚠️ Loading summary for failed execution...');
-          this.loadTestSummary(message);
-        }
-
+        this.loadTestSummary(message);
         this.saveChatToHistory();
       }
     },
@@ -272,6 +377,18 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
     }
   });
 }
+
+// Add this method to debug
+logFeedbackState(message: ChatMessage) {
+  console.log('📝 Feedback state:', {
+    hasSummary: !!message.summary,
+    executionStatus: message.executionStatus,
+    isRunning: message.isRunning,
+    correctedSelector: message.correctedSelector,
+    feedbackSubmitted: message.feedbackSubmitted
+  });
+}
+
 
   private loadTestSummary(message: ChatMessage) {
   console.log('🔍 loadTestSummary called with:', {
@@ -292,6 +409,9 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
       console.log('✅ Summary loaded successfully:', summary);
       message.summary = summary;
       message.showSummary = true;
+      // Initialize feedback properties
+      message.correctedSelector = '';
+      message.feedbackSubmitted = false;
       this.saveChatToHistory();
     },
     error: (error) => {
@@ -322,6 +442,239 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
         return 'status-unknown';
     }
   }
+
+  submitSelectorFeedback(step: any, message: ChatMessage) {
+  if (!message.ticketDetails?.ticket_id) {
+  // Show error or prevent submission
+  alert('Ticket ID is missing. Cannot submit feedback.');
+  return;
+  }
+  // Clean the step text before sending
+  const cleanStepText = step.description.split("Failed to process")[0].trim();
+  this.selectorFeedbackService.submitFeedback({
+    ticket_id: message.ticketDetails.ticket_id,
+    step_number: step.step_num,
+    // step_text: step.description,
+    // step_text: step.description.split("Failed to process")[0].trim(),
+    step_text: cleanStepText, // Use the cleaned step text
+    corrected_selector: step.correctedSelector,
+    module: message.ticketDetails.module,
+    action_type: step.action_type,
+    status: step.status
+  }).subscribe(() => {
+    step.feedbackSubmitted = true;
+    message.correctedSelector = step.correctedSelector;
+  });
+}
+
+
+
+
+
+
+// submitSelectorFeedback(step: any, message: ChatMessage) {
+//   if (!message.ticketDetails?.ticket_id) {
+//     alert('Ticket ID is missing. Cannot submit feedback.');
+//     return;
+//   }
+//   if (!step.correctedSelector || !step.description) {
+//     alert('Please enter a corrected selector and ensure step description is present.');
+//     return;
+//   }
+
+//   // Optionally, disable the button here (if you add a loading state)
+//   step.submittingFeedback = true;
+
+//   this.selectorFeedbackService.submitFeedback({
+//     ticket_id: message.ticketDetails.ticket_id,
+//     step_number: step.step_num,
+//     step_text: step.description,
+//     corrected_selector: step.correctedSelector,
+//     module: message.ticketDetails.module,
+//     action_type: step.action_type,
+//     status: step.status
+//   }).subscribe({
+//     next: () => {
+//     //   step.feedbackSubmitted = true;
+//     //   step.submittingFeedback = false;
+//     //   alert('✅ Feedback submitted successfully!');
+//     // },
+//     // Call process-feedback endpoint
+//       if (message.ticketDetails && message.ticketDetails.ticket_id) {
+//         // this.http.post('http://localhost:8000/api/process-feedback', { ticket_id: message.ticketDetails.ticket_id })
+//         // this.http.post(`http://localhost:8000/api/process-feedback?ticket_id=${message.ticketDetails.ticket_id}`, {})
+//         this.http.post(
+//   `http://localhost:8000/api/process-feedback?ticket_id=${message.ticketDetails.ticket_id}`,
+//   { feedback: step.correctedSelector }
+// )
+//          .subscribe({
+//            next: (response) => {
+//             step.feedbackSubmitted = true;
+//             alert('✅ Feedback processed and selector added!');
+//            },
+//            error: (err) => {
+//             alert('❌ Feedback submitted, but processing failed.');
+//            }
+//          });
+//       } else {
+//         alert('Ticket details are missing. Cannot process feedback.');
+//       }
+//     },
+//     error: (err) => {
+//       step.submittingFeedback = false;
+//       console.error('Feedback submission failed', err);
+//       alert('❌ Failed to submit feedback. Please try again.');
+//     }
+//   });
+// }
+
+
+anyFeedbackSubmitted(steps: any[]): boolean {
+  return steps.some(s => s.feedbackSubmitted);
+}
+
+// rerunTestWithFeedback(message: ChatMessage) {
+//   if (!message.ticketDetails?.ticket_id) {
+//     alert('Ticket ID is missing. Cannot re-run test.');
+//     return;
+//   }
+//   // this.apiService.rerunTest(message.ticketDetails.ticket_id).subscribe(...);
+//   this.apiService.rerunTest(message.ticketDetails.ticket_id).subscribe(
+//   response => {
+//     console.log('Rerun successful:', response);
+//   },
+//   error => {
+//     console.error('Rerun failed:', error);
+//   }
+// );
+// }
+
+// rerunTestWithFeedback(message: ChatMessage) {
+//   if (!message.ticketDetails?.ticket_id) {
+//     alert('Ticket ID is missing. Cannot re-run test.');
+//     return;
+//   }
+//   // Send both ticket_id and updated selector/feedback to backend
+//   // this.http.post('/api/rerun-with-feedback', {
+//   console.log('Corrected selector:', message.correctedSelector);
+//   this.http.post('http://localhost:8000/api/rerun-with-feedback', {
+//     ticket_id: message.ticketDetails.ticket_id,
+//     // feedback_text: message.correctedSelector // or the relevant feedback field
+//   }).subscribe(
+//     response => {
+//       console.log('Rerun started:', response);
+//     },
+//     error => {
+//       console.error('Rerun failed:', error);
+//     }
+//   );
+// }
+
+// rerunTestWithFeedback(step: any, message: ChatMessage) {
+//   const correctedSelector = step.correctedSelector;
+//   console.log('Corrected selector:', correctedSelector);
+//   if (!message.ticketDetails?.ticket_id) {
+//     alert('Ticket ID is missing. Cannot re-run test.');
+//     return;
+//   }
+//   if (!correctedSelector) {
+//     alert('No corrected selector found. Please submit feedback first.');
+//     return;
+//   }
+//   // Show loading state
+//   message.isRunning = true;
+//   this.http.post('http://localhost:8000/api/rerun-with-feedback', {
+//     ticket_id: message.ticketDetails.ticket_id,
+//     feedback_text: correctedSelector
+//   }).subscribe(
+//     response => {
+//       // console.log('Rerun started:', response);
+//       // Optionally show a message: "Rerun started"
+//       // Now poll for the new summary and artifacts
+//       if (message.ticketDetails?.ticket_id) {
+//         this.pollForRerunCompletion(message.ticketDetails.ticket_id, message);
+//       } else {
+//         message.isRunning = false;
+//         alert('Ticket ID is missing. Cannot poll for rerun completion.');
+//       }
+//     },
+//     error => {
+//       // console.error('Rerun failed:', error);
+//       message.isRunning = false;
+//       alert('Rerun failed. Please try again.');
+//     }
+//   );
+// }
+
+rerunTestWithFeedback(message: any) {
+  this.http.post<any>('http://localhost:8000/api/rerun-with-feedback', {
+    ticket_id: message.ticketDetails.ticket_id,
+    feedback_text: this.overallCorrectedSelector
+  }).subscribe(res => {
+
+    // 🔥 IMPORTANT
+    message.executionId = res.execution_id;
+    message.isRunning = true;
+    // message.executionStatus = null;
+    message.executionProgress = 0;
+    message.summary = null;
+    message.showSummary = false;
+
+    // Start polling NEW execution
+    // this.pollExecutionStatus(res.execution_id, message);
+    // ✅ POLL NEW EXECUTION
+    this.pollExecutionStatus(message.executionId, message);
+
+
+  });
+}
+
+
+// pollForRerunCompletion(ticketId: string, message: ChatMessage) {
+//   // Poll every 5 seconds for summary existence
+//   const pollInterval = setInterval(() => {
+//     this.apiService.getTestSummary(ticketId).subscribe({
+//       next: (summary) => {
+//         // Only show rerun summary if execution_date is recent (e.g., within last 2 minutes)
+//         const now = new Date();
+//         const execDate = new Date(summary.execution_date);
+//         const diff = (now.getTime() - execDate.getTime()) / 1000;
+//         if (diff < 120) { // 2 minutes
+//         // If summary loads, rerun is complete
+//         clearInterval(pollInterval);
+//         message.rerunSummary = summary;
+//         message.showRerunSummary = true;
+//         message.isRunning = false;
+//         console.log('Rerun summary loaded:', summary);
+//         // Optionally, fetch script and video paths if needed
+//         this.apiService.listScripts(ticketId).subscribe(scriptsResp => {
+//           // Set script path or list on message
+//           message.scriptPath = scriptsResp.scripts?.[0]?.path || '';
+//         });
+//       }
+//         // You can also fetch video/report if you have endpoints for those
+//       },
+//       error: (err) => {
+//         // Keep polling until summary is available
+//       }
+//     });
+//   }, 5000);
+// }
+
+submitOverallSelectorFeedback(message: ChatMessage) {
+  if (!message.ticketDetails?.ticket_id) {
+  alert('Ticket ID is missing. Cannot submit feedback.');
+  return;
+}
+  // Send feedback for the whole test, not per step
+  this.selectorFeedbackService.submitFeedback({
+    ticket_id: message.ticketDetails.ticket_id,
+    corrected_selector: this.overallCorrectedSelector,
+    // ...other fields as needed
+  }).subscribe(() => {
+    this.overallFeedbackSubmitted = true;
+  });
+}
 
   getAgentBadgeClass(agent: string): string {
     switch (agent) {
@@ -772,6 +1125,7 @@ private pollExecutionStatus(executionId: string, message: ChatMessage) {
       }
       this.saveToLocalStorage();
     }
+    localStorage.setItem('testGenCurrentChatId', this.currentChatId || '');
   }
 
   loadChatHistories() {
@@ -1140,7 +1494,31 @@ onConfirm(dialog: HTMLDialogElement, event: Event) {
   }
   }
 
+  hasFailedStep(message: any): boolean {
+  return !!message.summary?.steps?.some((step: any) => step.status === 'FAILED');
+}
 
+//   switchTab(tab: 'tab1' | 'tab2') {
+//   if (this.activeTab !== tab) {
+//     this.activeTab = tab;
+//     if (tab === 'tab1' && this.currentChatMessages.length === 0) {
+//       // Only start a new chat if there are no current messages
+//       this.startNewChat();
+//     }
+//   }
+// }
+
+//   switchTab(tab: 'tab1' | 'tab2') {
+//   if (this.activeTab !== tab) {
+//     this.activeTab = tab;
+//     if (tab === 'tab1') {
+//       this.startNewChat();
+//     }
+//   }
+// }
+// get isHistoryTab(): boolean {
+//   return this.activeTabIndex === 1;
+// }
   onLike(message: ChatMessage) {
     if (message.disliked) {
       message.disliked = false;
