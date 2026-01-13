@@ -15,6 +15,7 @@ from openai import AzureOpenAI
 from fastapi import Query
 from config_loader import load_config, get_azure_client
 from fastapi import BackgroundTasks
+from fastapi import Body
 
 from pydantic import BaseModel
 from typing import List, Optional
@@ -30,6 +31,7 @@ import requests
 import subprocess
 from dotenv import load_dotenv
 from selector_feedback import router as selector_feedback_router
+from models import Base
 
 load_dotenv()
 JIRA_BASE_URL = os.getenv("JIRA_BASE_URL")
@@ -43,6 +45,7 @@ logger.info("Starting Test Automation API...")
 # Create all tables
 Base.metadata.create_all(bind=engine)
 logger.info("Database tables verified")
+print("EXTERNAL_PROJECT_PATH =", os.getenv("EXTERNAL_PROJECT_PATH"))
 
 # ============================================================================
 # INITIALIZE FASTAPI APP
@@ -537,24 +540,36 @@ def rerun_test_in_background(
             logger.info(f"⚠️  Using system Python: {python_exe}")
 
         # Execute the script
-        logger.info(f"🏃 Executing script: {script_path}")
+        # logger.info(f"🏃 Executing script: {script_path}")
 
+        # result = subprocess.run(
+        #     [python_exe, script_path],
+        #     cwd=str(external_project_path),
+        #     capture_output=True,
+        #     text=True,
+        #     timeout=600  # 10 minutes timeout
+        # )
+
+        # logger.info(f"📤 Script execution completed with return code: {result.returncode}")
+
+        # # Log output
+        # if result.stdout:
+        #     logger.info(f"STDOUT:\n{result.stdout[:1000]}")  # First 1000 chars
+        # if result.stderr:
+        #     logger.warning(f"STDERR:\n{result.stderr[:1000]}")
+        logger.info(f"🏃 [RERUN_BG] About to execute script: {script_path}")
         result = subprocess.run(
             [python_exe, script_path],
             cwd=str(external_project_path),
             capture_output=True,
             text=True,
             timeout=600  # 10 minutes timeout
-        )
-
-        logger.info(f"📤 Script execution completed with return code: {result.returncode}")
-
-        # Log output
+        )        
+        logger.info(f"🏃 [RERUN_BG] Script execution completed with return code: {result.returncode}")
         if result.stdout:
-            logger.info(f"STDOUT:\n{result.stdout[:1000]}")  # First 1000 chars
+            logger.info(f"🏃 [RERUN_BG] STDOUT:\n{result.stdout[:1000]}")
         if result.stderr:
-            logger.warning(f"STDERR:\n{result.stderr[:1000]}")
-
+            logger.warning(f"🏃 [RERUN_BG] STDERR:\n{result.stderr[:1000]}")
         # Parse results from output or find generated files
         # Look for the latest report/video files
         reports_folder = external_project_path / "Reports"
@@ -653,6 +668,7 @@ def rerun_test_in_background(
 
             except Exception as e:
                 logger.warning(f"Could not parse steps from report: {e}")
+
 
         # Update execution with results
         execution.status = "completed"
@@ -1365,68 +1381,599 @@ class RerunFeedbackRequest(BaseModel):
 #         return {"status": "completed"}
     
 
+# @app.post("/api/rerun-with-feedback")
+# async def rerun_with_feedback(
+#     request: RerunFeedbackRequest,
+#     background_tasks: BackgroundTasks = None,
+#     db: Session = Depends(get_db)
+# ):
+#     """
+#     Process feedback and then rerun the test for the ticket.
+#     """
+#     ticket_id = request.ticket_id
+#     feedback_text = request.feedback_text
+#     logger.info(f"🔁 [API] Rerun with feedback called for ticket: {ticket_id}, feedback: {feedback_text}")
+
+#     external_project_path = settings.external_project_path
+#     plcd_script = Path(external_project_path) / "plcd_taseq.py"
+#     python_exe = str(Path(external_project_path) / "venv" / "Scripts" / "python.exe")
+
 @app.post("/api/rerun-with-feedback")
 async def rerun_with_feedback(
     request: RerunFeedbackRequest,
-    background_tasks: BackgroundTasks = None,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db)
 ):
-    """
-    Process feedback and then rerun the test for the ticket.
-    """
     ticket_id = request.ticket_id
     feedback_text = request.feedback_text
-    logger.info(f"🔁 [API] Rerun with feedback called for ticket: {ticket_id}, feedback: {feedback_text}")
 
-    external_project_path = settings.external_project_path
-    plcd_script = Path(external_project_path) / "plcd_taseq.py"
-    python_exe = str(Path(external_project_path) / "venv" / "Scripts" / "python.exe")
+    logger.info(f"Rerun with feedback for {ticket_id}")
 
-    def process_feedback_and_rerun():
-        # 1. Process feedback
-        subprocess.run(
-            [python_exe, str(plcd_script), ticket_id, "--process-feedback", feedback_text],
+    # =====================================================
+    # 1️⃣ CREATE EXECUTION FIRST (VERY IMPORTANT)
+    # =====================================================
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    execution_id = f"rerun_{ticket_id}_{timestamp}"
+
+    execution = TestExecution(
+        execution_id=execution_id,
+        ticket_id=ticket_id,
+        project_id=None,
+        status="pending",
+        overall_status="UNKNOWN",
+        started_at=datetime.now()
+    )
+    db.add(execution)
+    db.commit()
+    db.refresh(execution)
+
+    # =====================================================
+    # 2️⃣ ADD BACKGROUND TASK
+    # =====================================================
+    background_tasks.add_task(
+        process_feedback_and_rerun,
+        execution_id,
+        ticket_id,
+        feedback_text
+    )
+
+    # =====================================================
+    # 3️⃣ RETURN execution_id TO FRONTEND 🔥
+    # =====================================================
+    return {
+        "execution_id": execution_id,
+        "status": "started"
+    }
+
+
+    # def process_feedback_and_rerun():
+    # def process_feedback_and_rerun(execution_id: str, ticket_id: str, feedback_text: str):
+
+    #     # 1. Process feedback
+    #     subprocess.run(
+    #         [python_exe, str(plcd_script), ticket_id, "--process-feedback", feedback_text],
+    #         cwd=str(external_project_path),
+    #         capture_output=True,
+    #         text=True,
+    #         timeout=600
+    #     )
+    #     # 2. Find latest script for rerun
+    #     scripts_folder = Path(external_project_path) / "Generated_Scripts"
+    #     matching_scripts = list(scripts_folder.glob(f"*{ticket_id}*.py"))
+    #     if not matching_scripts:
+    #         logger.error(f"No generated script found for ticket '{ticket_id}'.")
+    #         return
+    #     latest_script = max(matching_scripts, key=lambda p: p.stat().st_mtime)
+    #     # 3. Create new execution record for rerun
+    #     service = TestExecutionService(db)
+    #     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    #     execution_id = f"rerun_{ticket_id}_{timestamp}"
+    #     execution = TestExecution(
+    #         execution_id=execution_id,
+    #         ticket_id=ticket_id,
+    #         project_id=None,
+    #         status="pending",
+    #         overall_status="UNKNOWN",
+    #         started_at=datetime.now()
+    #     )
+    #     db.add(execution)
+    #     db.commit()
+    #     db.refresh(execution)
+    #     # 4. Start rerun in background
+    #     rerun_test_in_background(
+    #         execution_id=execution_id,
+    #         ticket_id=ticket_id,
+    #         script_path=str(latest_script),
+    #         project_id=None
+    #     )
+
+    # if background_tasks:
+    #     background_tasks.add_task(process_feedback_and_rerun)
+    #     return {"status": "started"}
+    # else:
+    #     process_feedback_and_rerun()
+    #     return {"status": "completed"}
+    
+    
+# def process_feedback_and_rerun(
+#     execution_id: str,
+#     ticket_id: str,
+#     feedback_text: str
+# ):
+#     logger.info(f"Processing feedback and rerun for {ticket_id}")
+
+#     # =====================================================
+#     # 1️⃣ APPLY FEEDBACK (UPDATE SELECTOR KB)
+#     # =====================================================
+#     external_project_path = settings.external_project_path
+#     plcd_script = Path(external_project_path) / "plcd_taseq.py"
+#     python_exe = str(Path(external_project_path) / "venv" / "Scripts" / "python.exe")
+#     if not Path(python_exe).exists():
+#         import shutil
+#         python_exe = shutil.which("python") or shutil.which("python3")
+#         if not python_exe:
+#             logger.error("Python executable not found for feedback rerun.")
+#             return
+
+#     # subprocess.run(
+#     #     [python_exe, str(plcd_script), ticket_id, "--process-feedback", feedback_text],
+#     #     cwd=str(external_project_path),
+#     #     capture_output=True,
+#     #     text=True,
+#     #     timeout=600
+#     # )
+#     # 1️⃣ APPLY FEEDBACK
+#     logger.info(f"🔁 [RERUN] Running process-feedback subprocess for {ticket_id} with feedback: {feedback_text}")
+#     feedback_result = subprocess.run(
+#         [python_exe, str(plcd_script), ticket_id, "--process-feedback", feedback_text],
+#         cwd=str(external_project_path),
+#         capture_output=True,
+#         text=True,
+#         timeout=600
+#     )
+#     logger.info(f"🔁 [RERUN] process-feedback return code: {feedback_result.returncode}")
+#     logger.info(f"🔁 [RERUN] STDOUT: {feedback_result.stdout[:500]}")
+#     logger.info(f"🔁 [RERUN] STDERR: {feedback_result.stderr[:500]}")
+
+#     # =====================================================
+#     # 2️⃣ FIND LATEST GENERATED SCRIPT
+#     # =====================================================
+#     scripts_folder = Path(external_project_path) / "Generated_Scripts"
+#     matching_scripts = list(scripts_folder.glob(f"*{ticket_id}*.py"))
+
+#     if not matching_scripts:
+#         logger.error(f"No generated script found for ticket '{ticket_id}'")
+#         return
+
+#     latest_script = max(matching_scripts, key=lambda p: p.stat().st_mtime)
+    
+#     # # 3️⃣ RUN PLAYWRIGHT (🔥 THIS WAS MISSING 🔥)
+#     # result = subprocess.run(
+#     #     [python_exe, str(latest_script), ticket_id, "--no-feedback"],
+#     #     cwd=str(external_project_path),
+#     #     capture_output=True,
+#     #     text=True,
+#     #     timeout=600
+#     # )
+#     # 3️⃣ RUN PLAYWRIGHT (RERUN)
+#     # logger.info(f"🔁 [RERUN] Running Playwright rerun subprocess with script: {latest_script}")
+#     # rerun_result = subprocess.run(
+#     #     [python_exe, str(latest_script), ticket_id, "--no-feedback"],
+#     #     cwd=str(external_project_path),
+#     #     capture_output=True,
+#     #     text=True,
+#     #     timeout=600
+#     # )
+
+#     # logger.info("🎭 Playwright execution completed")
+#     # logger.info(f"🔁 [RERUN] rerun return code: {rerun_result.returncode}")
+#     # logger.info(f"🔁 [RERUN] STDOUT: {rerun_result.stdout[:500]}")
+#     # logger.info(f"🔁 [RERUN] STDERR: {rerun_result.stderr[:500]}")
+    
+    
+
+#     # =====================================================
+#     # 3️⃣ RUN TEST AGAIN USING SAME execution_id
+#     # =====================================================
+#     rerun_test_in_background(
+#         execution_id=execution_id,
+#         ticket_id=ticket_id,
+#         script_path=str(latest_script),
+#         project_id=None
+#     )
+
+# def process_feedback_and_rerun(
+#     execution_id: str,
+#     ticket_id: str,
+#     feedback_text: str
+# ):
+#     """
+#     Process feedback and rerun test WITH PLAYWRIGHT EXECUTION
+#     """
+#     db = SessionLocal()
+    
+#     try:
+#         logger.info(f"🔁 [RERUN] Starting for {execution_id}")
+        
+#         # 1️⃣ APPLY FEEDBACK
+#         external_project_path = Path(settings.external_project_path)
+#         plcd_script = external_project_path / "plcd_taseq.py"
+#         python_exe = str(external_project_path / "venv" / "Scripts" / "python.exe")
+        
+#         if not Path(python_exe).exists():
+#             import shutil
+#             python_exe = shutil.which("python") or shutil.which("python3")
+        
+#         logger.info(f"🔁 [RERUN] Processing feedback: {feedback_text[:50]}...")
+        
+#         # Run feedback processing
+#         feedback_result = subprocess.run(
+#             [python_exe, str(plcd_script), ticket_id, "--process-feedback", feedback_text],
+#             cwd=str(external_project_path),
+#             capture_output=True,
+#             text=True,
+#             timeout=600
+#         )
+        
+#         logger.info(f"🔁 [RERUN] Feedback processed, return code: {feedback_result.returncode}")
+        
+#         # 2️⃣ FIND LATEST SCRIPT
+#         # scripts_folder = external_project_path / "Generated_Scripts"
+#         # matching_scripts = list(scripts_folder.glob(f"*{ticket_id}*.py"))
+        
+#         # if not matching_scripts:
+#         #     raise FileNotFoundError(f"No script found for {ticket_id}")
+#         scripts_folder = external_project_path / "Generated_Scripts"
+#         matching_scripts = list(scripts_folder.glob(f"*{ticket_id}*.py"))
+
+#         if not matching_scripts:
+#             logger.info(f"No script found for {ticket_id}, generating new script with feedback...")
+#     # Run test generation with feedback (this should create the script)
+#             result = subprocess.run(
+#                 [python_exe, str(plcd_script), ticket_id, "--process-feedback", feedback_text, "--no-feedback"],
+#                 cwd=str(external_project_path),
+#                 capture_output=True,
+#                 text=True,
+#                 timeout=600
+#             )
+#             logger.info(f"Test generation with feedback completed, return code: {result.returncode}")
+#             logger.info(f"STDOUT: {result.stdout[:500]}")
+#             logger.info(f"STDERR: {result.stderr[:500]}")
+
+#     # Now continue as usual: find the new script, run it, generate summary
+#             matching_scripts = list(scripts_folder.glob(f"*{ticket_id}*.py"))
+#             if not matching_scripts:
+#                 logger.error(f"Still no script found after generation for ticket '{ticket_id}'")
+#         # Mark as failed, return
+#                 return
+        
+#         latest_script = max(matching_scripts, key=lambda p: p.stat().st_mtime)
+#         logger.info(f"🔁 [RERUN] Using script: {latest_script.name}")
+        
+#         # 3️⃣ UPDATE EXECUTION TO RUNNING
+#         execution = db.query(TestExecution).filter(
+#             TestExecution.execution_id == execution_id
+#         ).first()
+        
+#         if execution:
+#             execution.status = "running"
+#             execution.started_at = datetime.now()
+#             db.commit()
+#             logger.info(f"🔁 [RERUN] Status set to 'running'")
+        
+#         # 4️⃣ RUN PLAYWRIGHT TEST (BLOCKING)
+#         logger.info(f"🔁 [RERUN] Running Playwright with updated selector...")
+        
+#         playwright_result = subprocess.run(
+#             [python_exe, str(plcd_script), ticket_id, "--no-feedback"],
+#             cwd=str(external_project_path),
+#             capture_output=True,
+#             text=True,
+#             timeout=600
+#         )
+        
+#         logger.info(f"🔁 [RERUN] Playwright completed, return code: {playwright_result.returncode}")
+        
+#         # 5️⃣ FIND NEW ARTIFACTS
+#         report_path = None
+#         script_path = str(latest_script)
+#         video_path = None
+#         overall_status = "UNKNOWN"
+        
+#         reports_folder = external_project_path / "Reports"
+#         if reports_folder.exists():
+#             reports = sorted(
+#                 reports_folder.glob(f"*{ticket_id}*.html"),
+#                 key=lambda p: p.stat().st_mtime,
+#                 reverse=True
+#             )
+#             if reports:
+#                 report_path = str(reports[0])
+#                 logger.info(f"🔁 [RERUN] Found new report: {reports[0].name}")
+        
+#         videos_folder = external_project_path / "Videos"
+#         if videos_folder.exists():
+#             videos = sorted(
+#                 videos_folder.glob("*.webm"),
+#                 key=lambda p: p.stat().st_mtime,
+#                 reverse=True
+#             )
+#             if videos:
+#                 video_path = str(videos[0])
+        
+#         # 6️⃣ PARSE STATUS FROM REPORT
+#         if report_path and Path(report_path).exists():
+#             try:
+#                 with open(report_path, 'r', encoding='utf-8') as f:
+#                     html = f.read()
+                
+#                 match = re.search(r'<div[^>]*class=["\'][^"\']*status-(PASSED|FAILED)[^"\']*["\'][^>]*>\s*(PASSED|FAILED)\s*</div>', html, re.IGNORECASE)
+#                 if match:
+#                     overall_status = match.group(2).upper()
+#                 else:
+#                     passed = len(re.findall(r'>\s*PASSED\s*<', html, re.IGNORECASE))
+#                     failed = len(re.findall(r'>\s*FAILED\s*<', html, re.IGNORECASE))
+#                     overall_status = "FAILED" if failed > 0 else ("PASSED" if passed > 0 else "UNKNOWN")
+                
+#                 logger.info(f"🔁 [RERUN] Status: {overall_status}")
+#             except Exception as e:
+#                 logger.warning(f"Could not parse status: {e}")
+        
+#         # 7️⃣ LOAD STEPS FROM JSON
+#         steps_file = external_project_path / "Reports" / "steps" / f"steps_{ticket_id}.json"
+#         steps_saved = False
+        
+#         if steps_file.exists():
+#             with open(steps_file, "r", encoding="utf-8") as f:
+#                 raw_steps = json.load(f)
+            
+#             logger.info(f"🔁 [RERUN] Loaded {len(raw_steps)} steps from JSON")
+            
+#             # Delete old steps
+#             db.query(ExecutionStep).filter(
+#                 ExecutionStep.execution_id == execution_id
+#             ).delete()
+#             db.commit()
+            
+#             # Save new steps
+#             for step in raw_steps:
+#                 db.add(ExecutionStep(
+#                     execution_id=execution_id,
+#                     step_num=step.get("step_number"),
+#                     step_text=step.get("step_text"),
+#                     status=step.get("status"),
+#                     selector_used=step.get("selector", ""),
+#                     agent_used=step.get("agent_used", ""),
+#                     confidence=step.get("confidence", 0.0),
+#                     action_type=step.get("action_type", ""),
+#                     screenshot_path=None
+#                 ))
+            
+#             db.commit()
+#             steps_saved = True
+#             logger.info(f"🔁 [RERUN] Saved {len(raw_steps)} steps to DB")
+        
+#         # 8️⃣ UPDATE EXECUTION RECORD
+#         final_status = "completed" if report_path else "failed"
+        
+#         db.refresh(execution)
+#         execution.status = final_status
+#         execution.overall_status = overall_status
+#         execution.completed_at = datetime.now()
+#         execution.report_path = report_path
+#         execution.script_path = script_path
+#         execution.video_path = video_path
+#         execution.error_message = None if report_path else "No report generated"
+#         db.commit()
+        
+#         logger.info(f"🔁 [RERUN] Execution marked as '{final_status}'")
+        
+#         # 9️⃣ GENERATE SUMMARY
+#         if steps_saved:
+#             service = TestExecutionService(db)
+#             service._generate_summary_from_db(execution_id, ticket_id)
+#             logger.info(f"🔁 [RERUN] Summary generated")
+        
+#         logger.info(f"🔁 [RERUN] COMPLETED for {execution_id}")
+        
+#     except Exception as e:
+#         logger.error(f"❌ [RERUN] Failed: {e}")
+#         import traceback
+#         logger.error(traceback.format_exc())
+        
+#         # Mark as failed
+#         try:
+#             execution = db.query(TestExecution).filter(
+#                 TestExecution.execution_id == execution_id
+#             ).first()
+#             if execution:
+#                 execution.status = "failed"
+#                 execution.overall_status = "FAILED"
+#                 execution.completed_at = datetime.now()
+#                 execution.error_message = str(e)[:500]
+#                 db.commit()
+#         except:
+#             pass
+    
+#     finally:
+#         db.close()
+
+def process_feedback_and_rerun(
+    execution_id: str,
+    ticket_id: str,
+    feedback_text: str
+):
+    """
+    Always generate a new script with feedback, then run Playwright, then update summary.
+    """
+    db = SessionLocal()
+    try:
+        logger.info(f"🔁 [RERUN] Starting for {execution_id}")
+
+        external_project_path = Path(settings.external_project_path)
+        plcd_script = external_project_path / "plcd_taseq.py"
+        python_exe = str(external_project_path / "venv" / "Scripts" / "python.exe")
+        if not Path(python_exe).exists():
+            import shutil
+            python_exe = shutil.which("python") or shutil.which("python3")
+
+        # 1️⃣ Always generate a new script with feedback
+        logger.info(f"🔁 [RERUN] Generating new script with feedback: {feedback_text[:50]}...")
+        feedback_result = subprocess.run(
+            [python_exe, str(plcd_script), ticket_id, "--process-feedback", feedback_text, "--no-feedback"],
             cwd=str(external_project_path),
             capture_output=True,
             text=True,
             timeout=600
         )
-        # 2. Find latest script for rerun
-        scripts_folder = Path(external_project_path) / "Generated_Scripts"
+        logger.info(f"🔁 [RERUN] Script generation return code: {feedback_result.returncode}")
+        logger.info(f"STDOUT: {feedback_result.stdout[:500]}")
+        logger.info(f"STDERR: {feedback_result.stderr[:500]}")
+
+        # 2️⃣ Find the newly generated script
+        scripts_folder = external_project_path / "Generated_Scripts"
         matching_scripts = list(scripts_folder.glob(f"*{ticket_id}*.py"))
         if not matching_scripts:
-            logger.error(f"No generated script found for ticket '{ticket_id}'.")
+            logger.error(f"❌ [RERUN] Script generation failed for ticket '{ticket_id}'")
             return
-        latest_script = max(matching_scripts, key=lambda p: p.stat().st_mtime)
-        # 3. Create new execution record for rerun
-        service = TestExecutionService(db)
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        execution_id = f"rerun_{ticket_id}_{timestamp}"
-        execution = TestExecution(
-            execution_id=execution_id,
-            ticket_id=ticket_id,
-            project_id=None,
-            status="pending",
-            overall_status="UNKNOWN",
-            started_at=datetime.now()
-        )
-        db.add(execution)
-        db.commit()
-        db.refresh(execution)
-        # 4. Start rerun in background
-        rerun_test_in_background(
-            execution_id=execution_id,
-            ticket_id=ticket_id,
-            script_path=str(latest_script),
-            project_id=None
-        )
 
-    if background_tasks:
-        background_tasks.add_task(process_feedback_and_rerun)
-        return {"status": "started"}
-    else:
-        process_feedback_and_rerun()
-        return {"status": "completed"}
+        latest_script = max(matching_scripts, key=lambda p: p.stat().st_mtime)
+        logger.info(f"🔁 [RERUN] Using script: {latest_script.name}")
+
+        # 3️⃣ Mark execution as running
+        execution = db.query(TestExecution).filter(
+            TestExecution.execution_id == execution_id
+        ).first()
+        if execution:
+            execution.status = "running"
+            execution.started_at = datetime.now()
+            db.commit()
+            logger.info(f"🔁 [RERUN] Status set to 'running'")
+
+        # 4️⃣ Run Playwright using the new script
+        logger.info(f"🔁 [RERUN] Running Playwright with updated selector...")
+        playwright_result = subprocess.run(
+            [python_exe, str(latest_script), ticket_id, "--no-feedback"],
+            cwd=str(external_project_path),
+            capture_output=True,
+            text=True,
+            timeout=600
+        )
+        logger.info(f"🔁 [RERUN] Playwright completed, return code: {playwright_result.returncode}")
+        logger.info(f"STDOUT: {playwright_result.stdout[:500]}")
+        logger.info(f"STDERR: {playwright_result.stderr[:500]}")
+
+        # 5️⃣ Find new artifacts and update DB
+        report_path = None
+        script_path = str(latest_script)
+        video_path = None
+        overall_status = "UNKNOWN"
+
+        reports_folder = external_project_path / "Reports"
+        if reports_folder.exists():
+            reports = sorted(
+                reports_folder.glob(f"*{ticket_id}*.html"),
+                key=lambda p: p.stat().st_mtime,
+                reverse=True
+            )
+            if reports:
+                report_path = str(reports[0])
+                logger.info(f"🔁 [RERUN] Found new report: {reports[0].name}")
+
+        videos_folder = external_project_path / "Videos"
+        if videos_folder.exists():
+            videos = sorted(
+                videos_folder.glob("*.webm"),
+                key=lambda p: p.stat().st_mtime,
+                reverse=True
+            )
+            if videos:
+                video_path = str(videos[0])
+
+        # 6️⃣ Parse status from report
+        if report_path and Path(report_path).exists():
+            try:
+                with open(report_path, 'r', encoding='utf-8') as f:
+                    html = f.read()
+                match = re.search(r'<div[^>]*class=["\'][^"\']*status-(PASSED|FAILED)[^"\']*["\'][^>]*>\s*(PASSED|FAILED)\s*</div>', html, re.IGNORECASE)
+                if match:
+                    overall_status = match.group(2).upper()
+                else:
+                    passed = len(re.findall(r'>\s*PASSED\s*<', html, re.IGNORECASE))
+                    failed = len(re.findall(r'>\s*FAILED\s*<', html, re.IGNORECASE))
+                    overall_status = "FAILED" if failed > 0 else ("PASSED" if passed > 0 else "UNKNOWN")
+                logger.info(f"🔁 [RERUN] Status: {overall_status}")
+            except Exception as e:
+                logger.warning(f"Could not parse status: {e}")
+
+        # 7️⃣ Load steps from JSON
+        steps_file = external_project_path / "Reports" / "steps" / f"steps_{ticket_id}.json"
+        steps_saved = False
+
+        if steps_file.exists():
+            with open(steps_file, "r", encoding="utf-8") as f:
+                raw_steps = json.load(f)
+            logger.info(f"🔁 [RERUN] Loaded {len(raw_steps)} steps from JSON")
+            db.query(ExecutionStep).filter(
+                ExecutionStep.execution_id == execution_id
+            ).delete()
+            db.commit()
+            for step in raw_steps:
+                db.add(ExecutionStep(
+                    execution_id=execution_id,
+                    step_num=step.get("step_number"),
+                    step_text=step.get("step_text"),
+                    status=step.get("status"),
+                    selector_used=step.get("selector", ""),
+                    agent_used=step.get("agent_used", ""),
+                    confidence=step.get("confidence", 0.0),
+                    action_type=step.get("action_type", ""),
+                    screenshot_path=None
+                ))
+            db.commit()
+            steps_saved = True
+            logger.info(f"🔁 [RERUN] Saved {len(raw_steps)} steps to DB")
+
+        # 8️⃣ Update execution record
+        final_status = "completed" if report_path else "failed"
+        db.refresh(execution)
+        execution.status = final_status
+        execution.overall_status = overall_status
+        execution.completed_at = datetime.now()
+        execution.report_path = report_path
+        execution.script_path = script_path
+        execution.video_path = video_path
+        execution.error_message = None if report_path else "No report generated"
+        db.commit()
+        logger.info(f"🔁 [RERUN] Execution marked as '{final_status}'")
+
+        # 9️⃣ Generate summary
+        if steps_saved:
+            service = TestExecutionService(db)
+            service._generate_summary_from_db(execution_id, ticket_id)
+            logger.info(f"🔁 [RERUN] Summary generated")
+
+        logger.info(f"🔁 [RERUN] COMPLETED for {execution_id}")
+
+    except Exception as e:
+        logger.error(f"❌ [RERUN] Failed: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
+        try:
+            execution = db.query(TestExecution).filter(
+                TestExecution.execution_id == execution_id
+            ).first()
+            if execution:
+                execution.status = "failed"
+                execution.overall_status = "FAILED"
+                execution.completed_at = datetime.now()
+                execution.error_message = str(e)[:500]
+                db.commit()
+        except:
+            pass
+    finally:
+        db.close()
+
     
 @app.post("/api/feedback")
 async def receive_feedback(feedback: Feedback):
@@ -1700,85 +2247,271 @@ def debug_artifacts(ticket_id: str):
         return {"error": str(e)}
 
 
+# @app.get("/api/debug/parse-report/{execution_id}")
+# def debug_parse_report(execution_id: str, db: Session = Depends(get_db)):
+#     """
+#     Debug endpoint to show what we're parsing from the report
+#     """
+#     try:
+#         execution = db.query(TestExecution).filter(
+#             TestExecution.execution_id == execution_id
+#         ).first()
+
+#         if not execution or not execution.report_path:
+#             return {"error": "No report path found"}
+
+#         report_path = Path(execution.report_path)
+
+#         if not report_path.exists():
+#             return {"error": f"Report not found: {report_path}"}
+
+#         with open(report_path, 'r', encoding='utf-8') as f:
+#             html_content = f.read()
+
+#         import re
+
+#         # Extract key parts
+#         result = {
+#             "execution_id": execution_id,
+#             "report_path": str(report_path),
+#             "report_size": len(html_content),
+#             "patterns_found": {}
+#         }
+
+#         # Check for overall status patterns
+#         overall_patterns = {
+#             "h2_overall_status": r'<h2[^>]*>\s*Overall\s+Status:\s*(PASSED|FAILED)\s*</h2>',
+#             "div_overall_status": r'<div[^>]*class=["\']overall-status[^"\']*["\'][^>]*>\s*(PASSED|FAILED)',
+#             "generic_status": r'Overall\s+Status:\s*<[^>]+>\s*(PASSED|FAILED)',
+#         }
+
+#         for name, pattern in overall_patterns.items():
+#             match = re.search(pattern, html_content, re.IGNORECASE)
+#             if match:
+#                 result["patterns_found"][name] = match.group(1).upper()
+
+#         # Count step statuses
+#         step_table = re.search(r'<table[^>]*>(.*?)</table>', html_content, re.DOTALL | re.IGNORECASE)
+#         if step_table:
+#             table_content = step_table.group(1)
+
+#             passed_in_table = len(re.findall(r'>\s*PASSED\s*<', table_content, re.IGNORECASE))
+#             failed_in_table = len(re.findall(r'>\s*FAILED\s*<', table_content, re.IGNORECASE))
+
+#             result["step_table"] = {
+#                 "found": True,
+#                 "passed_count": passed_in_table,
+#                 "failed_count": failed_in_table
+#             }
+
+#         # Count all occurrences
+#         all_passed = len(re.findall(r'\bPASSED\b', html_content))
+#         all_failed = len(re.findall(r'\bFAILED\b', html_content))
+
+#         result["word_counts"] = {
+#             "passed": all_passed,
+#             "failed": all_failed
+#         }
+
+#         # Extract a snippet around "Overall Status" if found
+#         status_match = re.search(r'.{0,200}Overall\s+Status.{0,200}', html_content, re.IGNORECASE | re.DOTALL)
+#         if status_match:
+#             result["status_snippet"] = status_match.group(0)
+
+#         # Get first 1000 chars of HTML for inspection
+#         result["html_preview"] = html_content[:1000]
+
+#         return result
+
+#     except Exception as e:
+#         logger.error(f"Debug parse report error: {e}", exc_info=True)
+#         return {"error": str(e)}
+
+
+# ...existing code...
+
 @app.get("/api/debug/parse-report/{execution_id}")
-def debug_parse_report(execution_id: str, db: Session = Depends(get_db)):
+async def debug_parse_report(execution_id: str, db: Session = Depends(get_db)):
     """
-    Debug endpoint to show what we're parsing from the report
+    🔍 DEBUG ENDPOINT: Parse HTML report and show step extraction
+    
+    Example: GET http://localhost:8000/api/debug/parse-report/exec_RBPLCD-8960_20260111_003255
+    
+    Returns:
+        {
+            "execution_id": "exec_RBPLCD-8960_20260111_003255",
+            "report_path": "C:\\path\\to\\report.html",
+            "total_rows": 10,
+            "rows_parsed": [
+                {
+                    "row_index": 0,
+                    "is_header": true,
+                    "num_cells": 6,
+                    "cells": ["Step #", "Description", "Status", "Selector", "Agent", "Confidence"],
+                    "raw_html": "<tr><th>Step #</th>..."
+                },
+                {
+                    "row_index": 1,
+                    "is_header": false,
+                    "num_cells": 6,
+                    "cells": ["1", "Click login button", "PASSED", "#login", "L1", "0.95"],
+                    "raw_html": "<tr><td>1</td>..."
+                }
+            ],
+            "table_preview": "<thead><tr>..."
+        }
     """
     try:
+        # Find execution
         execution = db.query(TestExecution).filter(
             TestExecution.execution_id == execution_id
         ).first()
-
-        if not execution or not execution.report_path:
-            return {"error": "No report path found"}
-
-        report_path = Path(execution.report_path)
-
-        if not report_path.exists():
-            return {"error": f"Report not found: {report_path}"}
-
-        with open(report_path, 'r', encoding='utf-8') as f:
-            html_content = f.read()
-
-        import re
-
-        # Extract key parts
-        result = {
-            "execution_id": execution_id,
-            "report_path": str(report_path),
-            "report_size": len(html_content),
-            "patterns_found": {}
-        }
-
-        # Check for overall status patterns
-        overall_patterns = {
-            "h2_overall_status": r'<h2[^>]*>\s*Overall\s+Status:\s*(PASSED|FAILED)\s*</h2>',
-            "div_overall_status": r'<div[^>]*class=["\']overall-status[^"\']*["\'][^>]*>\s*(PASSED|FAILED)',
-            "generic_status": r'Overall\s+Status:\s*<[^>]+>\s*(PASSED|FAILED)',
-        }
-
-        for name, pattern in overall_patterns.items():
-            match = re.search(pattern, html_content, re.IGNORECASE)
-            if match:
-                result["patterns_found"][name] = match.group(1).upper()
-
-        # Count step statuses
-        step_table = re.search(r'<table[^>]*>(.*?)</table>', html_content, re.DOTALL | re.IGNORECASE)
-        if step_table:
-            table_content = step_table.group(1)
-
-            passed_in_table = len(re.findall(r'>\s*PASSED\s*<', table_content, re.IGNORECASE))
-            failed_in_table = len(re.findall(r'>\s*FAILED\s*<', table_content, re.IGNORECASE))
-
-            result["step_table"] = {
-                "found": True,
-                "passed_count": passed_in_table,
-                "failed_count": failed_in_table
+        
+        if not execution:
+            return {
+                "error": f"Execution {execution_id} not found",
+                "available_executions": [
+                    e.execution_id for e in db.query(TestExecution).order_by(
+                        TestExecution.started_at.desc()
+                    ).limit(10).all()
+                ]
             }
-
-        # Count all occurrences
-        all_passed = len(re.findall(r'\bPASSED\b', html_content))
-        all_failed = len(re.findall(r'\bFAILED\b', html_content))
-
-        result["word_counts"] = {
-            "passed": all_passed,
-            "failed": all_failed
+        
+        if not execution.report_path or not Path(execution.report_path).exists():
+            return {
+                "error": f"Report not found",
+                "report_path": execution.report_path,
+                "execution_status": execution.status,
+                "overall_status": execution.overall_status
+            }
+        
+        logger.info(f"🔍 DEBUG: Parsing report for {execution_id}")
+        logger.info(f"   Report path: {execution.report_path}")
+        
+        # Read HTML
+        with open(execution.report_path, 'r', encoding='utf-8') as f:
+            html = f.read()
+        
+        logger.info(f"   HTML size: {len(html)} bytes")
+        
+        # Extract table
+        table_match = re.search(r'<table[^>]*>(.*?)</table>', html, re.DOTALL | re.IGNORECASE)
+        
+        if not table_match:
+            return {
+                "error": "No <table> found in HTML",
+                "html_preview": html[:1000],
+                "report_path": execution.report_path,
+                "html_size": len(html),
+                "has_table_tag": "<table" in html.lower()
+            }
+        
+        table_html = table_match.group(1)
+        
+        # Extract rows
+        rows = re.findall(r'<tr[^>]*>(.*?)</tr>', table_html, re.DOTALL | re.IGNORECASE)
+        
+        logger.info(f"   Found {len(rows)} rows in table")
+        
+        debug_info = {
+            "execution_id": execution_id,
+            "report_path": execution.report_path,
+            "total_rows": len(rows),
+            "html_size": len(html),
+            "table_size": len(table_html),
+            "rows_parsed": []
+        }
+        
+        # Parse each row
+        for idx, row in enumerate(rows):
+            cells = re.findall(r'<td[^>]*>(.*?)</td>', row, re.DOTALL | re.IGNORECASE)
+            
+            # Also check for <th> tags (header row)
+            if idx == 0 and len(cells) == 0:
+                cells = re.findall(r'<th[^>]*>(.*?)</th>', row, re.DOTALL | re.IGNORECASE)
+            
+            # Clean HTML tags from cells
+            clean_cells = [re.sub(r'<[^>]+>', '', cell).strip() for cell in cells]
+            
+            debug_info["rows_parsed"].append({
+                "row_index": idx,
+                "is_header": idx == 0,
+                "num_cells": len(cells),
+                "cells": clean_cells[:10],  # Limit to first 10 cells
+                "raw_html": row[:200]  # First 200 chars of raw HTML
+            })
+        
+        # Show first few rows of actual HTML table for inspection
+        debug_info["table_preview"] = table_html[:1000]
+        
+        # Add recommendations based on what we found
+        if len(rows) > 0:
+            first_data_row = debug_info["rows_parsed"][1] if len(debug_info["rows_parsed"]) > 1 else None
+            if first_data_row:
+                num_cells = first_data_row["num_cells"]
+                debug_info["recommendations"] = {
+                    "cells_per_row": num_cells,
+                    "suggested_mapping": _suggest_cell_mapping(num_cells, first_data_row["cells"])
+                }
+        
+        return debug_info
+    
+    except Exception as e:
+        import traceback
+        logger.error(f"❌ DEBUG endpoint error: {e}")
+        logger.error(traceback.format_exc())
+        return {
+            "error": str(e),
+            "traceback": traceback.format_exc()
         }
 
-        # Extract a snippet around "Overall Status" if found
-        status_match = re.search(r'.{0,200}Overall\s+Status.{0,200}', html_content, re.IGNORECASE | re.DOTALL)
-        if status_match:
-            result["status_snippet"] = status_match.group(0)
 
-        # Get first 1000 chars of HTML for inspection
-        result["html_preview"] = html_content[:1000]
+def _suggest_cell_mapping(num_cells: int, sample_cells: list) -> dict:
+    """
+    Helper function to suggest cell mapping based on content
+    """
+    mapping = {}
+    
+    if num_cells >= 3:
+        mapping["step_num_index"] = 0
+        mapping["step_text_index"] = 1
+        mapping["status_index"] = 2
+    
+    if num_cells >= 4:
+        mapping["selector_index"] = 3
+    
+    if num_cells >= 5:
+        mapping["agent_index"] = 4
+    
+    if num_cells >= 6:
+        mapping["confidence_index"] = 5
+    
+    mapping["example"] = f"""
+    # Example parsing code for {num_cells} columns:
+    step_num = int(re.sub(r'<[^>]+>', '', cells[0]).strip())
+    step_text = re.sub(r'<[^>]+>', '', cells[1]).strip()[:200]
+    status = re.sub(r'<[^>]+>', '', cells[2]).strip().upper()
+    """
+    
+    if num_cells >= 4:
+        mapping["example"] += """
+    selector = re.sub(r'<[^>]+>', '', cells[3]).strip()
+    agent = re.sub(r'<[^>]+>', '', cells[4]).strip() if len(cells) > 4 else ""
+    confidence = float(re.sub(r'<[^>]+>', '', cells[5]).strip()) if len(cells) > 5 else 0.0
+    """
+    
+    return mapping
 
-        return result
+# ...existing code...
 
-    except Exception as e:
-        logger.error(f"Debug parse report error: {e}", exc_info=True)
-        return {"error": str(e)}
+
+
+
+
+@app.get("/api/debug/steps/{execution_id}")
+def debug_steps_count(execution_id: str, db: Session = Depends(get_db)):
+    count = db.query(ExecutionStep).filter(ExecutionStep.execution_id == execution_id).count()
+    return {"execution_id": execution_id, "steps_count": count}
 
 
 # Add this to your main.py after the other debug endpoints
@@ -2374,108 +3107,1274 @@ This ensures proper completion and error handling
 
 
 
+
+# def execute_test_in_background(
+#     execution_id: str,
+#     ticket_id: str,
+#     project_id: Optional[int]
+# ):
+#     """
+#     Background task to execute test workflow using external plcd_taseq.py
+#     FIXED: Ensures clean termination and immediate summary generation
+#     """
+#     db = SessionLocal()
+#     service = TestExecutionService(db)
+#     final_status_set = False
+
+#     logger.info("="*70)
+#     logger.info(f"🚀 BACKGROUND TASK STARTED")
+#     logger.info(f"   Execution ID: {execution_id}")
+#     logger.info(f"   Ticket ID: {ticket_id}")
+#     logger.info(f"   Project ID: {project_id}")
+#     logger.info("="*70)
+
+#     try:
+#         # ============================================================================
+#         # STEP 1: Mark as running
+#         # ============================================================================
+#         execution = db.query(TestExecution).filter(
+#             TestExecution.execution_id == execution_id
+#         ).first()
+
+#         if not execution:
+#             logger.error(f"❌ Execution {execution_id} not found!")
+#             return
+
+#         execution.status = "running"
+#         execution.started_at = datetime.utcnow()
+#         db.commit()
+#         logger.info("✅ Status updated to 'running'")
+
+#         # ============================================================================
+#         # STEP 2: Validate external project
+#         # ============================================================================
+#         external_project_path = Path(settings.external_project_path)
+#         if not external_project_path.exists():
+#             raise FileNotFoundError(f"External project not found: {external_project_path}")
+
+#         plcd_script = external_project_path / "plcd_taseq.py"
+#         if not plcd_script.exists():
+#             raise FileNotFoundError(f"plcd_taseq.py not found at: {plcd_script}")
+        
+#         logger.info(f"✅ Found plcd_taseq.py at: {plcd_script}")
+
+#         # ============================================================================
+#         # STEP 3: Find Python executable
+#         # ============================================================================
+#         python_exe = None
+#         venv_paths = [
+#             external_project_path / "venv" / "Scripts" / "python.exe",  # Windows
+#             external_project_path / "venv" / "bin" / "python",  # Linux/Mac
+#         ]
+
+#         for venv_path in venv_paths:
+#             if venv_path.exists():
+#                 python_exe = str(venv_path)
+#                 logger.info(f"✅ Found Python: {python_exe}")
+#                 break
+
+#         if not python_exe:
+#             import shutil
+#             python_exe = shutil.which("python") or shutil.which("python3")
+#             if not python_exe:
+#                 raise FileNotFoundError("Python executable not found")
+#             logger.info(f"⚠️ Using system Python: {python_exe}")
+
+#         # ============================================================================
+#         # STEP 4: Execute Playwright test (SINGLE RUN, NO FEEDBACK)
+#         # ============================================================================
+#         logger.info(f"🏃 Executing test: {ticket_id} --no-feedback")
+        
+#         # ✅ CRITICAL: Use --no-feedback flag to prevent interactive loop
+#         result = subprocess.run(
+#             [python_exe, str(plcd_script), ticket_id, "--no-feedback"],
+#             cwd=str(external_project_path),
+#             capture_output=True,
+#             text=True,
+#             timeout=600  # 10 minutes
+#         )
+
+#         logger.info(f"📤 Playwright execution completed with return code: {result.returncode}")
+
+#         if result.stdout:
+#             logger.debug(f"STDOUT:\n{result.stdout[:1000]}")
+#         if result.stderr:
+#             logger.warning(f"STDERR:\n{result.stderr[:1000]}")
+
+#         # ============================================================================
+#         # STEP 5: Locate generated artifacts (SYNC WITH ACTUAL FILES)
+#         # ============================================================================
+#         report_path = None
+#         script_path = None
+#         video_path = None
+#         overall_status = "UNKNOWN"
+
+#         # Find report
+#         reports_folder = external_project_path / "Reports"
+#         if reports_folder.exists():
+#             reports = sorted(
+#                 reports_folder.glob(f"*{ticket_id}*.html"),
+#                 key=lambda p: p.stat().st_mtime,
+#                 reverse=True
+#             )
+#             if reports:
+#                 report_path = str(reports[0])
+#                 logger.info(f"📄 Found report: {reports[0].name}")
+
+#         # Find script
+#         scripts_folder = external_project_path / "Generated_Scripts"
+#         if scripts_folder.exists():
+#             scripts = sorted(
+#                 scripts_folder.glob(f"*{ticket_id}*.py"),
+#                 key=lambda p: p.stat().st_mtime,
+#                 reverse=True
+#             )
+#             if scripts:
+#                 script_path = str(scripts[0])
+#                 logger.info(f"📜 Found script: {scripts[0].name}")
+
+#         # Find video
+#         videos_folder = external_project_path / "Videos"
+#         if videos_folder.exists():
+#             videos = sorted(
+#                 videos_folder.glob("*.webm"),
+#                 key=lambda p: p.stat().st_mtime,
+#                 reverse=True
+#             )
+#             if videos:
+#                 video_path = str(videos[0])
+#                 logger.info(f"🎥 Found video: {videos[0].name}")
+
+#         # Parse overall status from report
+#         if report_path and Path(report_path).exists():
+#             try:
+#                 with open(report_path, 'r', encoding='utf-8') as f:
+#                     html_content = f.read()
+
+#                 patterns = [
+#                     r'<h2[^>]*>\s*Overall\s+Status:\s*(PASSED|FAILED)\s*</h2>',
+#                     r'<div[^>]*class=["\']overall-status[^"\']*["\'][^>]*>\s*(PASSED|FAILED)',
+#                 ]
+
+#                 for pattern in patterns:
+#                     match = re.search(pattern, html_content, re.IGNORECASE)
+#                     if match:
+#                         overall_status = match.group(1).upper()
+#                         logger.info(f"✅ Parsed overall status: {overall_status}")
+#                         break
+
+#                 if overall_status == "UNKNOWN":
+#                     passed_count = len(re.findall(r'>\s*PASSED\s*<', html_content, re.IGNORECASE))
+#                     failed_count = len(re.findall(r'>\s*FAILED\s*<', html_content, re.IGNORECASE))
+#                     overall_status = "FAILED" if failed_count > 0 else ("PASSED" if passed_count > 0 else "UNKNOWN")
+#                     logger.info(f"📊 Inferred status: {overall_status} (P:{passed_count}, F:{failed_count})")
+
+#             except Exception as e:
+#                 logger.warning(f"Could not parse report status: {e}")
+
+#         # ============================================================================
+#         # STEP 6: Save execution steps from report (for summary generation)
+#         # ============================================================================
+#         # if report_path and Path(report_path).exists():
+#         #     try:
+#         #         with open(report_path, 'r', encoding='utf-8') as f:
+#         #             html_content = f.read()
+
+#         #         table_match = re.search(r'<table[^>]*>(.*?)</table>', html_content, re.DOTALL | re.IGNORECASE)
+#         #         if table_match:
+#         #             table_content = table_match.group(1)
+#         #             rows = re.findall(r'<tr[^>]*>(.*?)</tr>', table_content, re.DOTALL | re.IGNORECASE)
+                    
+#         #             # 🔒 DELETE old steps for this execution (prevents duplicates)
+#         #             try:
+#         #                 deleted = db.query(ExecutionStep).filter(
+#         #                     ExecutionStep.execution_id == execution_id
+#         #                 ).delete()
+#         #                 db.commit()
+#         #                 logger.info(f"🧹 Deleted {deleted} old steps for execution {execution_id}")
+#         #             except Exception as e:
+#         #                    logger.error(f"❌ Failed to delete old steps: {e}")
+#         #                    db.rollback()
+                           
+#         #             step_num = 1
+#         #             for row in rows[1:]:  # Skip header
+#         #                 cells = re.findall(r'<td[^>]*>(.*?)</td>', row, re.DOTALL | re.IGNORECASE)
+#         #                 if len(cells) >= 3:
+#         #                     # 🔥 FIX: Clean step text - remove HTML tags AND console output
+#         #                     raw_step_text = re.sub(r'<[^>]+>', '', cells[1]).strip()
+#         #                     # step_text = re.sub(r'<[^>]+>', '', cells[1]).strip()
+#         #                     # status = re.sub(r'<[^>]+>', '', cells[2]).strip().upper()
+#         #                     # Remove console output patterns that might have bled into step text
+#         #             # Pattern 1: Remove everything after "Failed to search" or similar error messages
+#         #                     step_text = re.split(r'(?:Failed to search|Error:|âœ" |â|Trying L2|\[OK\]|\[FAILED\]|\[SKIPPED\])', raw_step_text)[0].strip()
+                    
+#         #             # Pattern 2: Remove log prefixes like "UI element step detected..."
+#         #                     step_text = re.split(r'(?:UI element step detected|Checking pending insights|No pending insight)', step_text)[0].strip()
+                    
+#         #             # Pattern 3: Remove confidence indicators like "[L1 Low Confidence: 0.50]"
+#         #                     step_text = re.sub(r'\[L\d+[^\]]*\]', '', step_text).strip()
+                    
+#         #                     status = re.sub(r'<[^>]+>', '', cells[2]).strip().upper()
+
+#         #                     # if step_text and status in ['PASSED', 'FAILED']:
+#         #                     #     step = ExecutionStep(
+#         #                     #         execution_id=execution_id,
+#         #                     #         step_num=step_num,
+#         #                     #         step_text=step_text,
+#         #                     #         status=status,
+#         #                     #         screenshot_path=None
+#         #                     #     )
+#         #                     #     db.add(step)
+#         #                     #     step_num += 1
+#         #                     # Only save steps with valid status
+#         #                     if step_text and status in ['PASSED', 'FAILED', 'SKIPPED']:
+#         #                 # 🔥 FIX: Check for duplicates before adding
+#         #                         # existing_step = db.query(ExecutionStep).filter(
+#         #                         #     ExecutionStep.execution_id == execution_id,
+#         #                         #     ExecutionStep.step_num == step_num
+#         #                         # ).first()
+#         #                         step = ExecutionStep(
+#         #                             execution_id=execution_id,
+#         #                             step_num=step_num,
+#         #                             step_text=step_text,
+#         #                             status=status,
+#         #                             screenshot_path=None
+#         #                         )
+#         #                         db.add(step)
+#         #                         step_num += 1
+                        
+#         #                 # if not existing_step:
+#         #                 #     step = ExecutionStep(
+#         #                 #         execution_id=execution_id,
+#         #                 #         step_num=step_num,
+#         #                 #         step_text=step_text,
+#         #                 #         status=status,
+#         #                 #         screenshot_path=None
+#         #                 #     )
+#         #                 #     db.add(step)
+#         #                 #     step_num += 1
+
+
+#         #             db.commit()
+#         #             logger.info(f"✅ Saved {step_num-1} steps to database")
+#         #         else:
+#         #             logger.warning("No step table found in HTML report!")
+#         #     except Exception as e:
+#         #         logger.warning(f"Could not parse steps: {e}")
+
+#         #     # except Exception as e:
+#         #     #     logger.warning(f"Could not parse steps: {e}")
+#         #     #     import traceback
+#         #     #     logger.warning(traceback.format_exc())
+
+#         # if report_path and Path(report_path).exists():
+#         #     try:
+#         #         logger.info(f"📥 Parsing execution steps from report: {report_path}")
+                
+#         #         with open(report_path, 'r', encoding='utf-8') as f:
+#         #             html_content = f.read()
+                
+#         #         logger.debug(f"Report size: {len(html_content)} bytes")
+                
+#         #         # Find table
+#         #         table_match = re.search(r'<table[^>]*>(.*?)</table>', html_content, re.DOTALL | re.IGNORECASE)
+                
+#         #         if not table_match:
+#         #             logger.error("❌ No <table> found in HTML report!")
+#         #             logger.debug(f"Report preview: {html_content[:500]}")
+#         #         else:
+#         #             table_content = table_match.group(1)
+#         #             rows = re.findall(r'<tr[^>]*>(.*?)</tr>', table_content, re.DOTALL | re.IGNORECASE)
+                    
+#         #             logger.info(f"Found {len(rows)} table rows")
+                    
+#         #             # 🔥 DELETE old steps for this execution (prevents duplicates)
+#         #             # deleted = db.query(ExecutionStep).filter(
+#         #             #     ExecutionStep.execution_id == execution_id
+#         #             # ).delete()
+#         #             # db.commit()
+#         #             # logger.info(f"🧹 Deleted {deleted} old steps")
+                    
+#         #             step_num = 1
+#         #             saved_count = 0  # <-- ADD THIS LINE
+#         #             for idx, row in enumerate(rows[1:], start=1):  # Skip header
+#         #                 try:
+#         #                     cells = re.findall(r'<td[^>]*>(.*?)</td>', row, re.DOTALL | re.IGNORECASE)
+#         #                     logger.debug(f"🔍 Row {idx}: Found {len(cells)} cells")
+                            
+#         #                     if len(cells) < 6:
+#         #                         logger.debug(f"Row {idx} has only {len(cells)} cells, skipping")
+#         #                         continue
+                            
+#         #                     step_num = int(re.sub(r'<[^>]+>', '', cells[0]).strip())
+#         #                     step_text = re.sub(r'<[^>]+>', '', cells[1]).strip()
+#         #                     selector = re.sub(r'<[^>]+>', '', cells[2]).strip()
+#         #                     agent = re.sub(r'<[^>]+>', '', cells[3]).strip()
+#         #                     confidence = float(re.sub(r'<[^>]+>', '', cells[4]).strip())
+#         #                     # status = re.sub(r'<[^>]+>', '', cells[5]).strip().upper()
+#         #                     status = re.sub(r'<[^>]+>', '', cells[5]).strip().upper()  # <-- FIXED
+                            
+#         #                     # Clean step text
+#         #                     # raw_step_text = re.sub(r'<[^>]+>', '', cells[1]).strip()
+#         #                     # step_text = re.split(r'(?:Failed to search|Error:|✓ |[OK]|[FAILED])', raw_step_text)[0].strip()
+#         #                     # status = re.sub(r'<[^>]+>', '', cells[2]).strip().upper()
+                            
+#         #                     # # Extract status
+#         #                     # raw_status = re.sub(r'<[^>]+>', '', cells[2]).strip().upper()
+#         #                     # status = raw_status if raw_status in ['PASSED', 'FAILED', 'SKIPPED'] else 'UNKNOWN'
+                            
+#         #                     # logger.debug(f"   Raw text: {raw_step_text[:80]}...")
+#         #                     # logger.debug(f"   Clean text: {step_text[:80]}...")
+#         #                     # logger.debug(f"   Status: {status}")
+                            
+#         #                     logger.debug(f"Row {idx}: text='{step_text[:50]}...', status='{status}'")
+                            
+#         #                     if step_text and status in ['PASSED', 'FAILED', 'SKIPPED']:
+#         #                         step = ExecutionStep(
+#         #                             execution_id=execution_id,
+#         #                             step_num=step_num,
+#         #                             # step_text=step_text,
+#         #                             step_text=step_text[:200],  # Limit to 200 chars
+#         #                             status=status,
+#         #                             screenshot_path=None,
+#         #                             selector_used=selector,
+#         #                             agent_used=agent,
+#         #                             confidence=confidence,
+#         #                             action_type=None  # Fill if available
+#         #                         )
+#         #                         db.add(step)
+#         #                         step_num += 1
+#         #                         saved_count += 1
+#         #                         logger.debug(f"✅ Added step {step_num-1}")
+#         #                     else:
+#         #                         logger.debug(f"⚠️  Skipped row {idx}: invalid text or status")
+                        
+#         #                 except Exception as row_error:
+#         #                     logger.warning(f"⚠️  Failed to parse row {idx}: {row_error}")
+#         #                     continue
+                    
+#         #             db.commit()
+#         #             logger.info(f"✅ Saved {step_num-1} steps to database")
+#         #             logger.info(f"✅ Saved {saved_count} steps to database")
+                    
+#         #             # DEBUG: Add a test step to verify DB/model
+#         #             step = ExecutionStep(
+#         #                 execution_id=execution_id,
+#         #                 step_num=999,
+#         #                 step_text="DEBUG STEP",
+#         #                 status="PASSED",
+#         #                 selector_used="dummy",
+#         #                 agent_used="dummy",
+#         #                 confidence=1.0,
+#         #                 action_type=None,
+#         #                 screenshot_path=None
+#         #             )
+#         #             db.add(step)
+#         #             db.commit()
+#         #             logger.info("✅ DEBUG STEP added to execution_steps table")
+                    
+#         #             # # 🔥 VERIFY SAVE
+#         #             # saved_count = db.query(ExecutionStep).filter(
+#         #             #     ExecutionStep.execution_id == execution_id
+#         #             # ).count()
+#         #             # logger.info(f"🔍 Verification: {saved_count} steps in DB for {execution_id}")
+                    
+#         #             # 🔥 VERIFY what was actually saved
+#         #             verification_count = db.query(ExecutionStep).filter(
+#         #                 ExecutionStep.execution_id == execution_id
+#         #             ).count()
+#         #             logger.info(f"🔍 Verification: {verification_count} steps now in DB for {execution_id}")
+                    
+#         #             if verification_count == 0:
+#         #                 logger.error(f"❌ CRITICAL: No steps in DB after save! Check parsing logic!")
+            
+#         #     except Exception as e:
+#         #         logger.error(f"❌ Failed to parse steps from report: {e}")
+#         #         import traceback
+#         #         logger.error(traceback.format_exc())
+#         # else:
+#         #     logger.warning(f"⚠️  No report found at: {report_path}")
+        
+#         if report_path and Path(report_path).exists():
+#             try:
+#                 logger.info(f"📥 Parsing execution steps from report: {report_path}")
+#                 with open(report_path, 'r', encoding='utf-8') as f:
+#                      html_content = f.read()
+        
+#         # Clean HTML - remove script tags and comments
+#                 html_content = re.sub(r'<script[^>]*>.*?</script>', '', html_content, flags=re.DOTALL)
+#                 html_content = re.sub(r'<!--.*?-->', '', html_content, flags=re.DOTALL)
+#                 step_patterns = [
+#             # Pattern 1: Table rows with step number
+#                      r'<tr[^>]*>\s*<td[^>]*>\s*(\d+)\s*</td>.*?<td[^>]*>(.*?)</td>.*?<td[^>]*>(PASSED|FAILED|SKIPPED)</td>',
+#             # Pattern 2: Any step-like structure
+#                      r'Step\s+(\d+)[^<]*<[^>]*>(.*?)</[^>]*>.*?(PASSED|FAILED|SKIPPED)',
+#             ]
+#                 saved_steps = []
+#                 for pattern in step_patterns:
+#                     matches = re.findall(pattern, html_content, re.DOTALL | re.IGNORECASE)
+#                     for match in matches:
+#                         if len(match) >= 3:
+#                             step_num = int(match[0].strip())
+#                             step_text = re.sub(r'<[^>]+>', '', match[1]).strip()[:200]  # Clean and limit
+#                             status = match[2].strip().upper()
+                    
+#                     # Skip if we already have this step
+#                             if any(s[0] == step_num for s in saved_steps):
+#                                 continue
+                    
+#                             saved_steps.append((step_num, step_text, status))
+        
+#         # If no patterns found, try manual extraction
+#                 if not saved_steps:
+#                     logger.warning("⚠️ No step patterns found, trying manual extraction")
+            
+#             # Extract all text and look for step-like content
+#                     text_only = re.sub(r'<[^>]+>', ' ', html_content)
+#                     lines = text_only.split('\n')
+            
+#                     step_num = 1
+#                     for line in lines:
+#                         line = line.strip()
+#                         if (('Step' in line or 'step' in line) and 
+#                             any(status in line for status in ['PASSED', 'FAILED', 'SKIPPED'])):
+                    
+#                     # Clean the line
+#                             step_text = line[:200]
+#                             status = 'PASSED' if 'PASSED' in line.upper() else \
+#                                     'FAILED' if 'FAILED' in line.upper() else 'SKIPPED'
+                    
+#                             saved_steps.append((step_num, step_text, status))
+#                             step_num += 1
+        
+#         # Save steps to database
+#                 if saved_steps:
+#                     logger.info(f"Found {len(saved_steps)} steps to save")
+            
+#             # Delete existing steps first
+#                     deleted = db.query(ExecutionStep).filter(
+#                            ExecutionStep.execution_id == execution_id
+#                     ).delete()
+#                     logger.info(f"🧹 Deleted {deleted} old steps")
+            
+#             # Add new steps
+#                     for step_num, step_text, status in saved_steps:
+#                         step = ExecutionStep(
+#                             execution_id=execution_id,
+#                             step_num=step_num,
+#                             step_text=step_text,
+#                             status=status,
+#                             screenshot_path=None,
+#                             selector_used="",
+#                             agent_used="",
+#                             confidence=0.0,
+#                             action_type=""
+#                         )
+#                         db.add(step)
+            
+#                     db.commit()
+#                     logger.info(f"✅ Successfully saved {len(saved_steps)} steps to database")
+#                 else:
+#                     logger.warning("⚠️ No steps could be extracted from report")
+            
+#             # Add a single debug step so summary can generate
+#                     debug_step = ExecutionStep(
+#                         execution_id=execution_id,
+#                         step_num=1,
+#                         step_text="No steps could be parsed from report",
+#                         status="FAILED",
+#                         screenshot_path=None,
+#                         selector_used="",
+#                         agent_used="",
+#                         confidence=0.0,
+#                         action_type=""
+#                     )
+#                     db.add(debug_step)
+#                     db.commit()
+#                     logger.info("✅ Added debug step for summary generation")
+            
+#             except Exception as e:
+#                 logger.error(f"❌ Failed to parse steps: {e}")
+#                 import traceback
+#                 logger.error(traceback.format_exc())
+        
+#         # Even if parsing fails, add a debug step
+#                 try:
+#                     debug_step = ExecutionStep(
+#                         execution_id=execution_id,
+#                         step_num=1,
+#                         step_text=f"Step parsing failed: {str(e)[:100]}",
+#                         status="FAILED",
+#                         screenshot_path=None,
+#                         selector_used="",
+#                         agent_used="",
+#                         confidence=0.0,
+#                         action_type=""
+#                     )
+#                     db.add(debug_step)
+#                     db.commit()
+#                     logger.info("✅ Added fallback debug step")
+#                 except:
+#                     logger.error("❌ Could not add fallback debug step")
+
+#         # ============================================================================
+#         # STEP 7: Update execution to "completed" (CRITICAL)
+#         # ============================================================================
+#         final_status = "completed" if report_path else "failed"
+        
+#         db.refresh(execution)  # Get fresh state
+#         execution.status = final_status
+#         execution.overall_status = overall_status
+#         # execution.completed_at = datetime.utcnow()
+#         execution.completed_at = datetime.now()
+#         execution.report_path = report_path
+#         execution.script_path = script_path
+#         execution.video_path = video_path
+#         execution.error_message = None if report_path else "No report generated"
+#         db.commit()
+#         # final_status_set = True
+#         #  🔥 THIS WAS MISSING
+#         # service._generate_summary_from_db(execution_id, ticket_id)
+        
+#         logger.info(f"✅ Execution marked as '{final_status}'")
+
+#         # ============================================================================
+#         # STEP 8: Generate summary (AFTER DB update, BEFORE feedback)
+#         # ============================================================================
+#         logger.info("📊 Generating test summary...")
+#         try:
+#             service._generate_summary_from_db(execution_id, ticket_id)
+#             logger.info("✅ Summary generated successfully")
+#         except Exception as summary_error:
+#             logger.error(f"⚠️ Summary generation failed: {summary_error}")
+
+#         # ============================================================================
+#         # SUCCESS
+#         # ============================================================================
+#         logger.info("="*70)
+#         logger.info("✅ TEST EXECUTION COMPLETED SUCCESSFULLY")
+#         logger.info(f"   Execution ID: {execution_id}")
+#         logger.info(f"   Final Status: {final_status}")
+#         logger.info(f"   Overall Status: {overall_status}")
+#         logger.info(f"   📄 Report: {report_path or 'N/A'}")
+#         logger.info(f"   📜 Script: {script_path or 'N/A'}")
+#         logger.info(f"   🎥 Video: {video_path or 'N/A'}")
+#         logger.info("="*70)
+
+#     except subprocess.TimeoutExpired:
+#         error_msg = "Test execution timed out (10 minutes)"
+#         logger.error(f"⏰ {error_msg}")
+#         _mark_execution_as_failed(db, execution_id, error_msg, service, ticket_id)
+#         final_status_set = True
+
+#     except FileNotFoundError as e:
+#         error_msg = f"Configuration error: {str(e)}"
+#         logger.error(f"❌ {error_msg}")
+#         _mark_execution_as_failed(db, execution_id, error_msg, service, ticket_id)
+#         final_status_set = True
+
+#     except Exception as e:
+#         logger.error("="*70)
+#         logger.error(f"❌ EXECUTION FAILED")
+#         logger.error(f"   Execution ID: {execution_id}")
+#         logger.error(f"   Error: {e}")
+#         logger.error("="*70)
+
+#         import traceback
+#         logger.error("Full traceback:")
+#         logger.error(traceback.format_exc())
+
+#         error_message = str(e)[:500]
+#         _mark_execution_as_failed(db, execution_id, error_message, service, ticket_id)
+#         final_status_set = True
+
+#     finally:
+#         # ============================================================================
+#         # CRITICAL: Ensure execution is NEVER left in 'running' state
+#         # ============================================================================
+#         try:
+#             if not final_status_set:
+#                 logger.warning("⚠️ Final status was NOT set - forcing to 'failed'")
+#                 execution = db.query(TestExecution).filter(
+#                     TestExecution.execution_id == execution_id
+#                 ).first()
+
+#                 if execution and execution.status == "running":
+#                     logger.error(f"❌ Execution {execution_id} still 'running'! Forcing to 'failed'")
+#                     execution.status = "failed"
+#                     execution.completed_at = datetime.utcnow()
+#                     execution.overall_status = "FAILED"
+#                     execution.error_message = "Execution did not complete normally"
+#                     db.commit()
+                    
+#                     # Try to generate summary even for forced failure
+#                     try:
+#                         service._generate_summary_from_db(execution_id, ticket_id)
+#                     except:
+#                         pass
+
+#         except Exception as finally_error:
+#             logger.error(f"❌ Error in finally block: {finally_error}")
+        
+#         finally:
+#             db.close()
+#             logger.info(f"🔒 Database session closed for {execution_id}\n")
+
+
+# def _mark_execution_as_failed(
+#     db: Session, 
+#     execution_id: str, 
+#     error_message: str,
+#     service: TestExecutionService,
+#     ticket_id: str
+# ):
+#     """Mark execution as failed and generate summary"""
+#     try:
+#         execution = db.query(TestExecution).filter(
+#             TestExecution.execution_id == execution_id
+#         ).first()
+
+#         if execution:
+#             execution.status = "failed"
+#             execution.overall_status = "FAILED"
+#             execution.completed_at = datetime.utcnow()
+#             execution.error_message = error_message[:500]
+#             db.commit()
+#             logger.info(f"✅ Execution {execution_id} marked as 'failed'")
+            
+#             # Generate summary for failed execution
+#             try:
+#                 service._generate_summary_from_db(execution_id, ticket_id)
+#                 logger.info("✅ Generated summary for failed execution")
+#             except Exception as e:
+#                 logger.warning(f"⚠️ Could not generate summary for failed execution: {e}")
+
+#     except Exception as e:
+#         logger.error(f"❌ Failed to mark execution as failed: {e}")
+# this one is correct
+
+
+# ...existing code...
+
+# Add this BEFORE execute_test_in_background function
+def _mark_execution_as_failed(
+    db: Session, 
+    execution_id: str, 
+    error_message: str,
+    service: TestExecutionService,
+    ticket_id: str
+):
+    """
+    Helper function to mark execution as failed and generate summary
+    """
+    try:
+        execution = db.query(TestExecution).filter(
+            TestExecution.execution_id == execution_id
+        ).first()
+
+        if execution:
+            execution.status = "failed"
+            execution.overall_status = "FAILED"
+            execution.completed_at = datetime.now()
+            execution.error_message = error_message[:500]
+            db.commit()
+            logger.info(f"✅ Execution {execution_id} marked as 'failed'")
+            
+            # Try to generate summary for failed execution
+            try:
+                service._generate_summary_from_db(execution_id, ticket_id)
+                logger.info("✅ Generated summary for failed execution")
+            except Exception as e:
+                logger.warning(f"⚠️ Could not generate summary for failed execution: {e}")
+
+    except Exception as e:
+        logger.error(f"❌ Failed to mark execution as failed: {e}")
+        db.rollback()
+
+
+# def execute_test_in_background(
+#     execution_id: str,
+#     ticket_id: str,
+#     project_id: Optional[int]
+# ):
+#     """
+#     Background task - FIXED VERSION
+#     """
+#     # ...existing code...
+class StepData(BaseModel):
+    execution_id: str
+    steps: list
+
+@app.post("/api/save-steps")
+def save_steps(
+    data: StepData,
+    db: Session = Depends(get_db)
+):
+    """
+    Save execution steps from external runner.
+    """
+    execution_id = data.execution_id
+    steps = data.steps
+
+    # Delete old steps
+    db.query(ExecutionStep).filter(ExecutionStep.execution_id == execution_id).delete()
+    db.commit()
+
+    saved_count = 0
+    for step in steps:
+        db.add(ExecutionStep(
+            execution_id=execution_id,
+            step_num=step.get("step_num"),
+            step_text=step.get("step_text"),
+            status=step.get("status"),
+            selector_used=step.get("selector_used", ""),
+            agent_used=step.get("agent_used", ""),
+            confidence=step.get("confidence", 0.0),
+            action_type=step.get("action_type", ""),
+            screenshot_path=step.get("screenshot_path")
+        ))
+        saved_count += 1
+    db.commit()
+    return {"saved": saved_count}
+
+
+
+
+# def execute_test_in_background(
+#     execution_id: str,
+#     ticket_id: str,
+#     project_id: Optional[int]
+# ):
+#     """
+#     Background task - FIXED VERSION
+#     """
+#     db = SessionLocal()
+#     service = TestExecutionService(db)
+#     final_status_set = False
+
+#     logger.info("="*70)
+#     logger.info(f"🚀 BACKGROUND TASK STARTED")
+#     logger.info(f"   Execution ID: {execution_id}")
+#     logger.info(f"   Ticket ID: {ticket_id}")
+#     logger.info("="*70)
+
+#     try:
+#         # Step 1: Mark as running
+#         execution = db.query(TestExecution).filter(
+#             TestExecution.execution_id == execution_id
+#         ).first()
+#         execution.status = "running"
+#         execution.started_at = datetime.now()
+#         db.commit()
+
+#         # Step 2: Validate paths
+#         external_project_path = Path(settings.external_project_path)
+#         plcd_script = external_project_path / "plcd_taseq.py"
+        
+#         if not plcd_script.exists():
+#             raise FileNotFoundError(f"plcd_taseq.py not found: {plcd_script}")
+
+#         # Step 3: Find Python executable
+#         python_exe = str(external_project_path / "venv" / "Scripts" / "python.exe")
+#         if not Path(python_exe).exists():
+#             import shutil
+#             python_exe = shutil.which("python") or shutil.which("python3")
+
+#         # Step 4: Execute test with --no-feedback
+#         logger.info(f"🏃 Executing: {ticket_id} --no-feedback")
+        
+#         result = subprocess.run(
+#             [python_exe, str(plcd_script), ticket_id, "--no-feedback"],
+#             cwd=str(external_project_path),
+#             capture_output=True,
+#             text=True,
+#             timeout=600
+#         )
+
+#         logger.info(f"📤 Return code: {result.returncode}")
+
+#         # Step 5: Find artifacts
+#         report_path = None
+#         script_path = None
+#         video_path = None
+#         overall_status = "UNKNOWN"
+
+#         reports_folder = external_project_path / "Reports"
+#         if reports_folder.exists():
+#             reports = sorted(
+#                 reports_folder.glob(f"*{ticket_id}*.html"),
+#                 key=lambda p: p.stat().st_mtime,
+#                 reverse=True
+#             )
+#             if reports:
+#                 report_path = str(reports[0])
+#                 logger.info(f"📄 Found report: {reports[0].name}")
+
+#         scripts_folder = external_project_path / "Generated_Scripts"
+#         if scripts_folder.exists():
+#             scripts = sorted(
+#                 scripts_folder.glob(f"*{ticket_id}*.py"),
+#                 key=lambda p: p.stat().st_mtime,
+#                 reverse=True
+#             )
+#             if scripts:
+#                 script_path = str(scripts[0])
+
+#         videos_folder = external_project_path / "Videos"
+#         if videos_folder.exists():
+#             videos = sorted(
+#                 videos_folder.glob("*.webm"),
+#                 key=lambda p: p.stat().st_mtime,
+#                 reverse=True
+#             )
+#             if videos:
+#                 video_path = str(videos[0])
+
+#         # Step 6: Parse overall status from report
+#         if report_path:
+#             try:
+#                 with open(report_path, 'r', encoding='utf-8') as f:
+#                     html = f.read()
+                
+#                 # match = re.search(r'Overall\s+Status[:\s]+(PASSED|FAILED)', html, re.IGNORECASE)
+#                 # match = re.search(r'Overall\s+Status[:\s]+(PASSED|FAILED)', html, re.IGNORECASE)
+#                 # 🔥 FIX: Look for <div class="value status-PASSED">PASSED</div>
+#                 match = re.search(r'<div[^>]*class=["\'][^"\']*status-(PASSED|FAILED)[^"\']*["\'][^>]*>\s*(PASSED|FAILED)\s*</div>', html, re.IGNORECASE)
+#                 if match:
+#                     overall_status = match.group(2).upper()  # Use the text inside the div, not the class name
+#                     logger.info(f"✅ Parsed status from div: {overall_status}")
+#                 else:
+#             # Fallback 1: Try simpler patterns
+#                     match = re.search(r'Overall\s+Status[:\s]+(PASSED|FAILED)', html, re.IGNORECASE)
+#                 if match:
+#                     overall_status = match.group(1).upper()
+#                     logger.info(f"✅ Parsed status from text: {overall_status}")
+#                 else:
+#                     # Fallback: count passed/failed
+#                     passed = len(re.findall(r'>\s*PASSED\s*<', html, re.IGNORECASE))
+#                     failed = len(re.findall(r'>\s*FAILED\s*<', html, re.IGNORECASE))
+#                     overall_status = "FAILED" if failed > 0 else ("PASSED" if passed > 0 else "UNKNOWN")
+                
+#                 logger.info(f"✅ Parsed status: {overall_status}")
+#             except Exception as e:
+#                 logger.warning(f"Could not parse status: {e}")
+
+#         # 🔥 Step 7: Parse and save steps FIRST (CRITICAL FIX)
+#         # steps_saved = False
+#         # if report_path and Path(report_path).exists():
+#         #     try:
+#         #         logger.info("📥 Parsing steps from report...")
+#         #         with open(report_path, 'r', encoding='utf-8') as f:
+#         #             html = f.read()
+
+#         #         # 🔥 FIX: Use correct regex for YOUR HTML structure
+#         #         table_match = re.search(r'<table[^>]*>(.*?)</table>', html, re.DOTALL | re.IGNORECASE)
+                
+#         #         if table_match:
+#         #             # DELETE old steps FIRST
+#         #             deleted = db.query(ExecutionStep).filter(
+#         #                 ExecutionStep.execution_id == execution_id
+#         #             ).delete()
+#         #             db.commit()
+#         #             logger.info(f"🧹 Deleted {deleted} old steps")
+                    
+#         #             # Parse rows
+#         #             table_html = table_match.group(1)
+#         #             rows = re.findall(r'<tr[^>]*>(.*?)</tr>', table_html, re.DOTALL | re.IGNORECASE)
+#         #             logger.info(f"📋 Found {len(rows)} rows in table")
+                    
+#         #             saved_count = 0
+#         #             for idx, row in enumerate(rows[1:], start=1):  # Skip header
+#         #                 try:
+#         #                     # Extract all cells
+#         #                     cells = re.findall(r'<td[^>]*>(.*?)</td>', row, re.DOTALL | re.IGNORECASE)
+#         #                     logger.info(f"   Row {idx}: Found {len(cells)} cells")
+                            
+#         #                     if len(cells) < 6:
+#         #                         logger.warning(f"   Row {idx}: Skipping (only {len(cells)} cells)")
+#         #                         continue
+                            
+#         #                     # Map to your table structure
+#         #                     # step_num = int(re.sub(r'<[^>]+>', '', cells[0]).strip())
+#         #                     # step_text = re.sub(r'<[^>]+>', '', cells[1]).strip()[:200]
+#         #                     # selector = re.sub(r'<[^>]+>', '', cells[2]).strip()
+#         #                     # agent = re.sub(r'<[^>]+>', '', cells[3]).strip()
+#         #                     # confidence = 0.0
+#         #                     # try:
+#         #                     #     confidence_text = re.sub(r'<[^>]+>', '', cells[4]).strip()
+#         #                     #     confidence = float(confidence_text)
+                            
+#         #                     # 🔥 CRITICAL: Extract data from YOUR specific HTML structure
+#         #             # Cell 0: Step number
+#         #                     step_num = int(re.sub(r'<[^>]+>', '', cells[0]).strip())
+                    
+#         #             # Cell 1: Step description
+#         #                     step_text = re.sub(r'<[^>]+>', '', cells[1]).strip()[:200]
+                    
+#         #             # Cell 2: Selector (inside <span class="selector">)
+#         #                     selector_match = re.search(r'<span[^>]*class=["\']selector["\'][^>]*>(.*?)</span>', cells[2], re.DOTALL | re.IGNORECASE)
+#         #                     selector = selector_match.group(1) if selector_match else re.sub(r'<[^>]+>', '', cells[2]).strip()
+#         #                     selector = re.sub(r'<[^>]+>', '', selector).strip()  # Clean any remaining tags
+                    
+#         #             # Cell 3: Agent (inside <span class="badge badge-XXX">)
+#         #                     agent_match = re.search(r'<span[^>]*class=["\']badge[^"\']*["\'][^>]*>(.*?)</span>', cells[3], re.DOTALL | re.IGNORECASE)
+#         #                     agent = agent_match.group(1) if agent_match else re.sub(r'<[^>]+>', '', cells[3]).strip()
+#         #                     agent = re.sub(r'<[^>]+>', '', agent).strip()
+                    
+#         #             # Cell 4: Confidence
+#         #                     confidence = 0.0
+#         #                     try:
+#         #                         confidence_text = re.sub(r'<[^>]+>', '', cells[4]).strip()
+#         #                         confidence = float(confidence_text)
+#         #                     except:
+#         #                         pass
+#         #                     status_text = re.sub(r'<[^>]+>', '', cells[5]).strip()
+#         #                     status_match = re.search(r'badge-(PASSED|FAILED|SKIPPED)', cells[5], re.IGNORECASE)
+#         #                     if status_match:
+#         #                         status = status_match.group(1).upper()
+#         #                     else:
+#         #                         status = status_text.upper() if status_text.upper() in ['PASSED', 'FAILED', 'SKIPPED'] else 'UNKNOWN'
+#         #                     logger.info(f"   Row {idx}: step={step_num}, text='{step_text[:30]}...', status={status}")
+#         #                     if step_text and status in ['PASSED', 'FAILED', 'SKIPPED']:
+#         #                         step = ExecutionStep(
+#         #                             execution_id=execution_id,
+#         #                             step_num=step_num,
+#         #                             step_text=step_text,
+#         #                             status=status,
+#         #                             selector_used=selector,
+#         #                             agent_used=agent,
+#         #                             confidence=confidence,
+#         #                             action_type="",
+#         #                             screenshot_path=None
+#         #                         )
+#         #                         db.add(step)
+#         #                         saved_count += 1
+#         #                 except Exception as row_error:
+#         #                     logger.warning(f"⚠️ Failed to parse row {idx}: {row_error}")
+#         #                     continue
+#         #             db.commit()
+#         #             logger.info(f"✅ Saved {saved_count} steps to database")
+#         #             # VERIFY steps were saved
+#         #             verification = db.query(ExecutionStep).filter(
+#         #                 ExecutionStep.execution_id == execution_id
+#         #             ).count()
+#         #             logger.info(f"🔍 Verification: {verification} steps in DB")
+#         #             steps_saved = (verification > 0)
+#         #         else:
+#         #             logger.warning("⚠️ No <table> found in HTML")
+#         #     except Exception as e:
+#         #         logger.error(f"❌ Step parsing failed: {e}")
+#         #         import traceback
+#         #         logger.error(traceback.format_exc())
+
+#         # # Step 8: Update execution record
+#         # final_status = "completed" if report_path else "failed"
+#         # db.refresh(execution)
+#         # execution.status = final_status
+#         # execution.overall_status = overall_status
+#         # execution.completed_at = datetime.now()
+#         # execution.report_path = report_path
+#         # execution.script_path = script_path
+#         # execution.video_path = video_path
+#         # execution.error_message = None if report_path else "No report generated"
+#         # db.commit()
+#         # final_status_set = True
+        
+        
+        
+#         # 🔥 Step 7: Parse and save steps FIRST (CRITICAL FIX)
+#         steps_saved = False
+#         if report_path and Path(report_path).exists():
+#             try:        
+#                 logger.info(f"🔥 Parsing steps from report for execution: {execution_id}")
+#                 with open(report_path, 'r', encoding='utf-8') as f:
+#                     html = f.read()
+
+#         # 🔥 FIX: Use correct regex for YOUR HTML structure
+#                 table_match = re.search(r'<table[^>]*>(.*?)</table>', html, re.DOTALL | re.IGNORECASE)
+        
+#                 if table_match:
+#             # DELETE old steps FIRST
+#                      deleted = db.query(ExecutionStep).filter(
+#                          ExecutionStep.execution_id == execution_id
+#                      ).delete()
+#                      db.commit()
+#                      logger.info(f"🧹 Deleted {deleted} old steps for {execution_id}")
+            
+#             # Parse rows
+#                      table_html = table_match.group(1)
+#                      rows = re.findall(r'<tr[^>]*>(.*?)</tr>', table_html, re.DOTALL | re.IGNORECASE)
+            
+#                      logger.info(f"📋 Found {len(rows)} rows in table for {execution_id}")
+            
+#                      saved_count = 0
+#                      for idx, row in enumerate(rows[1:], start=1):  # Skip header
+#                          try:
+#                     # Extract all cells
+#                              cells = re.findall(r'<td[^>]*>(.*?)</td>', row, re.DOTALL | re.IGNORECASE)
+                    
+#                              if len(cells) < 6:
+#                                  continue
+                    
+#                     # Parse all fields (keeping your existing logic)
+#                              step_num = int(re.sub(r'<[^>]+>', '', cells[0]).strip())
+#                              step_text = re.sub(r'<[^>]+>', '', cells[1]).strip()[:200]
+                    
+#                              selector_match = re.search(r'<span[^>]*class=["\']selector["\'][^>]*>(.*?)</span>', cells[2], re.DOTALL | re.IGNORECASE)
+#                              selector = selector_match.group(1) if selector_match else re.sub(r'<[^>]+>', '', cells[2]).strip()
+#                              selector = re.sub(r'<[^>]+>', '', selector).strip()
+                    
+#                              agent_match = re.search(r'<span[^>]*class=["\']badge[^"\']*["\'][^>]*>(.*?)</span>', cells[3], re.DOTALL | re.IGNORECASE)
+#                              agent = agent_match.group(1) if agent_match else re.sub(r'<[^>]+>', '', cells[3]).strip()
+#                              agent = re.sub(r'<[^>]+>', '', agent).strip()
+                    
+#                              confidence = 0.0
+#                              try:
+#                                  confidence_text = re.sub(r'<[^>]+>', '', cells[4]).strip()
+#                                  confidence = float(confidence_text)
+#                              except:
+#                                  pass
+                    
+#                              status_match = re.search(r'<span[^>]*class=["\']badge\s+badge-(PASSED|FAILED|SKIPPED)["\'][^>]*>', cells[5], re.IGNORECASE)
+#                              if status_match:
+#                                  status = status_match.group(1).upper()
+#                              else:
+#                                  status_text = re.sub(r'<[^>]+>', '', cells[5]).strip().upper()
+#                                  status = status_text if status_text in ['PASSED', 'FAILED', 'SKIPPED'] else 'UNKNOWN'
+                    
+#                              logger.info(f"   Row {idx}: step={step_num}, text='{step_text[:30]}...', status={status}")
+                    
+#                              if step_text and status in ['PASSED', 'FAILED', 'SKIPPED']:
+#                                  step = ExecutionStep(
+#                                      execution_id=execution_id,  # 🔥 CRITICAL: Use correct execution_id
+#                                      step_num=step_num,
+#                                      step_text=step_text,
+#                                      status=status,
+#                                      selector_used=selector,
+#                                      agent_used=agent,
+#                                      confidence=confidence,
+#                                      action_type="",
+#                                      screenshot_path=None
+#                                  )
+#                                  db.add(step)
+#                                  saved_count += 1
+#                                  logger.info(f"   ✅ Added step {step_num} to {execution_id}")
+                        
+#                          except Exception as row_error:
+#                              logger.error(f"   ❌ Failed to parse row {idx}: {row_error}")
+#                              continue
+            
+#                      db.commit()
+#                      logger.info(f"✅ Committed {saved_count} steps to database for {execution_id}")
+            
+#             # VERIFY steps were saved
+#                      verification = db.query(ExecutionStep).filter(
+#                          ExecutionStep.execution_id == execution_id
+#                      ).count()
+#                      logger.info(f"🔍 Verification: {verification} steps in DB for {execution_id}")
+            
+#                      if verification > 0:
+#                          steps_saved = True
+#                          logger.info(f"✅ Steps successfully saved for {execution_id}")
+#                      else:
+#                          logger.error(f"❌ CRITICAL: No steps in DB for {execution_id} after commit!")
+#                 else:
+#                     logger.error(f"❌ No <table> found in HTML report for {execution_id}")
+            
+#             except Exception as e:
+#                    logger.error(f"❌ Step parsing failed for {execution_id}: {e}")
+#                    import traceback
+#                    logger.error(traceback.format_exc())
+
+# # Step 8: Update execution record
+#         final_status = "completed" if report_path else "failed"
+#         db.refresh(execution)
+#         execution.status = final_status
+#         execution.overall_status = overall_status
+#         execution.completed_at = datetime.now()
+#         execution.report_path = report_path
+#         execution.script_path = script_path
+#         execution.video_path = video_path
+#         execution.error_message = None if report_path else "No report generated"
+#         db.commit()
+#         final_status_set = True
+
+#         logger.info(f"✅ Execution {execution_id} marked as '{final_status}'")
+
+#         # Step 9: Generate summary AFTER steps are saved
+#         if steps_saved:
+#                 logger.info("📊 Generating summary...")
+#         try:
+#             service._generate_summary_from_db(execution_id, ticket_id)
+#             summary_path = external_project_path / "Reports" / "summaries" / f"summary_{ticket_id}_latest.json"
+#             if summary_path.exists():
+#                         logger.info(f"✅ Summary generated: {summary_path}")
+#             else:
+#                         logger.error(f"❌ Summary file NOT created")
+#         except Exception as summary_error:
+#                 logger.error(f"⚠️ Summary generation failed: {summary_error}")
+#                 import traceback
+#                 logger.error(traceback.format_exc())
+#         else:
+#             logger.warning("⚠️ Skipping summary generation - no steps in database")
+
+#         logger.info("="*70)
+#         logger.info("✅ EXECUTION COMPLETED")
+#         logger.info(f"   Status: {final_status} / {overall_status}")
+#         logger.info(f"   Report: {report_path}")
+#         logger.info("="*70)
+
+#     except Exception as e:
+#         logger.error(f"❌ EXECUTION FAILED: {e}")
+#         import traceback
+#         logger.error(traceback.format_exc())
+#         _mark_execution_as_failed(db, execution_id, str(e)[:500], service, ticket_id)
+#         final_status_set = True
+
+#     finally:
+#         if not final_status_set:
+#             logger.warning("⚠️ Forcing execution to failed state")
+#             execution = db.query(TestExecution).filter(
+#                 TestExecution.execution_id == execution_id
+#             ).first()
+#             if execution and execution.status == "running":
+#                 execution.status = "failed"
+#                 execution.completed_at = datetime.now()
+#                 db.commit()
+#         db.close()
+#         logger.info(f"🔒 Session closed: {execution_id}\n")
+
+
+logger.error("🔥 execute_test_in_background CALLED")
+
 def execute_test_in_background(
     execution_id: str,
     ticket_id: str,
     project_id: Optional[int]
 ):
     """
-    Background task to execute test workflow using external plcd_taseq.py
-    FIXED: Ensures clean termination and immediate summary generation
+    Background task - FIXED VERSION WITH PROPER EXECUTION ID HANDLING
     """
     db = SessionLocal()
     service = TestExecutionService(db)
     final_status_set = False
 
+    # 🔥 LOG THE EXECUTION ID AT THE VERY START
     logger.info("="*70)
     logger.info(f"🚀 BACKGROUND TASK STARTED")
-    logger.info(f"   Execution ID: {execution_id}")
-    logger.info(f"   Ticket ID: {ticket_id}")
-    logger.info(f"   Project ID: {project_id}")
+    logger.info(f"   🆔 Execution ID: {execution_id}")  # <-- CRITICAL
+    logger.info(f"   🎫 Ticket ID: {ticket_id}")
     logger.info("="*70)
 
     try:
-        # ============================================================================
-        # STEP 1: Mark as running
-        # ============================================================================
+        # Step 1: Mark as running
         execution = db.query(TestExecution).filter(
             TestExecution.execution_id == execution_id
         ).first()
-
-        if not execution:
-            logger.error(f"❌ Execution {execution_id} not found!")
-            return
-
-        execution.status = "running"
-        execution.started_at = datetime.utcnow()
-        db.commit()
-        logger.info("✅ Status updated to 'running'")
-
-        # ============================================================================
-        # STEP 2: Validate external project
-        # ============================================================================
-        external_project_path = Path(settings.external_project_path)
-        if not external_project_path.exists():
-            raise FileNotFoundError(f"External project not found: {external_project_path}")
-
-        plcd_script = external_project_path / "plcd_taseq.py"
-        if not plcd_script.exists():
-            raise FileNotFoundError(f"plcd_taseq.py not found at: {plcd_script}")
         
-        logger.info(f"✅ Found plcd_taseq.py at: {plcd_script}")
+        if not execution:
+            logger.error(f"❌ Execution {execution_id} not found in database!")
+            return
+            
+        execution.status = "running"
+        execution.started_at = datetime.now()
+        db.commit()
+        logger.info(f"✅ Status updated to 'running' for {execution_id}")
 
-        # ============================================================================
-        # STEP 3: Find Python executable
-        # ============================================================================
-        python_exe = None
-        venv_paths = [
-            external_project_path / "venv" / "Scripts" / "python.exe",  # Windows
-            external_project_path / "venv" / "bin" / "python",  # Linux/Mac
-        ]
+        # Step 2: Validate paths
+        external_project_path = Path(settings.external_project_path)
+        plcd_script = external_project_path / "plcd_taseq.py"
+        
+        if not plcd_script.exists():
+            raise FileNotFoundError(f"plcd_taseq.py not found: {plcd_script}")
 
-        for venv_path in venv_paths:
-            if venv_path.exists():
-                python_exe = str(venv_path)
-                logger.info(f"✅ Found Python: {python_exe}")
-                break
-
-        if not python_exe:
+        # Step 3: Find Python executable
+        python_exe = str(external_project_path / "venv" / "Scripts" / "python.exe")
+        if not Path(python_exe).exists():
             import shutil
             python_exe = shutil.which("python") or shutil.which("python3")
-            if not python_exe:
-                raise FileNotFoundError("Python executable not found")
-            logger.info(f"⚠️ Using system Python: {python_exe}")
 
-        # ============================================================================
-        # STEP 4: Execute Playwright test (SINGLE RUN, NO FEEDBACK)
-        # ============================================================================
-        logger.info(f"🏃 Executing test: {ticket_id} --no-feedback")
+        # Step 4: Execute test with --no-feedback
+        logger.info(f"🏃 Executing: {ticket_id} --no-feedback for {execution_id}")
         
-        # ✅ CRITICAL: Use --no-feedback flag to prevent interactive loop
         result = subprocess.run(
             [python_exe, str(plcd_script), ticket_id, "--no-feedback"],
             cwd=str(external_project_path),
             capture_output=True,
             text=True,
-            timeout=600  # 10 minutes
+            timeout=600
         )
+        
+        # ===============================
+# LOAD REAL STEPS FROM plcd_taseq
+# ===============================
 
-        logger.info(f"📤 Playwright execution completed with return code: {result.returncode}")
+        # steps_file = external_project_path / "Reports" / "steps" / f"steps_{ticket_id}.json"
+        # steps_saved = False
+        
+        # if steps_file.exists():
+        #     with open(steps_file, "r", encoding="utf-8") as f:
+        #         real_steps = json.load(f)
 
-        if result.stdout:
-            logger.debug(f"STDOUT:\n{result.stdout[:1000]}")
-        if result.stderr:
-            logger.warning(f"STDERR:\n{result.stderr[:1000]}")
+        #     # logger.info(f"📥 Loaded {len(real_steps)} real steps from plcd_taseq")
+        #     logger.info(f"Loaded {len(real_steps)} steps from JSON")
 
-        # ============================================================================
-        # STEP 5: Locate generated artifacts (SYNC WITH ACTUAL FILES)
-        # ============================================================================
+        #     service._save_steps_to_db(execution_id, real_steps)
+        # else:
+        #     logger.warning("⚠️ No step file found from plcd_taseq")
+
+
+        # logger.info(f"📤 Return code: {result.returncode} for {execution_id}")
+        # ===============================
+# LOAD REAL STEPS FROM plcd_taseq
+# ===============================
+
+        steps_file = external_project_path / "Reports" / "steps" / f"steps_{ticket_id}.json"
+
+        steps_saved = False
+
+        if steps_file.exists():
+            with open(steps_file, "r", encoding="utf-8") as f:
+                raw_steps = json.load(f)
+
+            logger.info(f"Loaded {len(raw_steps)} steps from JSON")
+
+    # 🔥 NORMALIZE STEP FORMAT FOR DB
+            normalized_steps = []
+            for step in raw_steps:
+                normalized_steps.append({
+                    "step_number": step.get("step_number"),
+                    "step_text": step.get("step_text"),
+                    "selector": step.get("selector"),   # maps to selector_used
+                    "status": step.get("status"),
+                    "confidence": step.get("confidence", 0.0),
+                    "agent_used": step.get("agent_used"),
+                    "action_type": step.get("action_type"),
+                })
+
+            service._save_steps_to_db(execution_id, normalized_steps)
+            steps_saved = True
+
+            logger.info(f"Saved {len(normalized_steps)} steps to DB")
+        else:
+            logger.error("Steps JSON file not found, skipping DB save")
+        
+        # ===============================
+# GENERATE SUMMARY (ONLY IF STEPS EXIST)
+# ===============================
+        if steps_saved:
+            service._generate_summary_from_db(execution_id, ticket_id)
+        else:
+            logger.error("Summary skipped because no steps were saved")
+
+
+
+        # Step 5: Find artifacts
         report_path = None
         script_path = None
         video_path = None
         overall_status = "UNKNOWN"
 
-        # Find report
         reports_folder = external_project_path / "Reports"
         if reports_folder.exists():
             reports = sorted(
@@ -2485,9 +4384,8 @@ def execute_test_in_background(
             )
             if reports:
                 report_path = str(reports[0])
-                logger.info(f"📄 Found report: {reports[0].name}")
+                logger.info(f"📄 Found report: {reports[0].name} for {execution_id}")
 
-        # Find script
         scripts_folder = external_project_path / "Generated_Scripts"
         if scripts_folder.exists():
             scripts = sorted(
@@ -2497,9 +4395,7 @@ def execute_test_in_background(
             )
             if scripts:
                 script_path = str(scripts[0])
-                logger.info(f"📜 Found script: {scripts[0].name}")
 
-        # Find video
         videos_folder = external_project_path / "Videos"
         if videos_folder.exists():
             videos = sorted(
@@ -2509,203 +4405,225 @@ def execute_test_in_background(
             )
             if videos:
                 video_path = str(videos[0])
-                logger.info(f"🎥 Found video: {videos[0].name}")
 
-        # Parse overall status from report
-        if report_path and Path(report_path).exists():
+        # Step 6: Parse overall status from report
+        if report_path:
             try:
                 with open(report_path, 'r', encoding='utf-8') as f:
-                    html_content = f.read()
-
-                patterns = [
-                    r'<h2[^>]*>\s*Overall\s+Status:\s*(PASSED|FAILED)\s*</h2>',
-                    r'<div[^>]*class=["\']overall-status[^"\']*["\'][^>]*>\s*(PASSED|FAILED)',
-                ]
-
-                for pattern in patterns:
-                    match = re.search(pattern, html_content, re.IGNORECASE)
-                    if match:
-                        overall_status = match.group(1).upper()
-                        logger.info(f"✅ Parsed overall status: {overall_status}")
-                        break
-
-                if overall_status == "UNKNOWN":
-                    passed_count = len(re.findall(r'>\s*PASSED\s*<', html_content, re.IGNORECASE))
-                    failed_count = len(re.findall(r'>\s*FAILED\s*<', html_content, re.IGNORECASE))
-                    overall_status = "FAILED" if failed_count > 0 else ("PASSED" if passed_count > 0 else "UNKNOWN")
-                    logger.info(f"📊 Inferred status: {overall_status} (P:{passed_count}, F:{failed_count})")
-
+                    html = f.read()
+                
+                # 🔥 FIX: Look for <div class="value status-PASSED">PASSED</div>
+                match = re.search(r'<div[^>]*class=["\'][^"\']*status-(PASSED|FAILED)[^"\']*["\'][^>]*>\s*(PASSED|FAILED)\s*</div>', html, re.IGNORECASE)
+                if match:
+                    overall_status = match.group(2).upper()
+                    logger.info(f"✅ Parsed status: {overall_status} for {execution_id}")
+                else:
+                    # Fallback
+                    passed = len(re.findall(r'>\s*PASSED\s*<', html, re.IGNORECASE))
+                    failed = len(re.findall(r'>\s*FAILED\s*<', html, re.IGNORECASE))
+                    overall_status = "FAILED" if failed > 0 else ("PASSED" if passed > 0 else "UNKNOWN")
+                    logger.info(f"📊 Inferred status: {overall_status} for {execution_id}")
+                    
             except Exception as e:
-                logger.warning(f"Could not parse report status: {e}")
+                logger.warning(f"Could not parse status for {execution_id}: {e}")
 
-        # ============================================================================
-        # STEP 6: Save execution steps from report (for summary generation)
-        # ============================================================================
+        # 🔥 Step 7: Parse and save steps - CRITICAL FIX
+        steps_saved = False
         if report_path and Path(report_path).exists():
             try:
+                logger.info(f"🔥 Parsing steps from report for {execution_id}")
                 with open(report_path, 'r', encoding='utf-8') as f:
-                    html_content = f.read()
+                    html = f.read()
 
-                table_match = re.search(r'<table[^>]*>(.*?)</table>', html_content, re.DOTALL | re.IGNORECASE)
+                table_match = re.search(r'<table[^>]*>(.*?)</table>', html, re.DOTALL | re.IGNORECASE)
+                
                 if table_match:
-                    table_content = table_match.group(1)
-                    rows = re.findall(r'<tr[^>]*>(.*?)</tr>', table_content, re.DOTALL | re.IGNORECASE)
-
-                    step_num = 1
-                    for row in rows[1:]:  # Skip header
-                        cells = re.findall(r'<td[^>]*>(.*?)</td>', row, re.DOTALL | re.IGNORECASE)
-                        if len(cells) >= 3:
-                            step_text = re.sub(r'<[^>]+>', '', cells[1]).strip()
-                            status = re.sub(r'<[^>]+>', '', cells[2]).strip().upper()
-
-                            if step_text and status in ['PASSED', 'FAILED']:
+                    # 🔥 DELETE old steps for THIS execution_id ONLY
+                    logger.info(f"🧹 Deleting old steps for {execution_id}")
+                    deleted = db.query(ExecutionStep).filter(
+                        ExecutionStep.execution_id == execution_id
+                    ).delete()
+                    db.commit()
+                    logger.info(f"🧹 Deleted {deleted} old steps for {execution_id}")
+                    
+                    # Parse rows
+                    table_html = table_match.group(1)
+                    rows = re.findall(r'<tr[^>]*>(.*?)</tr>', table_html, re.DOTALL | re.IGNORECASE)
+                    
+                    logger.info(f"📋 Found {len(rows)} rows in table for {execution_id}")
+                    
+                    saved_count = 0
+                    for idx, row in enumerate(rows[1:], start=1):  # Skip header
+                        try:
+                            cells = re.findall(r'<td[^>]*>(.*?)</td>', row, re.DOTALL | re.IGNORECASE)
+                            
+                            if len(cells) < 6:
+                                continue
+                            
+                            # Parse fields
+                            step_num = int(re.sub(r'<[^>]+>', '', cells[0]).strip())
+                            step_text = re.sub(r'<[^>]+>', '', cells[1]).strip()[:200]
+                            
+                            selector_match = re.search(r'<span[^>]*class=["\']selector["\'][^>]*>(.*?)</span>', cells[2], re.DOTALL | re.IGNORECASE)
+                            selector = selector_match.group(1) if selector_match else re.sub(r'<[^>]+>', '', cells[2]).strip()
+                            selector = re.sub(r'<[^>]+>', '', selector).strip()
+                            
+                            agent_match = re.search(r'<span[^>]*class=["\']badge[^"\']*["\'][^>]*>(.*?)</span>', cells[3], re.DOTALL | re.IGNORECASE)
+                            agent = agent_match.group(1) if agent_match else re.sub(r'<[^>]+>', '', cells[3]).strip()
+                            agent = re.sub(r'<[^>]+>', '', agent).strip()
+                            
+                            confidence = 0.0
+                            try:
+                                confidence_text = re.sub(r'<[^>]+>', '', cells[4]).strip()
+                                confidence = float(confidence_text)
+                            except:
+                                pass
+                            
+                            status_match = re.search(r'<span[^>]*class=["\']badge\s+badge-(PASSED|FAILED|SKIPPED)["\'][^>]*>', cells[5], re.IGNORECASE)
+                            if status_match:
+                                status = status_match.group(1).upper()
+                            else:
+                                status_text = re.sub(r'<[^>]+>', '', cells[5]).strip().upper()
+                                status = status_text if status_text in ['PASSED', 'FAILED', 'SKIPPED'] else 'UNKNOWN'
+                            
+                            if step_text and status in ['PASSED', 'FAILED', 'SKIPPED']:
+                                # 🔥 CRITICAL: Use the correct execution_id
                                 step = ExecutionStep(
-                                    execution_id=execution_id,
+                                    execution_id=execution_id,  # <-- THIS MUST BE CORRECT
                                     step_num=step_num,
                                     step_text=step_text,
                                     status=status,
+                                    selector_used=selector,
+                                    agent_used=agent,
+                                    confidence=confidence,
+                                    action_type="",
                                     screenshot_path=None
                                 )
                                 db.add(step)
-                                step_num += 1
-
+                                saved_count += 1
+                                
+                        except Exception as row_error:
+                            logger.error(f"❌ Failed to parse row {idx} for {execution_id}: {row_error}")
+                            continue
+                    
+                    # 🔥 COMMIT ALL STEPS AT ONCE
                     db.commit()
-                    logger.info(f"✅ Saved {step_num-1} steps to database")
-
+                    logger.info(f"✅ Committed {saved_count} steps for {execution_id}")
+                    
+                    # 🔥 VERIFY - Use execution_id from this function scope
+                    verification = db.query(ExecutionStep).filter(
+                        ExecutionStep.execution_id == execution_id
+                    ).count()
+                    logger.info(f"🔍 Verification: {verification} steps in DB for {execution_id}")
+                    
+                    steps_saved = (verification > 0)
+                else:
+                    logger.error(f"❌ No <table> found in HTML for {execution_id}")
+                    
             except Exception as e:
-                logger.warning(f"Could not parse steps: {e}")
+                logger.error(f"❌ Step parsing failed for {execution_id}: {e}")
+                import traceback
+                logger.error(traceback.format_exc())
 
-        # ============================================================================
-        # STEP 7: Update execution to "completed" (CRITICAL)
-        # ============================================================================
+        # Step 8: Update execution record
         final_status = "completed" if report_path else "failed"
-        
-        db.refresh(execution)  # Get fresh state
+        db.refresh(execution)
         execution.status = final_status
         execution.overall_status = overall_status
-        execution.completed_at = datetime.utcnow()
+        execution.completed_at = datetime.now()
         execution.report_path = report_path
         execution.script_path = script_path
         execution.video_path = video_path
         execution.error_message = None if report_path else "No report generated"
         db.commit()
         final_status_set = True
-        
-        logger.info(f"✅ Execution marked as '{final_status}'")
 
-        # ============================================================================
-        # STEP 8: Generate summary (AFTER DB update, BEFORE feedback)
-        # ============================================================================
-        logger.info("📊 Generating test summary...")
+        logger.info(f"✅ Execution {execution_id} marked as '{final_status}'")
+
+        # Step 9: Generate summary - ALWAYS RUN
+        logger.info(f"📊 Generating summary for {execution_id} (steps_saved={steps_saved})...")
         try:
-            service._generate_summary_from_db(execution_id, ticket_id)
-            logger.info("✅ Summary generated successfully")
+            
+            # 🔥 TEMP DEBUG: force one step into DB
+            # logger.error("🔥 FORCING DUMMY STEP SAVE")
+
+            # dummy_steps = [{
+            #     "step_number": 1,
+            #     "step_text": "Dummy step for validation",
+            #     "status": "PASSED",
+            #     "selector": "",
+            #     "agent_used": "SYSTEM",
+            #     "confidence": 1.0,
+            #     "action_type": "VALIDATION"
+            # }]
+
+            # service._save_steps_to_db(execution_id, dummy_steps)
+
+            # 🔥 PASS THE CORRECT execution_id
+            # service._generate_summary_from_db(execution_id, ticket_id)
+            
+            summary_path = external_project_path / "Reports" / "summaries" / f"summary_{ticket_id}_latest.json"
+            if summary_path.exists():
+                logger.info(f"✅ Summary generated: {summary_path}")
+            else:
+                logger.error(f"❌ Summary NOT created at: {summary_path}")
+                
         except Exception as summary_error:
-            logger.error(f"⚠️ Summary generation failed: {summary_error}")
+            logger.error(f"❌ Summary generation failed for {execution_id}: {summary_error}")
+            import traceback
+            logger.error(traceback.format_exc())
 
-        # ============================================================================
-        # SUCCESS
-        # ============================================================================
         logger.info("="*70)
-        logger.info("✅ TEST EXECUTION COMPLETED SUCCESSFULLY")
-        logger.info(f"   Execution ID: {execution_id}")
-        logger.info(f"   Final Status: {final_status}")
-        logger.info(f"   Overall Status: {overall_status}")
-        logger.info(f"   📄 Report: {report_path or 'N/A'}")
-        logger.info(f"   📜 Script: {script_path or 'N/A'}")
-        logger.info(f"   🎥 Video: {video_path or 'N/A'}")
+        logger.info(f"✅ EXECUTION COMPLETED for {execution_id}")
+        logger.info(f"   Status: {final_status} / {overall_status}")
+        logger.info(f"   Report: {report_path}")
         logger.info("="*70)
-
-    except subprocess.TimeoutExpired:
-        error_msg = "Test execution timed out (10 minutes)"
-        logger.error(f"⏰ {error_msg}")
-        _mark_execution_as_failed(db, execution_id, error_msg, service, ticket_id)
-        final_status_set = True
-
-    except FileNotFoundError as e:
-        error_msg = f"Configuration error: {str(e)}"
-        logger.error(f"❌ {error_msg}")
-        _mark_execution_as_failed(db, execution_id, error_msg, service, ticket_id)
-        final_status_set = True
 
     except Exception as e:
-        logger.error("="*70)
-        logger.error(f"❌ EXECUTION FAILED")
-        logger.error(f"   Execution ID: {execution_id}")
-        logger.error(f"   Error: {e}")
-        logger.error("="*70)
-
+        logger.error(f"❌ EXECUTION FAILED for {execution_id}: {e}")
         import traceback
-        logger.error("Full traceback:")
         logger.error(traceback.format_exc())
-
-        error_message = str(e)[:500]
-        _mark_execution_as_failed(db, execution_id, error_message, service, ticket_id)
+        _mark_execution_as_failed(db, execution_id, str(e)[:500], service, ticket_id)
         final_status_set = True
 
     finally:
-        # ============================================================================
-        # CRITICAL: Ensure execution is NEVER left in 'running' state
-        # ============================================================================
-        try:
-            if not final_status_set:
-                logger.warning("⚠️ Final status was NOT set - forcing to 'failed'")
-                execution = db.query(TestExecution).filter(
-                    TestExecution.execution_id == execution_id
-                ).first()
-
-                if execution and execution.status == "running":
-                    logger.error(f"❌ Execution {execution_id} still 'running'! Forcing to 'failed'")
-                    execution.status = "failed"
-                    execution.completed_at = datetime.utcnow()
-                    execution.overall_status = "FAILED"
-                    execution.error_message = "Execution did not complete normally"
-                    db.commit()
-                    
-                    # Try to generate summary even for forced failure
-                    try:
-                        service._generate_summary_from_db(execution_id, ticket_id)
-                    except:
-                        pass
-
-        except Exception as finally_error:
-            logger.error(f"❌ Error in finally block: {finally_error}")
-        
-        finally:
-            db.close()
-            logger.info(f"🔒 Database session closed for {execution_id}\n")
+        if not final_status_set:
+            logger.warning(f"⚠️ Forcing {execution_id} to failed state")
+            execution = db.query(TestExecution).filter(
+                TestExecution.execution_id == execution_id
+            ).first()
+            if execution and execution.status == "running":
+                execution.status = "failed"
+                execution.completed_at = datetime.now()
+                db.commit()
+        db.close()
+        logger.info(f"🔒 Session closed: {execution_id}\n")
 
 
-def _mark_execution_as_failed(
-    db: Session, 
-    execution_id: str, 
-    error_message: str,
-    service: TestExecutionService,
-    ticket_id: str
-):
-    """Mark execution as failed and generate summary"""
-    try:
-        execution = db.query(TestExecution).filter(
-            TestExecution.execution_id == execution_id
-        ).first()
+## Key Changes
 
-        if execution:
-            execution.status = "failed"
-            execution.overall_status = "FAILED"
-            execution.completed_at = datetime.utcnow()
-            execution.error_message = error_message[:500]
-            db.commit()
-            logger.info(f"✅ Execution {execution_id} marked as 'failed'")
-            
-            # Generate summary for failed execution
-            try:
-                service._generate_summary_from_db(execution_id, ticket_id)
-                logger.info("✅ Generated summary for failed execution")
-            except Exception as e:
-                logger.warning(f"⚠️ Could not generate summary for failed execution: {e}")
+# 1. **Added `execution_id` to EVERY log message** so you can track which execution is being processed
+# 2. **Ensured `execution_id` is used consistently** throughout the function
+# 3. **Added verification** that steps are being saved to the correct execution_id
+# 4. **Made summary generation always run** regardless of steps_saved status
 
-    except Exception as e:
-        logger.error(f"❌ Failed to mark execution as failed: {e}")
+## After Applying
+
+# 1. **Save `main.py`**
+# 2. **Restart FastAPI**
+# 3. **Run a new test**
+# 4. **Check logs** - you should now see:
+# ```
+#    🆔 Execution ID: exec_RBPLCD-8960_20260111_XXXXXX
+#    ...
+#    ✅ Committed 7 steps for exec_RBPLCD-8960_20260111_XXXXXX
+#    🔍 Verification: 7 steps in DB for exec_RBPLCD-8960_20260111_XXXXXX
+#    📊 Generating summary for exec_RBPLCD-8960_20260111_XXXXXX (steps_saved=True)...
+#    ✅ Summary generated: C:\...\summary_RBPLCD-8960_latest.json
+
+
+
+
 
 
 
