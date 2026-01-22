@@ -1460,13 +1460,16 @@
   gap: 12px;
   align-items: flex-start;
 }
-
+ 
 .user-content {
   background: #005587;
-  color: white;
-  padding: 12px 16px;
-  border-radius: 12px 12px 0 12px;
+  padding: 14px 16px;
+  border-radius: 10px;
   max-width: 70%;
+  font-size: 16px;
+  font-family: 'Bosch Sans';
+  word-wrap: break-word;
+  width: fit-content;
 }
 
 .bot-message-wrapper {
@@ -1481,7 +1484,6 @@
 }
 
 .bot-content {
-  background: #f5f5f5;
   color: #333;
   padding: 12px 16px;
   border-radius: 12px 12px 12px 0;
@@ -1495,6 +1497,7 @@
 
 .user-icon,
 .bot-icon {
+  background-color: #ddd;
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -1518,8 +1521,6 @@
   display: flex;
   align-items: flex-end;
   background: white;
-  border: 2px solid #e0e0e0;
-  border-radius: 12px;
   padding: 12px;
   transition: border-color 0.3s ease;
 }
@@ -1782,14 +1783,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   background: #fafafa;
-
-  &:hover {
-    background: #f0f7ff;
-    border-color: #2196f3;
-    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
-    transform: translateX(-2px);
-  }
-
+  
   &:active {
     transform: scale(0.98);
   }
@@ -1847,24 +1841,19 @@
     height: 20px !important;
   }
 
-  &:hover {
-    background: #e3f2fd;
-    color: #2196f3;
-  }
-
   &.view-btn:hover {
     background: #e8f5e9;
-    color: #4caf50;
+     color: #2196f3;
   }
 
   &.edit-btn:hover {
     background: #fff3e0;
-    color: #ff9800;
+     color: #2196f3;
   }
 
   &.delete-btn:hover {
     background: #ffebee;
-    color: #f44336;
+    color: #2196f3;
   }
 
   &.save-btn {
